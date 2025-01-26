@@ -40,7 +40,9 @@ export function StyledMarkdown({ children }: { children: string }) {
         ),
         pre: ({ className, node, ...props }) => (
           <Card className="p-4 border border-accent-foreground/20 w-full block rounded-lg">
-            <pre {...(props as any)} />
+            <div className="overflow-x-auto">
+              <pre {...(props as any)} />
+            </div>
           </Card>
         ),
         hr: ({ className, node, ...props }) => (
@@ -67,10 +69,10 @@ export function StyledMarkdown({ children }: { children: string }) {
               children={String(children).replace(/\n$/, '')}
               language={match[1]}
               style={themeWithoutBackgroundOrPadding(atomDark)}
-              className={cn('p-0', className)}
+              className={cn('p-0 min-w-max', className)}
             />
           ) : (
-            <code className={cn('p-0', className)} {...(rest as any)}>
+            <code className={cn('p-0 min-w-max', className)} {...(rest as any)}>
               {children}
             </code>
           );

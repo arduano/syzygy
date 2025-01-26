@@ -1,13 +1,17 @@
-import type { ReadonlySignal } from '@preact/signals-core';
-import type { AgentExtraArgs, AnyChatAgent, ChatUserMessage } from '@trpc-chat-agent/core';
-import { cn } from '@/lib/utils';
-import { useState } from 'react';
-import { RiPencilFill } from 'react-icons/ri';
-import { Button } from '../ui/button';
-import { Card } from '../ui/card';
-import { Textarea } from '../ui/textarea';
-import { MessageVariants } from './MessageVariants';
-import { StyledMarkdown } from './StyledMarkdown';
+import type { ReadonlySignal } from "@preact/signals-core";
+import type {
+  AgentExtraArgs,
+  AnyChatAgent,
+  ChatUserMessage,
+} from "@trpc-chat-agent/core";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { RiPencilFill } from "react-icons/ri";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
+import { Textarea } from "../ui/textarea";
+import { MessageVariants } from "./MessageVariants";
+import { StyledMarkdown } from "./StyledMarkdown";
 
 export function UserMessage<Agent extends AnyChatAgent>({
   message,
@@ -26,7 +30,12 @@ export function UserMessage<Agent extends AnyChatAgent>({
   };
 
   return (
-    <div className={cn('group flex items-start gap-2', !isEditing && 'pl-12 lg:pl-48')}>
+    <div
+      className={cn(
+        "group flex items-start gap-2",
+        !isEditing && "pl-12 lg:pl-48"
+      )}
+    >
       {!isEditing && (
         <Button
           onClick={() => {
@@ -36,15 +45,17 @@ export function UserMessage<Agent extends AnyChatAgent>({
           variant="ghost"
           size="sm"
           className={cn(
-            'mt-2 p-2 text-muted-foreground rounded-full hover:text-foreground opacity-0 group-hover:opacity-100',
-            message.path.count > 1 && 'mt-7'
+            "mt-2 p-2 text-muted-foreground rounded-full hover:text-foreground opacity-0 group-hover:opacity-100",
+            message.path.count > 1 && "mt-7"
           )}
         >
           <RiPencilFill size={14} />
         </Button>
       )}
-      <div className="flex-1">
-        {message.path.count > 1 && !isEditing && <MessageVariants path={message.path} />}
+      <div className="flex-1 max-w-full">
+        {message.path.count > 1 && !isEditing && (
+          <MessageVariants path={message.path} />
+        )}
         {isEditing ? (
           <form onSubmit={handleSubmit}>
             <Card className="p-4">
@@ -55,17 +66,22 @@ export function UserMessage<Agent extends AnyChatAgent>({
                 autoFocus
                 rows={1}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
+                  if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     handleSubmit(e as any);
                   }
                 }}
                 style={{
-                  height: 'auto',
+                  height: "auto",
                 }}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement;
-                  target.style.height = 'auto';
+                  target.style.height = "auto";
+                  target.style.height = `${target.scrollHeight + 2}px`;
+                }}
+                onLoad={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = "auto";
                   target.style.height = `${target.scrollHeight + 2}px`;
                 }}
               />

@@ -19,8 +19,16 @@ export async function createContext() {
   // Help prevent race conditions
   const todosLock = new AsyncLock();
 
+  const getExpertAnswersStore = (chatId: string) => {
+    return kvsLocalStorage({
+      name: `expert-answers-${chatId}`,
+      version: 1,
+    });
+  };
+
   return {
     conversations: conversationStore,
+    getExpertAnswersStore,
     todos: todosStore,
     todosLock,
   };

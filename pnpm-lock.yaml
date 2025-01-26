@@ -14,15 +14,21 @@ importers:
       '@langchain/anthropic':
         specifier: ^0.3.12
         version: 0.3.12(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
+      '@langchain/core':
+        specifier: ^0.3.36
+        version: 0.3.36(openai@4.80.1(zod@3.24.1))
       '@langchain/openai':
-        specifier: ^0.3.16
-        version: 0.3.17(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
+        specifier: ^0.4.2
+        version: 0.4.2(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
       '@preact/signals-core':
         specifier: ^1.8.0
         version: 1.8.0
       '@preact/signals-react':
         specifier: ^3.0.0
         version: 3.0.1(react@19.0.0)
+      '@radix-ui/react-dialog':
+        specifier: ^1.1.5
+        version: 1.1.5(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-progress':
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -39,32 +45,29 @@ importers:
         specifier: ^5.62.15
         version: 5.64.2(@tanstack/react-query@5.62.15(react@19.0.0))(react@19.0.0)
       '@trpc-chat-agent/core':
-        specifier: ^0.3.4
-        version: 0.3.4(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
+        specifier: ^0.3.6
+        version: 0.3.6(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
       '@trpc-chat-agent/langchain':
-        specifier: ^0.3.4
-        version: 0.3.4(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
+        specifier: ^0.3.6
+        version: 0.3.6(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
       '@trpc-chat-agent/react':
-        specifier: ^0.3.4
-        version: 0.3.4(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
+        specifier: ^0.3.6
+        version: 0.3.6(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
       '@trpc/client':
-        specifier: 11.0.0-rc.682
-        version: 11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3)
+        specifier: 11.0.0-rc.718
+        version: 11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3)
       '@trpc/next':
-        specifier: 11.0.0-rc.682
-        version: 11.0.0-rc.682(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3))(@trpc/react-query@11.0.0-rc.682(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(next@15.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
+        specifier: 11.0.0-rc.718
+        version: 11.0.0-rc.718(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3))(@trpc/react-query@11.0.0-rc.718(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(next@15.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
       '@trpc/react-query':
-        specifier: 11.0.0-rc.682
-        version: 11.0.0-rc.682(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
+        specifier: 11.0.0-rc.718
+        version: 11.0.0-rc.718(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
       '@trpc/server':
-        specifier: 11.0.0-rc.682
-        version: 11.0.0-rc.682(typescript@5.7.3)
+        specifier: 11.0.0-rc.718
+        version: 11.0.0-rc.718(typescript@5.7.3)
       '@types/async-lock':
         specifier: ^1.4.2
         version: 1.4.2
-      '@types/nanoid':
-        specifier: ^3.0.0
-        version: 3.0.0
       '@types/react-syntax-highlighter':
         specifier: ^15.5.13
         version: 15.5.13
@@ -92,6 +95,9 @@ importers:
       next:
         specifier: 15.1.3
         version: 15.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      openai:
+        specifier: ^4.80.1
+        version: 4.80.1(zod@3.24.1)
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -322,8 +328,8 @@ packages:
     peerDependencies:
       '@langchain/core': '>=0.2.36 <0.3.0 || >=0.3.9 < 0.4.0'
 
-  '@langchain/openai@0.3.17':
-    resolution: {integrity: sha512-uw4po32OKptVjq+CYHrumgbfh4NuD7LqyE+ZgqY9I/LrLc6bHLMc+sisHmI17vgek0K/yqtarI0alPJbzrwyag==}
+  '@langchain/openai@0.4.2':
+    resolution: {integrity: sha512-Cuj7qbVcycALTP0aqZuPpEc7As8cwiGaU21MhXRyZFs+dnWxKYxZ1Q1z4kcx6cYkq/I+CNwwmk+sP+YruU73Aw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@langchain/core': '>=0.3.29 <0.4.0'
@@ -433,6 +439,19 @@ packages:
       '@types/react':
         optional: true
 
+  '@radix-ui/react-dialog@1.1.5':
+    resolution: {integrity: sha512-LaO3e5h/NOEL4OfXjxD43k9Dx+vn+8n+PCFt6uhX/BADFflllyv3WJG6rgvvSVBxpTch938Qq/LGc2MMxipXPw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
   '@radix-ui/react-direction@1.1.0':
     resolution: {integrity: sha512-BUuBvgThEiAXh2DWu93XsT+a3aWrGqolGlqqw5VU1kG7p/ZH2cuDlM1sRLNnY3QcBS69UIz2mcKhMxDsdewhjg==}
     peerDependencies:
@@ -440,6 +459,63 @@ packages:
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
+        optional: true
+
+  '@radix-ui/react-dismissable-layer@1.1.4':
+    resolution: {integrity: sha512-XDUI0IVYVSwjMXxM6P4Dfti7AH+Y4oS/TB+sglZ/EXc7cqLwGAmp1NlMrcUjj7ks6R5WTZuWKv44FBbLpwU3sA==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@radix-ui/react-focus-guards@1.1.1':
+    resolution: {integrity: sha512-pSIwfrT1a6sIoDASCSpFwOasEwKTZWDw/iBdtnqKO7v6FeOzYJ7U53cPzYFVR3geGGXgVHaH+CdngrrAzqUGxg==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@radix-ui/react-focus-scope@1.1.1':
+    resolution: {integrity: sha512-01omzJAYRxXdG2/he/+xy+c8a8gCydoQ1yOxnWNcRhrrBW5W+RQJ22EK1SaO8tb3WoUsuEw7mJjBozPzihDFjA==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@radix-ui/react-id@1.1.0':
+    resolution: {integrity: sha512-EJUrI8yYh7WOjNOqpoJaf1jlFIH2LvtgAl+YcFqNCa+4hj64ZXmPkAKOFs/ukjz3byN6bdb/AVUqHkI8/uWWMA==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@radix-ui/react-portal@1.1.3':
+    resolution: {integrity: sha512-NciRqhXnGojhT93RPyDaMPfLH3ZSl4jjIFbZQ1b/vxvZEdHsBZ49wP9w8L3HzUQwep01LcWtkUvm0OVB5JAHTw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
         optional: true
 
   '@radix-ui/react-presence@1.1.2':
@@ -512,6 +588,24 @@ packages:
       '@types/react':
         optional: true
 
+  '@radix-ui/react-use-controllable-state@1.1.0':
+    resolution: {integrity: sha512-MtfMVJiSr2NjzS0Aa90NPTnvTSg6C/JLCV7ma0W6+OMV78vd8OyRpID+Ng9LxzsPbLeuBnWBA1Nq30AtBIDChw==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@radix-ui/react-use-escape-keydown@1.1.0':
+    resolution: {integrity: sha512-L7vwWlR1kTTQ3oh7g1O0CBF3YCyyTj8NmhLR+phShpyA50HCfBFKVJTpshm9PzLiKmehsrQzTYTpX9HvmC9rhw==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   '@radix-ui/react-use-layout-effect@1.1.0':
     resolution: {integrity: sha512-+FPE0rOdziWSrH9athwI1R0HDVbWlEhd+FR+aSDk4uWGmSJ9Z54sdZVDQPZAinJhJXwfT+qnj969mCsT2gfm5w==}
     peerDependencies:
@@ -544,28 +638,28 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@trpc-chat-agent/core@0.3.4':
-    resolution: {integrity: sha512-RA4zCEmifWWrG1I0tzs6FN1xgW4QsFZFcJna+ydmfcq0UiC5mZNyofiqSL0LoY2uOBSplhGMpi8EoMqTgu0gbA==}
+  '@trpc-chat-agent/core@0.3.6':
+    resolution: {integrity: sha512-FeqkkWfPuMC6aT5UwQJQr+o7p6DlsBTs0wLu0KrAiVZZUzb76aRO5QxTFB111k39kNKJYmu7N7XZcRt25MG/cg==}
 
-  '@trpc-chat-agent/langchain@0.3.4':
-    resolution: {integrity: sha512-BFHB5IYy7/cqM9W2Lix5EqE3JY3MutOFTp5pVhCm/Cai4BJim5SaBeUMm5INHLUwHygAOeW+Io06oB45mZwIIA==}
+  '@trpc-chat-agent/langchain@0.3.6':
+    resolution: {integrity: sha512-sSBBlhikvdoeFaXefADL0ZkSMHB9zpFnL6ulZVQSiRCQePvycHnk1Ktfu3MsMWQ8C84nG6ebmAy9QQTIh/dcMw==}
 
-  '@trpc-chat-agent/react@0.3.4':
-    resolution: {integrity: sha512-OEkg5y5ozg2ySBYJpFS9LgwibCxOf8PQaRYL55pUUVXkxDrPyCI/XNhSRDX2nm/Y487LmGiaTIu6PGq+75OTbg==}
+  '@trpc-chat-agent/react@0.3.6':
+    resolution: {integrity: sha512-FLKwFUp84suWtp+XGQuCyQqYu0WDLrok/Yb7oWZdeCC6dU623g8bXbocaE8P/XGbs/TRdGdUA4taOLI1b6comw==}
 
-  '@trpc/client@11.0.0-rc.682':
-    resolution: {integrity: sha512-zfM6t4tkbQPm/FHK85jcJjJle7FJTj9U8t/ieDzIe3X6DNo66sg6KqQpjkeTJcaj5u2hga1lmv3rc4uob/7D0g==}
+  '@trpc/client@11.0.0-rc.718':
+    resolution: {integrity: sha512-pTeMVFcNSw7akDz7XySsbBckfmoEYVSKLB4TCare4eAmJkFRnuPuFeKvs97hm2hxTQ43j9rrEOQGCRY84Vc4Ew==}
     peerDependencies:
-      '@trpc/server': 11.0.0-rc.682+8650a22e8
+      '@trpc/server': 11.0.0-rc.718+2018e3914
       typescript: '>=5.7.2'
 
-  '@trpc/next@11.0.0-rc.682':
-    resolution: {integrity: sha512-3LhlwyZiVEMTBKfpxSbD00Ea/uuW9vfTmlFpKRbuU22BBkcW/QNtfcHWL5QtyDHnr8/SIvReTJQ+BfDnqNUSLA==}
+  '@trpc/next@11.0.0-rc.718':
+    resolution: {integrity: sha512-z9Yp9rcQbEmqcY8AuGdAArVyoWV2fQA2JVA0kJ1FYpatgpJqMEXFXnxyS7TduZsC0VNWlANdveUOW9Fsv5T4AA==}
     peerDependencies:
       '@tanstack/react-query': ^5.59.15
-      '@trpc/client': 11.0.0-rc.682+8650a22e8
-      '@trpc/react-query': 11.0.0-rc.682+8650a22e8
-      '@trpc/server': 11.0.0-rc.682+8650a22e8
+      '@trpc/client': 11.0.0-rc.718+2018e3914
+      '@trpc/react-query': 11.0.0-rc.718+2018e3914
+      '@trpc/server': 11.0.0-rc.718+2018e3914
       next: '*'
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -576,18 +670,18 @@ packages:
       '@trpc/react-query':
         optional: true
 
-  '@trpc/react-query@11.0.0-rc.682':
-    resolution: {integrity: sha512-Ghuk7e7jGRvxOD32X/ImGZTqERZ3R03vaPVzfmdWnBeTyOeqBr0Tb8ylTVyCclqBHpTrRhdM3pWlaXR4M/LKDg==}
+  '@trpc/react-query@11.0.0-rc.718':
+    resolution: {integrity: sha512-oFz47ice2sxjH9X4jqlny/XBm03//Q7fBxaXdrlZD2OjkQhBFzA1QXcvtFwq2M54a3kwpa7IqfrFoJnRzvAMAw==}
     peerDependencies:
       '@tanstack/react-query': ^5.62.8
-      '@trpc/client': 11.0.0-rc.682+8650a22e8
-      '@trpc/server': 11.0.0-rc.682+8650a22e8
+      '@trpc/client': 11.0.0-rc.718+2018e3914
+      '@trpc/server': 11.0.0-rc.718+2018e3914
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
       typescript: '>=5.7.2'
 
-  '@trpc/server@11.0.0-rc.682':
-    resolution: {integrity: sha512-y8FhLW/UJ8SOyHByvSQW7WvCnbvYioOYhviWD+sRvqkB9f0O8/sEBPJt1mBadWaO/0tygOghkeNC9o1wAsJ8cg==}
+  '@trpc/server@11.0.0-rc.718':
+    resolution: {integrity: sha512-u9xKci9yEVBjia3X6XhYG9Me3klf0HmyQUAPCzxPYUg8WNvwXEGfTJrIC1bBfst2pjvv3xmXsi16e3tGU16c6g==}
     peerDependencies:
       typescript: '>=5.7.2'
 
@@ -617,10 +711,6 @@ packages:
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
-
-  '@types/nanoid@3.0.0':
-    resolution: {integrity: sha512-UXitWSmXCwhDmAKe7D3hNQtQaHeHt5L8LO1CB8GF8jlYVzOv5cBWDNqiJ+oPEWrWei3i3dkZtHY/bUtd0R/uOQ==}
-    deprecated: This is a stub types definition. nanoid provides its own type definitions, so you do not need this installed.
 
   '@types/node-fetch@2.6.12':
     resolution: {integrity: sha512-8nneRWKCg3rMtF69nLQJnOYUcbafYeFSjqkw3jCRLsqkWFlHaoQrr5mXmofFGOx3DKn7UfmBMyov8ySvLRVldA==}
@@ -701,6 +791,10 @@ packages:
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
+
+  aria-hidden@1.2.4:
+    resolution: {integrity: sha512-y+CcFFwelSXpLZk/7fMB2mUbGtX9lKycf1MWJ7CaTIERyitVlyQx6C+sxcROU2BAJ24OiZyK+8wj2i8AlBoS3A==}
+    engines: {node: '>=10'}
 
   async-lock@1.4.1:
     resolution: {integrity: sha512-Az2ZTpuytrtqENulXwO3GGv1Bztugx6TT37NIo7imr/Qo0gsYiGtSdBa2B6fsXhTpVZDNfu1Qn3pk531e3q+nQ==}
@@ -856,6 +950,9 @@ packages:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
     engines: {node: '>=8'}
 
+  detect-node-es@1.1.0:
+    resolution: {integrity: sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==}
+
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
 
@@ -939,6 +1036,10 @@ packages:
 
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
+
+  get-nonce@1.0.1:
+    resolution: {integrity: sha512-FJhYRoDaiatfEkUK8HKlicmu/3SGFD51q3itKDGoSTysQJBnfOcxU5GxnhE1E6soB76MbT0MBtnKJuXyAx+96Q==}
+    engines: {node: '>=6'}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -1545,6 +1646,36 @@ packages:
       '@types/react': '>=18'
       react: '>=18'
 
+  react-remove-scroll-bar@2.3.8:
+    resolution: {integrity: sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  react-remove-scroll@2.6.3:
+    resolution: {integrity: sha512-pnAi91oOk8g8ABQKGF5/M9qxmmOPxaAnopyTHYfqYEwJhyFrbbBtHuSgtKEoH0jpcxx5o3hXqH1mNd9/Oi+8iQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  react-style-singleton@2.2.3:
+    resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   react-syntax-highlighter@15.6.1:
     resolution: {integrity: sha512-OqJ2/vL7lEeV5zTJyG7kmARppUjiB9h9udl4qHQjjgEos66z00Ia0OckwYfRxCSFrW8RJIBnsBwQsHZbVPspqg==}
     peerDependencies:
@@ -1770,6 +1901,26 @@ packages:
 
   unist-util-visit@5.0.0:
     resolution: {integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==}
+
+  use-callback-ref@1.3.3:
+    resolution: {integrity: sha512-jQL3lRnocaFtu3V00JToYz/4QkNWswxijDaCVNZRiRTO3HQDLsdu1ZtmIUvV4yPp+rvWm5j0y0TG/S61cuijTg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  use-sidecar@1.1.3:
+    resolution: {integrity: sha512-Fedw0aZvkhynoPYlA5WXrMCAMm+nSWdZt6lzJQ7Ok8S6Q+VsHmHpRWndVRJ8Be0ZbkfPc5LRYH+5XrzXcEeLRQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   use-sync-external-store@1.4.0:
     resolution: {integrity: sha512-9WXSPC5fMv61vaupRkCKCxsPxBocVnwakBEkMIHHpkTTg6icbJtg6jzgtLDm4bl3cSHAca52rYWih0k4K3PfHw==}
@@ -2044,7 +2195,7 @@ snapshots:
       uuid: 10.0.0
       zod: 3.24.1
 
-  '@langchain/openai@0.3.17(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))':
+  '@langchain/openai@0.4.2(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))':
     dependencies:
       '@langchain/core': 0.3.36(openai@4.80.1(zod@3.24.1))
       js-tiktoken: 1.0.16
@@ -2131,11 +2282,80 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.8
 
+  '@radix-ui/react-dialog@1.1.5(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      '@radix-ui/primitive': 1.1.1
+      '@radix-ui/react-compose-refs': 1.1.1(@types/react@19.0.8)(react@19.0.0)
+      '@radix-ui/react-context': 1.1.1(@types/react@19.0.8)(react@19.0.0)
+      '@radix-ui/react-dismissable-layer': 1.1.4(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-focus-guards': 1.1.1(@types/react@19.0.8)(react@19.0.0)
+      '@radix-ui/react-focus-scope': 1.1.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-id': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      '@radix-ui/react-portal': 1.1.3(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-presence': 1.1.2(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-primitive': 2.0.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-slot': 1.1.1(@types/react@19.0.8)(react@19.0.0)
+      '@radix-ui/react-use-controllable-state': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      aria-hidden: 1.2.4
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      react-remove-scroll: 2.6.3(@types/react@19.0.8)(react@19.0.0)
+    optionalDependencies:
+      '@types/react': 19.0.8
+      '@types/react-dom': 19.0.3(@types/react@19.0.8)
+
   '@radix-ui/react-direction@1.1.0(@types/react@19.0.8)(react@19.0.0)':
     dependencies:
       react: 19.0.0
     optionalDependencies:
       '@types/react': 19.0.8
+
+  '@radix-ui/react-dismissable-layer@1.1.4(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      '@radix-ui/primitive': 1.1.1
+      '@radix-ui/react-compose-refs': 1.1.1(@types/react@19.0.8)(react@19.0.0)
+      '@radix-ui/react-primitive': 2.0.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-use-callback-ref': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      '@radix-ui/react-use-escape-keydown': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    optionalDependencies:
+      '@types/react': 19.0.8
+      '@types/react-dom': 19.0.3(@types/react@19.0.8)
+
+  '@radix-ui/react-focus-guards@1.1.1(@types/react@19.0.8)(react@19.0.0)':
+    dependencies:
+      react: 19.0.0
+    optionalDependencies:
+      '@types/react': 19.0.8
+
+  '@radix-ui/react-focus-scope@1.1.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      '@radix-ui/react-compose-refs': 1.1.1(@types/react@19.0.8)(react@19.0.0)
+      '@radix-ui/react-primitive': 2.0.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-use-callback-ref': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    optionalDependencies:
+      '@types/react': 19.0.8
+      '@types/react-dom': 19.0.3(@types/react@19.0.8)
+
+  '@radix-ui/react-id@1.1.0(@types/react@19.0.8)(react@19.0.0)':
+    dependencies:
+      '@radix-ui/react-use-layout-effect': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      react: 19.0.0
+    optionalDependencies:
+      '@types/react': 19.0.8
+
+  '@radix-ui/react-portal@1.1.3(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      '@radix-ui/react-primitive': 2.0.1(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-use-layout-effect': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    optionalDependencies:
+      '@types/react': 19.0.8
+      '@types/react-dom': 19.0.3(@types/react@19.0.8)
 
   '@radix-ui/react-presence@1.1.2(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
@@ -2196,6 +2416,20 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.8
 
+  '@radix-ui/react-use-controllable-state@1.1.0(@types/react@19.0.8)(react@19.0.0)':
+    dependencies:
+      '@radix-ui/react-use-callback-ref': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      react: 19.0.0
+    optionalDependencies:
+      '@types/react': 19.0.8
+
+  '@radix-ui/react-use-escape-keydown@1.1.0(@types/react@19.0.8)(react@19.0.0)':
+    dependencies:
+      '@radix-ui/react-use-callback-ref': 1.1.0(@types/react@19.0.8)(react@19.0.0)
+      react: 19.0.0
+    optionalDependencies:
+      '@types/react': 19.0.8
+
   '@radix-ui/react-use-layout-effect@1.1.0(@types/react@19.0.8)(react@19.0.0)':
     dependencies:
       react: 19.0.0
@@ -2223,13 +2457,13 @@ snapshots:
       '@tanstack/query-core': 5.62.15
       react: 19.0.0
 
-  '@trpc-chat-agent/core@0.3.4(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))':
+  '@trpc-chat-agent/core@0.3.6(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))':
     dependencies:
       '@langchain/core': 0.3.36(openai@4.80.1(zod@3.24.1))
       '@langchain/langgraph': 0.2.41(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
       '@preact/signals-core': 1.8.0
-      '@trpc/client': 11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3)
-      '@trpc/server': 11.0.0-rc.682(typescript@5.7.3)
+      '@trpc/client': 11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3)
+      '@trpc/server': 11.0.0-rc.718(typescript@5.7.3)
       '@types/node': 20.17.16
       immer: 10.1.1
       react: 18.2.0
@@ -2241,12 +2475,12 @@ snapshots:
       - typescript
       - use-sync-external-store
 
-  '@trpc-chat-agent/langchain@0.3.4(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))':
+  '@trpc-chat-agent/langchain@0.3.6(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))':
     dependencies:
       '@langchain/anthropic': 0.3.12(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
       '@langchain/core': 0.3.36(openai@4.80.1(zod@3.24.1))
       '@langchain/langgraph': 0.2.41(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
-      '@trpc-chat-agent/core': 0.3.4(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
+      '@trpc-chat-agent/core': 0.3.6(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
       zod: 3.24.1
       zod-to-json-schema: 3.24.1(zod@3.24.1)
     transitivePeerDependencies:
@@ -2256,11 +2490,11 @@ snapshots:
       - typescript
       - use-sync-external-store
 
-  '@trpc-chat-agent/react@0.3.4(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))':
+  '@trpc-chat-agent/react@0.3.6(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))':
     dependencies:
       '@preact/signals-core': 1.8.0
       '@preact/signals-react': 3.0.1(react@18.2.0)
-      '@trpc-chat-agent/core': 0.3.4(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
+      '@trpc-chat-agent/core': 0.3.6(@types/react@19.0.8)(openai@4.80.1(zod@3.24.1))(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))
       immer: 10.1.1
       react: 18.2.0
       zod: 3.24.1
@@ -2271,33 +2505,33 @@ snapshots:
       - typescript
       - use-sync-external-store
 
-  '@trpc/client@11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3)':
+  '@trpc/client@11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3)':
     dependencies:
-      '@trpc/server': 11.0.0-rc.682(typescript@5.7.3)
+      '@trpc/server': 11.0.0-rc.718(typescript@5.7.3)
       typescript: 5.7.3
 
-  '@trpc/next@11.0.0-rc.682(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3))(@trpc/react-query@11.0.0-rc.682(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(next@15.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)':
+  '@trpc/next@11.0.0-rc.718(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3))(@trpc/react-query@11.0.0-rc.718(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(next@15.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)':
     dependencies:
-      '@trpc/client': 11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3)
-      '@trpc/server': 11.0.0-rc.682(typescript@5.7.3)
+      '@trpc/client': 11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3)
+      '@trpc/server': 11.0.0-rc.718(typescript@5.7.3)
       next: 15.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       typescript: 5.7.3
     optionalDependencies:
       '@tanstack/react-query': 5.62.15(react@19.0.0)
-      '@trpc/react-query': 11.0.0-rc.682(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
+      '@trpc/react-query': 11.0.0-rc.718(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
 
-  '@trpc/react-query@11.0.0-rc.682(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)':
+  '@trpc/react-query@11.0.0-rc.718(@tanstack/react-query@5.62.15(react@19.0.0))(@trpc/client@11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3))(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)':
     dependencies:
       '@tanstack/react-query': 5.62.15(react@19.0.0)
-      '@trpc/client': 11.0.0-rc.682(@trpc/server@11.0.0-rc.682(typescript@5.7.3))(typescript@5.7.3)
-      '@trpc/server': 11.0.0-rc.682(typescript@5.7.3)
+      '@trpc/client': 11.0.0-rc.718(@trpc/server@11.0.0-rc.718(typescript@5.7.3))(typescript@5.7.3)
+      '@trpc/server': 11.0.0-rc.718(typescript@5.7.3)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       typescript: 5.7.3
 
-  '@trpc/server@11.0.0-rc.682(typescript@5.7.3)':
+  '@trpc/server@11.0.0-rc.718(typescript@5.7.3)':
     dependencies:
       typescript: 5.7.3
 
@@ -2328,10 +2562,6 @@ snapshots:
       '@types/unist': 3.0.3
 
   '@types/ms@2.1.0': {}
-
-  '@types/nanoid@3.0.0':
-    dependencies:
-      nanoid: 5.0.9
 
   '@types/node-fetch@2.6.12':
     dependencies:
@@ -2400,6 +2630,10 @@ snapshots:
   arg@5.0.2: {}
 
   argparse@2.0.1: {}
+
+  aria-hidden@1.2.4:
+    dependencies:
+      tslib: 2.8.1
 
   async-lock@1.4.1: {}
 
@@ -2531,6 +2765,8 @@ snapshots:
   detect-libc@2.0.3:
     optional: true
 
+  detect-node-es@1.1.0: {}
+
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
@@ -2605,6 +2841,8 @@ snapshots:
     optional: true
 
   function-bind@1.1.2: {}
+
+  get-nonce@1.0.1: {}
 
   glob-parent@5.1.2:
     dependencies:
@@ -2751,7 +2989,7 @@ snapshots:
   langchain@0.3.13(@langchain/anthropic@0.3.12(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1))))(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))(openai@4.80.1(zod@3.24.1)):
     dependencies:
       '@langchain/core': 0.3.36(openai@4.80.1(zod@3.24.1))
-      '@langchain/openai': 0.3.17(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
+      '@langchain/openai': 0.4.2(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
       '@langchain/textsplitters': 0.1.0(@langchain/core@0.3.36(openai@4.80.1(zod@3.24.1)))
       js-tiktoken: 1.0.16
       js-yaml: 4.1.0
@@ -3388,6 +3626,33 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  react-remove-scroll-bar@2.3.8(@types/react@19.0.8)(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      react-style-singleton: 2.2.3(@types/react@19.0.8)(react@19.0.0)
+      tslib: 2.8.1
+    optionalDependencies:
+      '@types/react': 19.0.8
+
+  react-remove-scroll@2.6.3(@types/react@19.0.8)(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      react-remove-scroll-bar: 2.3.8(@types/react@19.0.8)(react@19.0.0)
+      react-style-singleton: 2.2.3(@types/react@19.0.8)(react@19.0.0)
+      tslib: 2.8.1
+      use-callback-ref: 1.3.3(@types/react@19.0.8)(react@19.0.0)
+      use-sidecar: 1.1.3(@types/react@19.0.8)(react@19.0.0)
+    optionalDependencies:
+      '@types/react': 19.0.8
+
+  react-style-singleton@2.2.3(@types/react@19.0.8)(react@19.0.0):
+    dependencies:
+      get-nonce: 1.0.1
+      react: 19.0.0
+      tslib: 2.8.1
+    optionalDependencies:
+      '@types/react': 19.0.8
+
   react-syntax-highlighter@15.6.1(react@19.0.0):
     dependencies:
       '@babel/runtime': 7.26.7
@@ -3673,6 +3938,21 @@ snapshots:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.0
       unist-util-visit-parents: 6.0.1
+
+  use-callback-ref@1.3.3(@types/react@19.0.8)(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      tslib: 2.8.1
+    optionalDependencies:
+      '@types/react': 19.0.8
+
+  use-sidecar@1.1.3(@types/react@19.0.8)(react@19.0.0):
+    dependencies:
+      detect-node-es: 1.1.0
+      react: 19.0.0
+      tslib: 2.8.1
+    optionalDependencies:
+      '@types/react': 19.0.8
 
   use-sync-external-store@1.4.0(react@18.2.0):
     dependencies:

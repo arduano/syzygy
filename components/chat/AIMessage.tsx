@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { CgRedo } from 'react-icons/cg';
 import { Button } from '../ui/button';
 import { MessageVariants } from './MessageVariants';
+import { JSX } from 'react';
 
 export function AIMessageShell<Agent extends AnyChatAgent>({
   message,
