@@ -28,6 +28,7 @@
     "npm:@types/react@*": "19.0.8",
     "npm:@types/react@19.0.8": "19.0.8",
     "npm:@types/react@^19.0.8": "19.0.8",
+    "npm:async-lock@1.4.1": "1.4.1",
     "npm:async-lock@^1.4.1": "1.4.1",
     "npm:class-variance-authority@~0.7.1": "0.7.1",
     "npm:clsx@2.1.1": "2.1.1",

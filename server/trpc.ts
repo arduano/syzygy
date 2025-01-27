@@ -7,6 +7,7 @@ import {
 import { initTRPC } from "@trpc/server";
 import { nanoid } from "nanoid";
 import { agent } from "./agent.ts";
+import { getAllConversationsWithMetadata } from "@/server/conversationMetadata.ts";
 
 export const ee = new EventEmitter();
 
@@ -48,7 +49,7 @@ export const appRouter = router({
   }),
 
   listConversations: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.conversations.list();
+    return getAllConversationsWithMetadata(ctx);
   }),
 });
 

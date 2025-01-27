@@ -5,10 +5,10 @@ import { initTRPC } from "@trpc/server";
 import AsyncLock from "async-lock";
 import path from "node:path";
 import { findUp } from "find-up";
+import { ConversationMetadata } from '@/server/conversationMetadata.ts';
 
-const projectRoot = path.dirname(await findUp("deno.json") ?? '');
-const storePath = path.join(projectRoot, '.cache/kvs');
-console.log(storePath);
+const projectRoot = path.dirname((await findUp("deno.json")) ?? "");
+const storePath = path.join(projectRoot, ".cache/kvs");
 
 export async function createContext() {
   const conversationStore = await kvsLocalStorage({
@@ -16,8 +16,10 @@ export async function createContext() {
     version: 1,
     storeFilePath: storePath,
   });
-  const conversationNamesStore = await kvsLocalStorage({
-    name: "conversation-names",
+  const conversationMetadataStore = await kvsLocalStorage<
+    Record<string, ConversationMetadata>
+  >({
+    name: "conversation-metadata",
     version: 1,
     storeFilePath: storePath,
   });
@@ -44,12 +46,12 @@ export async function createContext() {
   };
 
   const listConversations = async () => {
-    return [] as string[];
-    // return (await conversationList.get("list")) as string[];
+    return (await conversationList.get("list")) as string[];
   };
 
   return {
-    conversationNamesStore,
+    conversationMetadataStore,
+    conversationLock,
     conversations: {
       store: conversationStore,
       list: listConversations,
@@ -57,6 +59,8 @@ export async function createContext() {
     },
   };
 }
+
+export type Context = Awaited<ReturnType<typeof createContext>>;
 
 export const t = initTRPC.context<typeof createContext>().create();
 export const ai = initAgents
