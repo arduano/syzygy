@@ -28,7 +28,18 @@ class ScriptsFolder {
     this.path = path;
   }
 
+  private async ensureDir() {
+    try {
+      await Deno.mkdir(this.path, { recursive: true });
+    } catch (e) {
+      if (!(e instanceof Deno.errors.AlreadyExists)) {
+        throw e;
+      }
+    }
+  }
+
   async listScripts() {
+    await this.ensureDir();
     const scriptsPath = path.join(this.path);
     const scripts = await Deno.readDir(scriptsPath);
     const scriptNames = [];
@@ -41,6 +52,7 @@ class ScriptsFolder {
   }
 
   async listScriptsWithContents() {
+    await this.ensureDir();
     const scripts = await this.listScripts();
     return Object.fromEntries(
       await Promise.all(
@@ -57,14 +69,17 @@ class ScriptsFolder {
   }
 
   async getScript(scriptName: string) {
+    await this.ensureDir();
     return Deno.readTextFile(this.getScriptPath(scriptName));
   }
 
   async writeScript(scriptName: string, text: string) {
+    await this.ensureDir();
     await Deno.writeTextFile(this.getScriptPath(scriptName), text);
   }
 
   async deleteScript(scriptName: string) {
+    await this.ensureDir();
     await Deno.remove(this.getScriptPath(scriptName));
   }
 }

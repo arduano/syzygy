@@ -11,21 +11,21 @@ interface ExecutionResult {
 
 export interface DenoPermissions {
   // File system permissions
-  allowRead?: string[];
+  allowRead?: true | string[];
   denyRead?: string[];
-  allowWrite?: string[];
+  allowWrite?: true | string[];
   denyWrite?: string[];
 
   // Network permissions
-  allowNet?: string[];
+  allowNet?: true | string[];
   denyNet?: string[];
 
   // Environment permissions
-  allowEnv?: string[];
+  allowEnv?: true | string[];
   denyEnv?: string[];
 
   // System information permissions
-  allowSys?: Array<
+  allowSys?: true | Array<
     | "hostname"
     | "osRelease"
     | "osUptime"
@@ -47,15 +47,15 @@ export interface DenoPermissions {
   >;
 
   // Subprocess permissions
-  allowRun?: string[];
+  allowRun?: true | string[];
   denyRun?: string[];
 
   // FFI permissions
-  allowFfi?: string[];
+  allowFfi?: true | string[];
   denyFfi?: string[];
 
   // Import permissions
-  allowImport?: string[];
+  allowImport?: true | string[];
 }
 
 function buildDenoPermissionFlags(permissions: DenoPermissions): string[] {
@@ -64,10 +64,12 @@ function buildDenoPermissionFlags(permissions: DenoPermissions): string[] {
   // Helper function to add permission flags
   const addPermissionFlag = (
     flag: string,
-    allowed?: string[],
+    allowed?: true | string[],
     denied?: string[]
   ) => {
-    if (allowed?.length) {
+    if (allowed === true) {
+      flags.push(`--allow-${flag}`);
+    } else if (Array.isArray(allowed) && allowed.length) {
       flags.push(`--allow-${flag}=${allowed.join(",")}`);
     }
     if (denied?.length) {
@@ -84,19 +86,24 @@ function buildDenoPermissionFlags(permissions: DenoPermissions): string[] {
   addPermissionFlag("run", permissions.allowRun, permissions.denyRun);
   addPermissionFlag("ffi", permissions.allowFfi, permissions.denyFfi);
 
-  if (permissions.allowImport?.length) {
+  if (permissions.allowImport === true) {
+    flags.push(`--import`);
+  } else if (Array.isArray(permissions.allowImport) && permissions.allowImport.length) {
     flags.push(`--import=${permissions.allowImport.join(",")}`);
   }
 
   return flags;
 }
 
-export async function executeScript(
-  projectName: string,
-  code: string,
-  permissions: DenoPermissions = {},
-  onProgress?: (data: string) => void
-): Promise<ExecutionResult> {
+export async function executeScript(args: {
+  projectName: string;
+  code: string;
+  permissions: DenoPermissions;
+  onProgress?: (data: string) => void;
+  workdir?: string;
+}): Promise<ExecutionResult> {
+  const { projectName, code, permissions, onProgress, workdir } = args;
+
   const filename = `temp_${nanoid()}.ts`;
   const scriptsFolder = scriptDb.projectScriptFiles(projectName);
   const scriptPath = path.join(scriptsFolder.path, filename);
@@ -110,6 +117,7 @@ export async function executeScript(
       args: ["run", ...permissionFlags, scriptPath],
       stdout: "piped",
       stderr: "piped",
+      cwd: workdir,
       env: {
         ...Deno.env.toObject(),
         LD_LIBRARY_PATH: "", // Requires unsetting this for the security sandbox

@@ -5,7 +5,6 @@ import type { AgentTools, ChatAIMessageToolCall } from "@trpc-chat-agent/core";
 import { ToolCallWrapper } from "@/components/chat/ToolCallWrapper.tsx";
 import { ToolResultWrapper } from "@/components/chat/ToolResultWrapper.tsx";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
-import { ExpertResponse } from "./ExpertResponse.tsx";
 import { useState } from "react";
 import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -49,7 +48,7 @@ function CodeContent({
     );
 
     return (
-      <ScrollArea className="max-w-full" orientation="both">
+      <ScrollArea className="max-w-full max-h-full" orientation="both">
         {inner}
       </ScrollArea>
     );
@@ -69,7 +68,7 @@ function CodeContent({
           <DialogHeader>
             <DialogTitle>Full Content</DialogTitle>
           </DialogHeader>
-          <div className="p-4 max-w-2xl">
+          <div className="p-4 max-w-2xl max-h-[80vh]">
             <CodeBlock content={content} />
           </div>
         </DialogContent>
@@ -91,7 +90,7 @@ export function RenderTool({
           <div className="space-y-2">
             <div>
               <span className="font-semibold">Path: </span>
-              <code>{tool.args?.path}</code>
+              <code>{tool.args?.filename}</code>
             </div>
             <div>
               <span className="font-semibold">Declarations:</span>
@@ -162,6 +161,30 @@ export function RenderTool({
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+          </div>
+        </ToolCallWrapper>
+      );
+    }
+
+    case "get-advice": {
+      const data = tool.result;
+      return (
+        <ToolCallWrapper tool={tool} title="AI Advice">
+          <div className="space-y-2">
+            <div>
+              <span className="font-semibold">Question:</span>
+              <div className="mt-1">
+                <StyledMarkdown>{tool.args?.question ?? ""}</StyledMarkdown>
+              </div>
+            </div>
+            {data && (
+              <div>
+                <span className="font-semibold">Answer:</span>
+                <div className="mt-1">
+                  <StyledMarkdown>{data.answer}</StyledMarkdown>
+                </div>
               </div>
             )}
           </div>

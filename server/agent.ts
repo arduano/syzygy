@@ -22,11 +22,15 @@ const deepseek = new ChatDeepSeek({
   },
 });
 
+const expert = new ChatOpenAI({
+  modelName: "o1-mini",
+});
+
 const writeLibFile = ai.tool({
   name: "write-lib-file",
   description: "Write a file to the lib directory",
   schema: z.object({
-    path: z.string(),
+    filename: z.string(),
     content: z
       .string()
       .describe(
@@ -38,14 +42,18 @@ const writeLibFile = ai.tool({
         "The high-level detailed description of the file's exports and functionality, including doc comments for each item. You don't need to include code here other than the signatures, unless it helps illustrate the point."
       ),
   }),
-  run: async ({ input: { path, content, declarationsWithComments } }) => {
+  run: async ({ input: { filename, content, declarationsWithComments } }) => {
     const projectName = currentProject;
+
+    if (filename.startsWith("@lib/")) {
+      filename = filename.slice("@lib/".length);
+    }
 
     const fullContent = mergeSplitDocFile({
       content,
       docComment: declarationsWithComments,
     });
-    await scriptDb.projectFiles(projectName).writeScript(path, fullContent);
+    await scriptDb.projectFiles(projectName).writeScript(filename, fullContent);
 
     return {
       response: "File written",
@@ -57,6 +65,37 @@ const writeLibFile = ai.tool({
   mapArgsForClient: (args) => args,
   mapErrorForAI: (error) => `An error occurred: ${error}`,
 });
+
+function truncateStringLines(
+  str: string,
+  maxLines: number,
+  maxLineLength: number
+) {
+  let lines = str.split("\n");
+
+  // Remove lines from the middle, inserting a marker saying N lines were truncated
+  if (lines.length > maxLines) {
+    lines = [
+      ...lines.slice(0, maxLines / 2),
+      `...`,
+      `... ${lines.length - maxLines} lines truncated ...`,
+      `...`,
+      ...lines.slice(-maxLines / 2),
+    ];
+  }
+
+  lines = lines.map((line) => {
+    if (line.length > maxLineLength) {
+      return (
+        line.slice(0, maxLineLength) +
+        ` ... truncated ${line.length - maxLineLength} characters ...`
+      );
+    }
+    return line;
+  });
+
+  return lines.join("\n");
+}
 
 const executeScriptTool = ai.tool({
   name: "execute-script",
@@ -70,26 +109,33 @@ const executeScriptTool = ai.tool({
   run: async ({ input: { code }, sendProgress }) => {
     const permissions: DenoPermissions = {
       allowRun: ["git"],
+      allowRead: [currentWorkdir, "."],
+      allowWrite: [currentWorkdir, "."],
+      allowEnv: true,
     };
 
-    const result = await executeScript(
-      currentProject,
+    const result = await executeScript({
+      projectName: currentProject,
+      workdir: currentWorkdir,
       code,
       permissions,
-      (output) => {
+      onProgress: (output) => {
         sendProgress({
           output,
         });
-      }
-    );
+      },
+    });
+
+    const stdout = truncateStringLines(result.stdout, 200, 500);
+    const stderr = truncateStringLines(result.stderr, 200, 500);
 
     const aiResponse = `
 <output>
 <stdout>
-${result.stdout}
+${stdout}
 </stdout>
 <stderr>
-${result.stderr}
+${stderr}
 </stderr>
 <exitCode>
 ${result.exitCode}
@@ -99,14 +145,76 @@ ${result.exitCode}
 
     return {
       response: aiResponse,
-      clientResult: result,
+      clientResult: {
+        ...result,
+        stdout,
+        stderr,
+      },
     };
   },
   mapArgsForClient: (args) => args,
   mapErrorForAI: (error) => `An error occurred: ${error}`,
 });
 
-const allTools = [writeLibFile, executeScriptTool] as const;
+const getAdvice = ai.tool({
+  name: "get-advice",
+  description:
+    "Get advice or answers to questions from an expert programmer. The expert programmer can see the full chat history.",
+  schema: z.object({
+    question: z
+      .string()
+      .describe(
+        "The question or topic to get advice about. Be specific and thorough with your question. Make sure all details are covered, and always include extra context where possible."
+      ),
+  }),
+  run: async ({ input: { question }, conversation, conversationPath }) => {
+    const chatHistory = conversation.asMessagesArray(conversationPath);
+
+    const chatHistoryMessages = chatHistory
+      .map((message) => {
+        if (message.kind === "ai") {
+          return `
+<ai>
+${message.parts.map((part) => part.content).join("\n\n")}
+</ai>
+          `.trim();
+        } else {
+          return `
+<user>
+${message.content}
+</user>
+          `.trim();
+        }
+      })
+      .join("\n\n");
+
+    const response = await expert.invoke([
+      {
+        role: "user",
+        content: `You are a helpful assistant that can provide advice or answers to programming questions. You deeply think about the implementation of code and come up with the perfect solutions to problems.`,
+      },
+      {
+        role: "user",
+        content: chatHistoryMessages,
+      },
+      {
+        role: "user",
+        content: question,
+      },
+    ]);
+
+    return {
+      response: response.content,
+      clientResult: {
+        answer: response.content as string,
+      },
+    };
+  },
+  mapArgsForClient: (args) => args,
+  mapErrorForAI: (error) => `An error occurred: ${error}`,
+});
+
+const allTools = [writeLibFile, executeScriptTool, getAdvice] as const;
 
 const langfuseHandler = new CallbackHandler({
   publicKey: "pk-lf-a52f8e79-f42c-430b-be4c-c3b78da4a0c4",

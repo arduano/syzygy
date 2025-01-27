@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { trpc, trpcClient } from "@/utils/trpc.ts";
 
-import { useSignal } from "@preact/signals-react";
+import { ReadonlySignal, Signal, useSignal } from "@preact/signals-react";
 import { RenderMessages, useConversation } from "@trpc-chat-agent/react";
 import React, { useEffect, useRef, useState } from "react";
 import { AIMessageShell } from "../../components/chat/AIMessage.tsx";
@@ -16,6 +16,7 @@ import { StyledMarkdown } from "../../components/chat/StyledMarkdown.tsx";
 import { UserMessage } from "../../components/chat/UserMessage.tsx";
 import { RenderTool } from "./RenderTool.tsx";
 import { useRouter } from "next/navigation";
+import { IoMdAdd } from "react-icons/io";
 
 export type ChatComponentProps = Omit<
   UseConversationArgs<AgentType>,
@@ -28,23 +29,39 @@ export function Chat({ id, ...props }: ChatComponentProps) {
   const [key, setKey] = useState(0);
   const [pastId, setPastId] = useState(id);
 
+  const lastCreatedConversation = useSignal<string | undefined>();
+
   // Force re-mount the chat component when the id changes.
   useEffect(() => {
     if (id !== pastId) {
       setPastId(id);
-      if (pastId !== undefined) {
+      const pastConvoId = lastCreatedConversation.peek();
+      if (!pastConvoId || id !== pastConvoId) {
         setKey((k) => k + 1);
+        lastCreatedConversation.value = id;
       }
     }
   }, [id]);
 
-  return <ChatComponentWithStaticId key={key} id={id} {...props} />;
+  return (
+    <ChatComponentWithStaticId
+      key={key}
+      id={id}
+      {...props}
+      lastCreatedConversation={lastCreatedConversation}
+    />
+  );
 }
+
+type ChatComponentPropsWithIdSignal = ChatComponentProps & {
+  lastCreatedConversation: Signal<string | undefined>;
+};
 
 function ChatComponentWithStaticId({
   id,
+  lastCreatedConversation,
   ...converationArgs
-}: ChatComponentProps) {
+}: ChatComponentPropsWithIdSignal) {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -65,6 +82,7 @@ function ChatComponentWithStaticId({
     initialConversationId: id,
     onUpdateConversationId: (id) => {
       converationArgs.onUpdateConversationId?.(id);
+      lastCreatedConversation.value = id;
       conversationNames.refetch();
     },
     router: trpcClient.chat,
@@ -90,6 +108,14 @@ function ChatComponentWithStaticId({
       <div className="w-64 border-r border-border bg-card">
         <ScrollArea className="h-full">
           <div className="p-4 space-y-2">
+            <div
+              className="p-2 rounded cursor-pointer hover:bg-accent flex items-center gap-2"
+              onClick={() => router.push("/chat")}
+            >
+              <IoMdAdd className="w-5 h-5" />
+              <span>New Conversation</span>
+            </div>
+            <div className="h-px bg-border my-2" />
             {conversationNames.data
               ?.toSorted(
                 (a, b) =>
