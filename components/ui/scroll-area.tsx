@@ -2,20 +2,22 @@
 
 import { cn } from '@/lib/utils.ts';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
-
 import * as React from 'react';
 
 const ScrollArea = ({
   ref,
   className,
   children,
+  orientation = 'vertical',
   ...props
 }: React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
   ref?: React.RefObject<React.ElementRef<typeof ScrollAreaPrimitive.Root>>;
+  orientation?: 'vertical' | 'horizontal' | 'both';
 }) => (
   <ScrollAreaPrimitive.Root ref={ref} className={cn('relative overflow-hidden', className)} {...props}>
     <ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit]">{children}</ScrollAreaPrimitive.Viewport>
-    <ScrollBar />
+    {(orientation === 'vertical' || orientation === 'both') && <ScrollBar orientation="vertical" />}
+    {(orientation === 'horizontal' || orientation === 'both') && <ScrollBar orientation="horizontal" />}
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
 );

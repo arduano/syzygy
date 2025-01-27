@@ -8,7 +8,6 @@
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "deno.window"],
     "strict": true,
-    "allowJs": true,
     "jsx": "react-jsx",
     "jsxImportSource": "npm:react",
     "jsxImportSourceTypes": "npm:@types/react"
@@ -21,6 +20,7 @@
     "@langchain/openai": "npm:@langchain/openai@^0.4.2",
     "@preact/signals-core": "npm:@preact/signals-core@^1.8.0",
     "@preact/signals-react": "npm:@preact/signals-react@^3.0.1",
+    "@tanstack/react-query-devtools": "npm:@tanstack/react-query-devtools@^5.64.2",
     "@trpc-chat-agent/core": "npm:@trpc-chat-agent/core@^0.3.6",
     "@trpc-chat-agent/langchain": "npm:@trpc-chat-agent/langchain@^0.3.6",
     "@trpc-chat-agent/react": "npm:@trpc-chat-agent/react@^0.3.6",
@@ -52,7 +52,7 @@
     "remark-gfm": "npm:remark-gfm@^4.0.0",
     "tailwind-merge": "npm:tailwind-merge@^2.6.0",
     "tailwind-scrollbar": "npm:tailwind-scrollbar@^3.1.0",
-    "tailwindcss": "npm:tailwindcss@^4.0.0",
+    "tailwindcss": "npm:tailwindcss@3.4.1",
     "tailwindcss-animate": "npm:tailwindcss-animate@^1.0.7",
     "zod": "npm:zod@3.24.1"
   },
