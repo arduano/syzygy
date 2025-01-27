@@ -1,20 +1,15 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { z } from "zod";
-import { ai } from "./context";
-import { ChatAnthropic } from "@langchain/anthropic";
+import { ai } from "./context.ts";
 import {
   isAIMessageChunk,
   type AIMessageChunk,
 } from "@langchain/core/messages";
 import { CallbackHandler } from "langfuse-langchain";
 import { nanoid } from "nanoid";
-import { Debouncer } from "./debouncer";
-import {
-  ChatCompletion,
-  ChatCompletionChunk,
-  ChatCompletionMessage,
-} from "openai/resources/index.mjs";
-import { ChatDeepSeek } from "./chatDeepseek";
+import { Debouncer } from "./debouncer.ts";
+import { ChatDeepSeek } from "./chatDeepseek.ts";
+import process from "node:process";
 
 const deepseek = new ChatDeepSeek({
   openAIApiKey: process.env.DEEPSEEK_API_KEY,
@@ -57,16 +52,9 @@ const askExperts = ai.tool({
       .string()
       .describe("The question and context to ask the experts."),
     attachedPastExpertsResponses: z
-      .string()
-      .optional()
+      .array(z.string())
       .describe(
         "The comma-separated IDs of the responses of the past experts to attach to the question. Please use this to reference past expert responses instead of just re-writing them yourself. This forwards the thinking of the expert as well."
-      ),
-    includeLastUserMessage: z
-      .boolean()
-      .default(true)
-      .describe(
-        "Whether to automatically include the last user message as context."
       ),
     numberOfExperts: z
       .number()
@@ -81,12 +69,12 @@ const askExperts = ai.tool({
   run: async ({
     input: {
       questionAndContext,
-      includeLastUserMessage,
       attachedPastExpertsResponses,
       numberOfExperts,
     },
     sendProgress,
-    lastUserMessage,
+    conversation,
+    conversationPath,
     ctx,
     conversationId,
     signal,
@@ -98,7 +86,7 @@ const askExperts = ai.tool({
     const pastMessagesStore = await ctx.getExpertAnswersStore(conversationId);
 
     const pastExpertsResponsesData = await Promise.all(
-      (attachedPastExpertsResponses?.split(",") ?? []).map(async (id) => {
+      (attachedPastExpertsResponses ?? []).map(async (id) => {
         const data = await pastMessagesStore.get(id);
         if (data === undefined) {
           throw new Error(`Expert response with id ${id} not found`);
@@ -106,6 +94,8 @@ const askExperts = ai.tool({
         return { id, data };
       })
     );
+
+    const chatHistory = conversation.asMessagesArray(conversationPath);
 
     const pastExpertResponsesStrings = pastExpertsResponsesData
       .map(({ id, data }) => {
@@ -117,13 +107,30 @@ ${data}
       })
       .join("\n\n");
 
-    const pastUserMessageStr = !includeLastUserMessage
-      ? ""
-      : `
-<pastUserMessage>
-${lastUserMessage.content}
-</pastUserMessage>
-    `;
+    const chatHistoryStr = chatHistory
+      .map((message) => {
+        if (message.kind === "user") {
+          return `
+<userMessage>
+${message.content}
+</userMessage>
+        `;
+        } else if (message.kind === "ai") {
+          return message.parts
+            .map((part) =>
+              `
+<assistantMessage>
+${part.content}
+</assistantMessage>
+        `.trim()
+            )
+            .join("\n\n");
+        } else {
+          throw new Error("Unknown message kind");
+        }
+      })
+      .map((str) => str.trim())
+      .join("\n\n");
 
     const requestStr = `
 <request>
@@ -134,7 +141,7 @@ ${questionAndContext}
     const fullPrompt = `
 ${pastExpertResponsesStrings.trim()}
 
-${pastUserMessageStr.trim()}
+${chatHistoryStr.trim()}
 
 ${requestStr.trim()}
     `.trim();
@@ -281,35 +288,39 @@ async function invokePrompt(
 
   const startTime = new Date();
 
-  return new Promise<ResponseData>(async (resolve) => {
-    let aggregateChunk: AIMessageChunk | undefined;
-    for await (const chunk of stream) {
-      if (chunk.event === "on_chat_model_stream") {
-        const data = chunk.data.chunk;
-        if (isAIMessageChunk(data)) {
-          if (!aggregateChunk) {
-            aggregateChunk = data;
-          } else {
-            aggregateChunk = aggregateChunk.concat(data);
+  return new Promise<ResponseData>((resolve) => {
+    const invoke = async () => {
+      let aggregateChunk: AIMessageChunk | undefined;
+      for await (const chunk of stream) {
+        if (chunk.event === "on_chat_model_stream") {
+          const data = chunk.data.chunk;
+          if (isAIMessageChunk(data)) {
+            if (!aggregateChunk) {
+              aggregateChunk = data;
+            } else {
+              aggregateChunk = aggregateChunk.concat(data);
+            }
+            callbacks?.onProgress?.(aggregateChunk);
           }
-          callbacks?.onProgress?.(aggregateChunk);
         }
-      }
 
-      if (chunk.event === "on_chat_model_end") {
-        const data = chunk.data.output;
-        if (isAIMessageChunk(data)) {
-          aggregateChunk = data;
-          callbacks?.onComplete?.(aggregateChunk);
-          resolve({
-            message: aggregateChunk,
-            startTime,
-            endTime: new Date(),
-          });
-          break;
+        if (chunk.event === "on_chat_model_end") {
+          const data = chunk.data.output;
+          if (isAIMessageChunk(data)) {
+            aggregateChunk = data;
+            callbacks?.onComplete?.(aggregateChunk);
+            resolve({
+              message: aggregateChunk,
+              startTime,
+              endTime: new Date(),
+            });
+            break;
+          }
         }
       }
-    }
+    };
+
+    invoke();
   });
 }
 
@@ -322,9 +333,19 @@ const langfuseHandler = new CallbackHandler({
 });
 
 export const agent = ai.agent({
-  llm: new ChatAnthropic({ model: "claude-3-5-sonnet-20241022" }),
+  llm: new ChatOpenAI({ model: "gpt-4o" }),
+  // llm: new ChatAnthropic({ model: "claude-3-5-sonnet-20241022" }),
   tools: allTools,
   langchainCallbacks: [langfuseHandler],
+  systemMessage: `
+You are an assistant that is helping me solve difficult problems.
+You have access to domain experts, and can request multiple experts to answer a question.
+
+For any difficult question, follow these steps:
+- Decide how many expert opinions are ideal to answer the question. 3 is a good sweet spot, but you can go up to 5 for really difficult questions.
+- When you get expert responses, it's good practice to ask more experts to judge these responses. You aren't perfect, so it's important to rely on expert opinions.
+- Always include all the relevant context for each expert request. Include the relevant past expert responses, and the relevant user messages.
+  `,
 });
 
 export type AgentType = typeof agent;

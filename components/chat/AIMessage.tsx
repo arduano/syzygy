@@ -1,9 +1,9 @@
 import type { ReadonlySignal } from '@preact/signals-core';
 import type { AgentExtraArgs, AnyChatAgent, ChatAIMessage } from '@trpc-chat-agent/core';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils.ts';
 import { CgRedo } from 'react-icons/cg';
-import { Button } from '../ui/button';
-import { MessageVariants } from './MessageVariants';
+import { Button } from '../ui/button.tsx';
+import { MessageVariants } from './MessageVariants.tsx';
 import { JSX } from 'react';
 
 export function AIMessageShell<Agent extends AnyChatAgent>({

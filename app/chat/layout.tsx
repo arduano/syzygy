@@ -1,6 +1,6 @@
 'use client';
 
-import { Chat } from '@/app/chat/Chat';
+import { Chat } from '@/app/chat/Chat.tsx';
 import { useParams, useRouter } from 'next/navigation';
 
 export default function Home() {

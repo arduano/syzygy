@@ -1,9 +1,9 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils.ts';
 import Markdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import remarkGfm from 'remark-gfm';
-import { Card } from '../ui/card';
+import { Card } from '../ui/card.tsx';
 
 export function StyledMarkdown({ children }: { children: string }) {
   return (

@@ -1,13 +1,12 @@
-import type { createContext } from "./context";
+import type { createContext } from "./context.ts";
 import { EventEmitter } from "node:events";
 import {
   makeChatRouterForAgent,
   ServerSideChatConversationHelper,
 } from "@trpc-chat-agent/core";
 import { initTRPC } from "@trpc/server";
-import { observable } from "@trpc/server/observable";
 import { nanoid } from "nanoid";
-import { agent } from "./agent";
+import { agent } from "./agent.ts";
 
 export const ee = new EventEmitter();
 

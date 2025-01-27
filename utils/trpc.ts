@@ -1,4 +1,4 @@
-import type { AppRouter } from '@/server/trpc';
+import type { AppRouter } from '@/server/trpc.ts';
 import { splitLink, unstable_httpBatchStreamLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
 

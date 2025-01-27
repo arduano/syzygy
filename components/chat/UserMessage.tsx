@@ -4,14 +4,14 @@ import type {
   AnyChatAgent,
   ChatUserMessage,
 } from "@trpc-chat-agent/core";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils.ts";
 import { useState } from "react";
 import { RiPencilFill } from "react-icons/ri";
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
-import { Textarea } from "../ui/textarea";
-import { MessageVariants } from "./MessageVariants";
-import { StyledMarkdown } from "./StyledMarkdown";
+import { Button } from "../ui/button.tsx";
+import { Card } from "../ui/card.tsx";
+import { Textarea } from "../ui/textarea.tsx";
+import { MessageVariants } from "./MessageVariants.tsx";
+import { StyledMarkdown } from "./StyledMarkdown.tsx";
 
 export function UserMessage<Agent extends AnyChatAgent>({
   message,

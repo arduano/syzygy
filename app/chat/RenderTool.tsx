@@ -1,15 +1,13 @@
 "use client";
 
-import type { AgentType } from "@/server/agent";
+import type { AgentType } from "@/server/agent.ts";
 import type { AgentTools, ChatAIMessageToolCall } from "@trpc-chat-agent/core";
-import { ToolCallWrapper } from "@/components/chat/ToolCallWrapper";
-import { ToolResultWrapper } from "@/components/chat/ToolResultWrapper";
+import { ToolCallWrapper } from "@/components/chat/ToolCallWrapper.tsx";
+import { ToolResultWrapper } from "@/components/chat/ToolResultWrapper.tsx";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
-import { ExpertResponse } from "./ExpertResponse";
+import { ExpertResponse } from "./ExpertResponse.tsx";
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { StyledMarkdown } from "@/components/chat/StyledMarkdown";
+import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
 
 export function RenderTool({
   tool,
@@ -17,14 +15,16 @@ export function RenderTool({
   tool: ChatAIMessageToolCall<AgentTools<AgentType>>;
 }) {
   switch (tool.name) {
-    case "ask-experts":
+    case "ask-experts": {
       const data = tool.result ?? tool.progressStatus;
 
       return (
         <ToolCallWrapper tool={tool} title="Expert Consultation">
           <div className="flex gap-2">
             <span className="font-semibold">Question:</span>
-            <StyledMarkdown>{tool.args?.questionAndContext ?? ''}</StyledMarkdown>
+            <StyledMarkdown>
+              {tool.args?.questionAndContext ?? ""}
+            </StyledMarkdown>
           </div>
           <ToolResultWrapper
             icon={
@@ -59,6 +59,7 @@ export function RenderTool({
           </ToolResultWrapper>
         </ToolCallWrapper>
       );
+    }
 
     default:
       return (

@@ -1,20 +1,20 @@
 'use client';
 
-import type { AgentType } from '@/server/agent';
+import type { AgentType } from '@/server/agent.ts';
 import type { AgentExtraArgs } from '@trpc-chat-agent/core';
 import type { UseConversationArgs } from '@trpc-chat-agent/react';
-import { Card } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Textarea } from '@/components/ui/textarea';
-import { trpcClient } from '@/utils/trpc';
+import { Card } from '@/components/ui/card.tsx';
+import { ScrollArea } from '@/components/ui/scroll-area.tsx';
+import { Textarea } from '@/components/ui/textarea.tsx';
+import { trpcClient } from '@/utils/trpc.ts';
 
 import { useSignal } from '@preact/signals-react';
 import { RenderMessages, useConversation } from '@trpc-chat-agent/react';
 import React, { useEffect, useRef, useState } from 'react';
-import { AIMessageShell } from '../../components/chat/AIMessage';
-import { StyledMarkdown } from '../../components/chat/StyledMarkdown';
-import { UserMessage } from '../../components/chat/UserMessage';
-import { RenderTool } from './RenderTool';
+import { AIMessageShell } from '../../components/chat/AIMessage.tsx';
+import { StyledMarkdown } from '../../components/chat/StyledMarkdown.tsx';
+import { UserMessage } from '../../components/chat/UserMessage.tsx';
+import { RenderTool } from './RenderTool.tsx';
 
 export type ChatComponentProps = Omit<UseConversationArgs<AgentType>, 'initialConversationId' | 'router'> & {
   id?: string;

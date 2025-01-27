@@ -1,17 +1,17 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { StyledMarkdown } from "@/components/chat/StyledMarkdown";
+} from "@/components/ui/dialog.tsx";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
+import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
 import { useState } from "react";
 import { HiOutlineLightBulb, HiOutlinePencil } from "react-icons/hi2";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils.ts";
 
 interface ExpertResponseProps {
   title: string;

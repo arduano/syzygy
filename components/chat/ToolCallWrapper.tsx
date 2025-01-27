@@ -1,5 +1,5 @@
 import type { ChatAIMessageToolCall, ToolCallState } from '@trpc-chat-agent/core';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils.ts';
 
 interface ToolCallWrapperProps {
   children?: React.ReactNode;

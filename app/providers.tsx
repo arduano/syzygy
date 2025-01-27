@@ -1,6 +1,6 @@
 'use client';
 
-import { trpc, trpcClient } from '@/utils/trpc';
+import { trpc, trpcClient } from '@/utils/trpc.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 
