@@ -19,15 +19,18 @@ export const middleware = t.middleware;
 export const appRouter = router({
   chat: makeChatRouterForAgent({
     agent,
-    createConversation: async (_ctx) => {
+    createConversation: async ({ ctx }) => {
       const id = nanoid();
+
+      await ctx.conversations.addConversation(id);
+
       return ServerSideChatConversationHelper.newConversationData<typeof agent>(
         id
       );
     },
     getConversation: async ({ id, ctx }) => {
       try {
-        const data = await ctx.conversations.get(id);
+        const data = await ctx.conversations.store.get(id);
         if (!data) {
           return null;
         }
@@ -40,8 +43,12 @@ export const appRouter = router({
     },
     t,
     saveConversation: async ({ id, conversation, ctx }) => {
-      await ctx.conversations.set(id, conversation);
+      await ctx.conversations.store.set(id, conversation as any);
     },
+  }),
+
+  listConversations: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.conversations.list();
   }),
 });
 

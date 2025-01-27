@@ -13,7 +13,7 @@ export function splitFileDoc(input: string): SplitFile {
 
   const [fullMatch, commentContent] = match;
 
-  // Process comment lines
+  // Process comment lines and restore */ sequences
   const docComment = commentContent
     .split("\n")
     .map((line) => {
@@ -21,7 +21,8 @@ export function splitFileDoc(input: string): SplitFile {
       return trimmed.replace(/^\*\s?/, "").trim();
     })
     .join("\n")
-    .trim();
+    .trim()
+    .replace(/\/\*/g, "*/");  // Restore */ sequences
 
   return {
     docComment,
@@ -33,7 +34,10 @@ export function mergeSplitDocFile({ docComment, content }: SplitFile): string {
   let merged = "";
 
   if (docComment) {
-    const commentBody = docComment
+    // Replace */ with /* in the doc comment to prevent early termination
+    const safeComment = docComment.replace(/\*\//g, "/\\*");
+    
+    const commentBody = safeComment
       .split("\n")
       .map((line) => ` * ${line}`)
       .join("\n");

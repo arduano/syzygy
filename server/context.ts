@@ -3,34 +3,58 @@ import { AgentsBackend, initAgents } from "@trpc-chat-agent/core";
 import { LangChainAgentsBackend } from "@trpc-chat-agent/langchain";
 import { initTRPC } from "@trpc/server";
 import AsyncLock from "async-lock";
+import path from "node:path";
+import { findUp } from "find-up";
+
+const projectRoot = path.dirname(await findUp("deno.json") ?? '');
+const storePath = path.join(projectRoot, '.cache/kvs');
+console.log(storePath);
 
 export async function createContext() {
-  // Primitive KV database to store conversations
   const conversationStore = await kvsLocalStorage({
     name: "conversations",
     version: 1,
+    storeFilePath: storePath,
   });
-
-  const todosStore = await kvsLocalStorage({
-    name: "todos",
+  const conversationNamesStore = await kvsLocalStorage({
+    name: "conversation-names",
     version: 1,
+    storeFilePath: storePath,
   });
 
-  // Help prevent race conditions
-  const todosLock = new AsyncLock();
+  const conversationLock = new AsyncLock();
+  const conversationList = await kvsLocalStorage({
+    name: "conversation-list",
+    version: 1,
+    storeFilePath: storePath,
+  });
 
-  const getExpertAnswersStore = (chatId: string) => {
-    return kvsLocalStorage({
-      name: `expert-answers-${chatId}`,
-      version: 1,
+  const addConversation = async (id: string) => {
+    await conversationLock.acquire(id, async () => {
+      const existing = (await conversationList.get("list")) as string[];
+      if (existing) {
+        if (existing.includes(id)) {
+          return;
+        }
+        await conversationList.set("list", [...existing, id]);
+      } else {
+        await conversationList.set("list", [id]);
+      }
     });
   };
 
+  const listConversations = async () => {
+    return [] as string[];
+    // return (await conversationList.get("list")) as string[];
+  };
+
   return {
-    conversations: conversationStore,
-    getExpertAnswersStore,
-    todos: todosStore,
-    todosLock,
+    conversationNamesStore,
+    conversations: {
+      store: conversationStore,
+      list: listConversations,
+      addConversation,
+    },
   };
 }
 

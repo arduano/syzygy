@@ -97,7 +97,7 @@ export function RenderTool({
               <span className="font-semibold">Declarations:</span>
               <div className="mt-1">
                 <CodeContent
-                  content={tool.args?.declarations ?? ""}
+                  content={tool.args?.declarationsWithComments ?? ""}
                   language="typescript"
                 />
               </div>

@@ -32,18 +32,18 @@ const writeLibFile = ai.tool({
       .describe(
         "The actual content of the lib file, exporting all the relevant helper functions."
       ),
-    declarations: z
+    declarationsWithComments: z
       .string()
       .describe(
-        "The high-level detailed description of the file's exports and functionality. You don't need to include code here other than the signatures, unless it helps illustrate the point."
+        "The high-level detailed description of the file's exports and functionality, including doc comments for each item. You don't need to include code here other than the signatures, unless it helps illustrate the point."
       ),
   }),
-  run: async ({ input: { path, content, declarations } }) => {
+  run: async ({ input: { path, content, declarationsWithComments } }) => {
     const projectName = currentProject;
 
     const fullContent = mergeSplitDocFile({
       content,
-      docComment: declarations,
+      docComment: declarationsWithComments,
     });
     await scriptDb.projectFiles(projectName).writeScript(path, fullContent);
 

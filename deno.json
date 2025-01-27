@@ -34,6 +34,7 @@
     "@types/react-dom": "npm:@types/react-dom@^19.0.3",
     "async-lock": "npm:async-lock@^1.4.1",
     "class-variance-authority": "npm:class-variance-authority@^0.7.1",
+    "find-up": "npm:find-up@^7.0.0",
     "langfuse-langchain": "npm:langfuse-langchain@^3.32.3",
     "nanoid": "npm:nanoid@^5.0.9",
     "openai": "npm:openai@^4.80.1",
