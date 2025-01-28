@@ -56,6 +56,10 @@ export interface DenoPermissions {
 
   // Import permissions
   allowImport?: true | string[];
+
+  // Script permissions
+  allowScripts?: true | string[];
+  denyScripts?: string[];
 }
 
 function buildDenoPermissionFlags(permissions: DenoPermissions): string[] {
@@ -85,6 +89,7 @@ function buildDenoPermissionFlags(permissions: DenoPermissions): string[] {
   addPermissionFlag("sys", permissions.allowSys, permissions.denySys);
   addPermissionFlag("run", permissions.allowRun, permissions.denyRun);
   addPermissionFlag("ffi", permissions.allowFfi, permissions.denyFfi);
+  addPermissionFlag("scripts", permissions.allowScripts, permissions.denyScripts);
 
   if (permissions.allowImport === true) {
     flags.push(`--import`);

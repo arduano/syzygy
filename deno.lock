@@ -5,6 +5,7 @@
     "npm:@kvs/node-localstorage@^2.2.0": "2.2.0",
     "npm:@langchain/anthropic@~0.3.12": "0.3.12_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.80.1__zod@3.24.1",
     "npm:@langchain/core@~0.3.36": "0.3.36_openai@4.80.1__zod@3.24.1_zod@3.24.1",
+    "npm:@langchain/groq@~0.1.3": "0.1.3_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.80.1__zod@3.24.1",
     "npm:@langchain/openai@~0.4.2": "0.4.2_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.80.1__zod@3.24.1",
     "npm:@preact/signals-core@^1.8.0": "1.8.0",
     "npm:@preact/signals-react@^3.0.1": "3.0.1_react@19.0.0",
@@ -53,6 +54,7 @@
     "npm:tailwind-scrollbar@^3.1.0": "3.1.0_tailwindcss@3.4.17__postcss@8.5.1",
     "npm:tailwindcss-animate@^1.0.7": "1.0.7_tailwindcss@3.4.1__postcss@8.5.1",
     "npm:tailwindcss@3.4.1": "3.4.1_postcss@8.5.1",
+    "npm:tree-sitter@*": "0.22.4",
     "npm:typescript@5.7.3": "5.7.3",
     "npm:typescript@^5.7.3": "5.7.3",
     "npm:zod@3.24.1": "3.24.1"
@@ -308,6 +310,16 @@
         "zod-to-json-schema"
       ]
     },
+    "@langchain/groq@0.1.3_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.80.1__zod@3.24.1": {
+      "integrity": "sha512-dMzvBVaLf/0IQoHdAOAN8W/PbOcwgbvgUMCn02CqvCC90mxZ45LI0Tipzqnoaam0hiKALR5hLc3dNj1oCYV92w==",
+      "dependencies": [
+        "@langchain/core",
+        "@langchain/openai@0.3.17_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.80.1__zod@3.24.1",
+        "groq-sdk",
+        "zod",
+        "zod-to-json-schema"
+      ]
+    },
     "@langchain/langgraph-checkpoint@0.0.13_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_openai@4.80.1__zod@3.24.1": {
       "integrity": "sha512-amdmBcNT8a9xP2VwcEWxqArng4gtRDcnVyVI4DsQIo1Aaz8e8+hH17zSwrUF3pt1pIYztngIfYnBOim31mtKMg==",
       "dependencies": [
@@ -332,6 +344,16 @@
         "@langchain/langgraph-sdk",
         "uuid@10.0.0",
         "zod"
+      ]
+    },
+    "@langchain/openai@0.3.17_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.80.1__zod@3.24.1": {
+      "integrity": "sha512-uw4po32OKptVjq+CYHrumgbfh4NuD7LqyE+ZgqY9I/LrLc6bHLMc+sisHmI17vgek0K/yqtarI0alPJbzrwyag==",
+      "dependencies": [
+        "@langchain/core",
+        "js-tiktoken",
+        "openai",
+        "zod",
+        "zod-to-json-schema"
       ]
     },
     "@langchain/openai@0.4.2_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.80.1__zod@3.24.1": {
@@ -1140,7 +1162,7 @@
       "integrity": "sha512-0iirZp3uVDjVGt9p49aTaqjk84TrglENEDuqfdlZQ1roC9CWlPk6Avf8EEnZNcAqPonwkG35x4n3ww/1THYAeQ==",
       "dependencies": [
         "node-domexception",
-        "web-streams-polyfill"
+        "web-streams-polyfill@4.0.0-beta.3"
       ]
     },
     "fsevents@2.3.3": {
@@ -1180,6 +1202,19 @@
     },
     "graceful-fs@4.2.11": {
       "integrity": "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="
+    },
+    "groq-sdk@0.5.0": {
+      "integrity": "sha512-RVmhW7qZ+XZoy5fIuSdx/LGQJONpL8MHgZEW7dFwTdgkzStub2XQx6OKv28CHogijdwH41J+Npj/z2jBPu3vmw==",
+      "dependencies": [
+        "@types/node@18.19.74",
+        "@types/node-fetch",
+        "abort-controller",
+        "agentkeepalive",
+        "form-data-encoder",
+        "formdata-node",
+        "node-fetch",
+        "web-streams-polyfill@3.3.3"
+      ]
     },
     "has-flag@4.0.0": {
       "integrity": "sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ=="
@@ -1357,7 +1392,7 @@
       "dependencies": [
         "@langchain/anthropic",
         "@langchain/core",
-        "@langchain/openai",
+        "@langchain/openai@0.4.2_@langchain+core@0.3.36__openai@4.80.1___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.80.1__zod@3.24.1",
         "@langchain/textsplitters",
         "js-tiktoken",
         "js-yaml",
@@ -1924,6 +1959,9 @@
         "styled-jsx"
       ]
     },
+    "node-addon-api@8.3.0": {
+      "integrity": "sha512-8VOpLHFrOQlAH+qA0ZzuGRlALRA6/LVh8QJldbrC4DY0hXoMP0l4Acq8TzFC018HztWiRqyCEj2aTWY2UvnJUg=="
+    },
     "node-domexception@1.0.0": {
       "integrity": "sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ=="
     },
@@ -1932,6 +1970,9 @@
       "dependencies": [
         "whatwg-url"
       ]
+    },
+    "node-gyp-build@4.8.4": {
+      "integrity": "sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ=="
     },
     "node-localstorage@2.2.1": {
       "integrity": "sha512-vv8fJuOUCCvSPjDjBLlMqYMHob4aGjkmrkaE42/mZr0VT+ZAU10jRF8oTnX9+pgU9/vYJ8P7YT3Vd6ajkmzSCw==",
@@ -2518,6 +2559,13 @@
     "tr46@0.0.3": {
       "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
     },
+    "tree-sitter@0.22.4": {
+      "integrity": "sha512-usbHZP9/oxNsUY65MQUsduGRqDHQOou1cagUSwjhoSYAmSahjQDAVsh9s+SlZkn8X8+O1FULRGwHu7AFP3kjzg==",
+      "dependencies": [
+        "node-addon-api",
+        "node-gyp-build"
+      ]
+    },
     "trim-lines@3.0.1": {
       "integrity": "sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg=="
     },
@@ -2640,6 +2688,9 @@
         "vfile-message"
       ]
     },
+    "web-streams-polyfill@3.3.3": {
+      "integrity": "sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw=="
+    },
     "web-streams-polyfill@4.0.0-beta.3": {
       "integrity": "sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug=="
     },
@@ -2726,6 +2777,7 @@
       "npm:@kvs/node-localstorage@^2.2.0",
       "npm:@langchain/anthropic@~0.3.12",
       "npm:@langchain/core@~0.3.36",
+      "npm:@langchain/groq@~0.1.3",
       "npm:@langchain/openai@~0.4.2",
       "npm:@preact/signals-core@^1.8.0",
       "npm:@preact/signals-react@^3.0.1",

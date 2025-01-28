@@ -1,3 +1,3 @@
-import * as traverse from 'npm:@babel/traverse';
+import * as traverse from "npm:tree-sitter";
 
-console.log(traverse.default);
+console.log(traverse);

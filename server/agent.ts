@@ -1,4 +1,5 @@
 import { ChatOpenAI } from "@langchain/openai";
+import { ChatGroq } from "@langchain/groq";
 import { z } from "zod";
 import { ai } from "./context.ts";
 import {
@@ -26,6 +27,10 @@ const expert = new ChatOpenAI({
   modelName: "o1-mini",
 });
 
+const expert2 = new ChatGroq({
+  modelName: "deepseek-r1-distill-llama-70b",
+});
+
 const writeLibFile = ai.tool({
   name: "write-lib-file",
   description: "Write a file to the lib directory",
@@ -36,13 +41,15 @@ const writeLibFile = ai.tool({
       .describe(
         "The actual content of the lib file, exporting all the relevant helper functions."
       ),
-    declarationsWithComments: z
+    exportedDeclarationsWithComments: z
       .string()
       .describe(
         "The high-level detailed description of the file's exports and functionality, including doc comments for each item. You don't need to include code here other than the signatures, unless it helps illustrate the point."
       ),
   }),
-  run: async ({ input: { filename, content, declarationsWithComments } }) => {
+  run: async ({
+    input: { filename, content, exportedDeclarationsWithComments },
+  }) => {
     const projectName = currentProject;
 
     if (filename.startsWith("@lib/")) {
@@ -51,7 +58,7 @@ const writeLibFile = ai.tool({
 
     const fullContent = mergeSplitDocFile({
       content,
-      docComment: declarationsWithComments,
+      docComment: exportedDeclarationsWithComments,
     });
     await scriptDb.projectFiles(projectName).writeScript(filename, fullContent);
 
@@ -112,6 +119,7 @@ const executeScriptTool = ai.tool({
       allowRead: [currentWorkdir, "."],
       allowWrite: [currentWorkdir, "."],
       allowEnv: true,
+      allowScripts: ["npm:tree-sitter"],
     };
 
     const result = await executeScript({
@@ -188,10 +196,16 @@ ${message.content}
       })
       .join("\n\n");
 
-    const response = await expert.invoke([
+    const response = await expert2.invoke([
       {
         role: "user",
-        content: `You are a helpful assistant that can provide advice or answers to programming questions. You deeply think about the implementation of code and come up with the perfect solutions to problems.`,
+        content: `
+You are a helpful assistant that can provide advice or answers to programming questions. You deeply think about the implementation of code and come up with the perfect solutions to problems.
+
+When giving advice about implementation of code, ALWAYS:
+- Include example implementations
+- Keep in mind that the code will be run in Deno, so you can import any npm packages via \`npm:packagename\`
+`,
       },
       {
         role: "user",
