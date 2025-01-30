@@ -12,10 +12,12 @@ import { currentProject, currentWorkdir } from "./system/systemEnv.ts";
 import { scriptDb } from "@/server/system/scriptDb.ts";
 import { createPromptContextForFiles } from "@/server/system/projectFilePrompts.ts";
 import { mergeSplitDocFile } from "@/server/system/scriptFileDocs.ts";
-import { DenoPermissions, executeScript } from "@/server/system/execution.ts";
+import { executeScript } from "@/server/system/execution.ts";
 import { createContext } from "node:vm";
 import { initAgents } from "@trpc-chat-agent/core";
 import { langchainBackend } from "@trpc-chat-agent/langchain";
+import { DenoPermissions, mergePermissions } from "./system/permissions.ts";
+import { getSystemDnsServers } from "./system/dns.ts";
 
 export const ai = initAgents
   .context<typeof createContext>()
@@ -121,13 +123,20 @@ const executeScriptTool = ai.tool({
     output: z.string(),
   }),
   run: async ({ input: { code }, sendProgress }) => {
-    const permissions: DenoPermissions = {
+    const basePermissions: DenoPermissions = {
       allowRun: ["git"],
       allowRead: [currentWorkdir, "."],
       allowWrite: [currentWorkdir, "."],
       allowEnv: true,
       allowScripts: ["npm:tree-sitter"],
     };
+
+    const dnsServers = await getSystemDnsServers();
+    const dnsPermissions: DenoPermissions = {
+      allowNet: dnsServers.map((server) => `${server}:53`),
+    };
+
+    const permissions = mergePermissions(basePermissions, dnsPermissions);
 
     const result = await executeScript({
       projectName: currentProject,
@@ -277,6 +286,21 @@ You have access to a library of deno script files. The two import paths are:
 
 The execution environment is sandboxed via deno permissions, with whitelisted permissions for all the relevant functionality you'll need.
 You can use the deno filesystem API, but only within the WORKDIR directory.
+
+# Deno basics
+
+Here is a rundown of the Deno basics you must know:
+- You can import lib files you wrote with the @lib/ prefix. \`./\` will never work in this environment.
+- Core libraries can be imported with the @core/ prefix.
+- You can import any npm packages with \`npm:packagename\` (e.g. \`npm:axios\`)
+- Node core libraries can be imported with \`node:packagename\` (e.g. \`node:fs\`)
+- ALWAYS use .ts extensions when importing. Deno doesn't implicitly assume import extensions.
+- You can use the deno filesystem API:
+  - \`Deno.readTextFile\` for reading files
+  - \`Deno.writeTextFile\` for writing files
+  - \`Deno.remove\` for deleting files
+  - \`Deno.mkdir\` for creating directories
+  - \`Deno.stat\` for getting file stats
 
 # Library files
 

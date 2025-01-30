@@ -13,19 +13,13 @@ import { Textarea } from "../ui/textarea.tsx";
 import { MessageVariants } from "./MessageVariants.tsx";
 import { StyledMarkdown } from "./StyledMarkdown.tsx";
 
-export function UserMessage<Agent extends AnyChatAgent>({
-  message,
-  invokeArgs: extraArgs,
-}: {
-  message: ChatUserMessage<Agent>;
-  invokeArgs: ReadonlySignal<AgentExtraArgs<Agent>>;
-}) {
+export function UserMessage({ message }: { message: ChatUserMessage }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(message.content as string);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    message.edit({ content: editedContent, invokeArgs: extraArgs.peek() });
+    message.edit({ content: editedContent });
     setIsEditing(false);
   };
 

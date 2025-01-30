@@ -15,7 +15,7 @@ const analysisSchema = z.object({
   name: z.string(),
 });
 
-async function makeNameForConversation(conversation: ConversationData<any>) {
+export async function makeNameForConversation(conversation: ConversationData<any>) {
   const helpers = new ChatConversationHelper(conversation);
   const message = helpers.getUserMessageAt([
     { userMessageChildIndex: 0, aiMessageChildIndex: 0 },
@@ -50,49 +50,3 @@ export type ConversationMetadata = {
   name: string;
   createdAt: string;
 };
-
-export async function getAllConversationsWithMetadata(ctx: Context) {
-  const conversations = await ctx.conversations.list();
-  const all = await Promise.all(
-    conversations.map(async (id) => {
-      const data = (await ctx.conversations.store.get(
-        id
-      )) as ConversationData<any>;
-      if (!data) {
-        console.error("Could not find conversation", id);
-        return null;
-      }
-
-      return ctx.conversationLock.acquire(id, async () => {
-        const metadata = await ctx.conversationMetadataStore.get(id);
-
-        if (metadata) {
-          return {
-            id,
-            name: metadata.name,
-            createdAt: metadata.createdAt,
-          };
-        }
-
-        const generatedName = await makeNameForConversation(data);
-        const createdAt = new Date().toISOString();
-        if (generatedName) {
-          await ctx.conversationMetadataStore.set(id, {
-            name: generatedName,
-            createdAt,
-          });
-        } else {
-          return null;
-        }
-
-        return {
-          id,
-          name: generatedName,
-          createdAt,
-        };
-      });
-    })
-  );
-
-  return all.filter((a) => !!a);
-}

@@ -1,5 +1,6 @@
 import path from "node:path";
 import { SplitFile, splitFileDoc } from "./scriptFileDocs.ts";
+import { sandboxDir } from "@/server/system/systemEnv.ts";
 
 const internalsFolder = "core";
 const projectsFolder = "projects";
@@ -140,6 +141,4 @@ export class ScriptDb {
   }
 }
 
-export const scriptDb = new ScriptDb(
-  "/home/arduano/programming/scripting-agent/sandbox"
-);
+export const scriptDb = new ScriptDb(sandboxDir);

@@ -1,103 +1,13 @@
 import { nanoid } from "nanoid";
 import { scriptDb } from "./scriptDb.ts";
 import * as path from "node:path";
+import { DenoPermissions, buildDenoPermissionFlags } from "./permissions.ts";
 
 interface ExecutionResult {
   stdout: string;
   stderr: string;
   merged: string;
   exitCode: number;
-}
-
-export interface DenoPermissions {
-  // File system permissions
-  allowRead?: true | string[];
-  denyRead?: string[];
-  allowWrite?: true | string[];
-  denyWrite?: string[];
-
-  // Network permissions
-  allowNet?: true | string[];
-  denyNet?: string[];
-
-  // Environment permissions
-  allowEnv?: true | string[];
-  denyEnv?: string[];
-
-  // System information permissions
-  allowSys?: true | Array<
-    | "hostname"
-    | "osRelease"
-    | "osUptime"
-    | "loadavg"
-    | "networkInterfaces"
-    | "systemMemoryInfo"
-    | "uid"
-    | "gid"
-  >;
-  denySys?: Array<
-    | "hostname"
-    | "osRelease"
-    | "osUptime"
-    | "loadavg"
-    | "networkInterfaces"
-    | "systemMemoryInfo"
-    | "uid"
-    | "gid"
-  >;
-
-  // Subprocess permissions
-  allowRun?: true | string[];
-  denyRun?: string[];
-
-  // FFI permissions
-  allowFfi?: true | string[];
-  denyFfi?: string[];
-
-  // Import permissions
-  allowImport?: true | string[];
-
-  // Script permissions
-  allowScripts?: true | string[];
-  denyScripts?: string[];
-}
-
-function buildDenoPermissionFlags(permissions: DenoPermissions): string[] {
-  const flags: string[] = [];
-
-  // Helper function to add permission flags
-  const addPermissionFlag = (
-    flag: string,
-    allowed?: true | string[],
-    denied?: string[]
-  ) => {
-    if (allowed === true) {
-      flags.push(`--allow-${flag}`);
-    } else if (Array.isArray(allowed) && allowed.length) {
-      flags.push(`--allow-${flag}=${allowed.join(",")}`);
-    }
-    if (denied?.length) {
-      flags.push(`--deny-${flag}=${denied.join(",")}`);
-    }
-  };
-
-  // Add all permission flags
-  addPermissionFlag("read", permissions.allowRead, permissions.denyRead);
-  addPermissionFlag("write", permissions.allowWrite, permissions.denyWrite);
-  addPermissionFlag("net", permissions.allowNet, permissions.denyNet);
-  addPermissionFlag("env", permissions.allowEnv, permissions.denyEnv);
-  addPermissionFlag("sys", permissions.allowSys, permissions.denySys);
-  addPermissionFlag("run", permissions.allowRun, permissions.denyRun);
-  addPermissionFlag("ffi", permissions.allowFfi, permissions.denyFfi);
-  addPermissionFlag("scripts", permissions.allowScripts, permissions.denyScripts);
-
-  if (permissions.allowImport === true) {
-    flags.push(`--import`);
-  } else if (Array.isArray(permissions.allowImport) && permissions.allowImport.length) {
-    flags.push(`--import=${permissions.allowImport.join(",")}`);
-  }
-
-  return flags;
 }
 
 export async function executeScript(args: {

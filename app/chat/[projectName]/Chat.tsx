@@ -95,13 +95,11 @@ function ChatComponentWithStaticId({
     scrollToBottom();
   }, [messages]);
 
-  const invokeArgs = useSignal<AgentExtraArgs<AgentType>>({});
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
-    beginMessage({ userMessage: input, invokeArgs: invokeArgs.peek() });
+    beginMessage({ userMessage: input });
     setInput("");
   };
 
@@ -154,17 +152,13 @@ function ChatComponentWithStaticId({
                   <RenderMessages
                     messages={messages}
                     renderAiMessageShell={(message, children) => (
-                      <AIMessageShell
-                        message={message}
-                        children={children}
-                        invokeArgs={invokeArgs}
-                      />
+                      <AIMessageShell message={message} children={children} />
                     )}
                     renderAiMessagePartContent={(content) => (
                       <StyledMarkdown>{content as string}</StyledMarkdown>
                     )}
                     renderUserMessage={(message) => (
-                      <UserMessage message={message} invokeArgs={invokeArgs} />
+                      <UserMessage message={message} />
                     )}
                     renderToolCall={(tool) => <RenderTool tool={tool} />}
                   />
