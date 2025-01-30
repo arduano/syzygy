@@ -6,23 +6,23 @@ import type { UseConversationArgs } from "@trpc-chat-agent/react";
 import { Card } from "@/components/ui/card.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { trpc, trpcClient } from "@/utils/trpc.ts";
-
 import { ReadonlySignal, Signal, useSignal } from "@preact/signals-react";
 import { RenderMessages, useConversation } from "@trpc-chat-agent/react";
 import React, { useEffect, useRef, useState } from "react";
-import { AIMessageShell } from "../../components/chat/AIMessage.tsx";
-import { StyledMarkdown } from "../../components/chat/StyledMarkdown.tsx";
-import { UserMessage } from "../../components/chat/UserMessage.tsx";
 import { RenderTool } from "./RenderTool.tsx";
 import { useRouter } from "next/navigation";
 import { IoMdAdd } from "react-icons/io";
+import { AIMessageShell } from "@/components/chat/AIMessage.tsx";
+import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
+import { UserMessage } from "@/components/chat/UserMessage.tsx";
+import { trpc, trpcClient } from "@/utils/trpc.ts";
 
 export type ChatComponentProps = Omit<
   UseConversationArgs<AgentType>,
   "initialConversationId" | "router"
 > & {
   id?: string;
+  projectName: string;
 };
 
 export function Chat({ id, ...props }: ChatComponentProps) {
@@ -60,6 +60,8 @@ type ChatComponentPropsWithIdSignal = ChatComponentProps & {
 function ChatComponentWithStaticId({
   id,
   lastCreatedConversation,
+  projectName,
+  onUpdateConversationId,
   ...converationArgs
 }: ChatComponentPropsWithIdSignal) {
   const [input, setInput] = useState("");
@@ -70,7 +72,7 @@ function ChatComponentWithStaticId({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const conversationNames = trpc.listConversations.useQuery();
+  const conversationNames = trpc.listConversations.useQuery({ projectName });
 
   const {
     messages,
@@ -81,11 +83,12 @@ function ChatComponentWithStaticId({
   } = useConversation<AgentType>({
     initialConversationId: id,
     onUpdateConversationId: (id) => {
-      converationArgs.onUpdateConversationId?.(id);
+      onUpdateConversationId?.(id);
       lastCreatedConversation.value = id;
       conversationNames.refetch();
     },
     router: trpcClient.chat,
+    ...converationArgs,
   });
 
   useEffect(() => {

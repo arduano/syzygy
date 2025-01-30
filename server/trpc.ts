@@ -8,16 +8,16 @@ import { initTRPC } from "@trpc/server";
 import { nanoid } from "nanoid";
 import { agent } from "./agent.ts";
 import { getAllConversationsWithMetadata } from "@/server/conversationMetadata.ts";
+import { scriptDb } from "@/server/system/scriptDb.ts";
+import z from "zod";
 
 export const ee = new EventEmitter();
 
 export const t = initTRPC.context<typeof createContext>().create();
 
-export const router = t.router;
-export const publicProcedure = t.procedure;
-export const middleware = t.middleware;
+export const appRouter = t.router({
+  listProjects: t.procedure.query(() => scriptDb.listProjects()),
 
-export const appRouter = router({
   chat: makeChatRouterForAgent({
     agent,
     createConversation: async ({ ctx }) => {
@@ -48,9 +48,11 @@ export const appRouter = router({
     },
   }),
 
-  listConversations: publicProcedure.query(async ({ ctx }) => {
-    return getAllConversationsWithMetadata(ctx);
-  }),
+  listConversations: t.procedure
+    .input(z.object({ projectName: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return getAllConversationsWithMetadata(ctx);
+    }),
 });
 
 export type AppRouter = typeof appRouter;

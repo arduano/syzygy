@@ -1,16 +1,15 @@
 import { kvsLocalStorage } from "@kvs/node-localstorage";
 import { AgentsBackend, initAgents } from "@trpc-chat-agent/core";
-import { LangChainAgentsBackend } from "@trpc-chat-agent/langchain";
 import { initTRPC } from "@trpc/server";
 import AsyncLock from "async-lock";
 import path from "node:path";
 import { findUp } from "find-up";
-import { ConversationMetadata } from '@/server/conversationMetadata.ts';
+import { ConversationMetadata } from "@/server/conversationMetadata.ts";
 
 const projectRoot = path.dirname((await findUp("deno.json")) ?? "");
 const storePath = path.join(projectRoot, ".cache/kvs");
 
-export async function createContext() {
+export async function createContext(args: { projectName: string }) {
   const conversationStore = await kvsLocalStorage({
     name: "conversations",
     version: 1,
@@ -61,9 +60,3 @@ export async function createContext() {
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>;
-
-export const t = initTRPC.context<typeof createContext>().create();
-export const ai = initAgents
-  .context<typeof createContext>()
-  .backend(new LangChainAgentsBackend())
-  .create();

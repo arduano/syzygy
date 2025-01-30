@@ -1,7 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatGroq } from "@langchain/groq";
 import { z } from "zod";
-import { ai } from "./context.ts";
 import {
   isAIMessageChunk,
   type AIMessageChunk,
@@ -14,6 +13,14 @@ import { scriptDb } from "@/server/system/scriptDb.ts";
 import { createPromptContextForFiles } from "@/server/system/projectFilePrompts.ts";
 import { mergeSplitDocFile } from "@/server/system/scriptFileDocs.ts";
 import { DenoPermissions, executeScript } from "@/server/system/execution.ts";
+import { createContext } from "node:vm";
+import { initAgents } from "@trpc-chat-agent/core";
+import { langchainBackend } from "@trpc-chat-agent/langchain";
+
+export const ai = initAgents
+  .context<typeof createContext>()
+  .backend(langchainBackend.extraArgs(z.object({ projectName: z.string() })))
+  .create();
 
 const deepseek = new ChatDeepSeek({
   openAIApiKey: process.env.DEEPSEEK_API_KEY,
