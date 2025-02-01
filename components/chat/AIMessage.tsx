@@ -1,24 +1,26 @@
-import type { ReadonlySignal } from "@preact/signals-core";
-import type {
-  AgentExtraArgs,
-  AnyChatAgent,
-  ChatAIMessage,
-} from "@trpc-chat-agent/core";
+import type { AnyChatAgent, ChatAIMessage } from "@trpc-chat-agent/core";
 import { cn } from "@/lib/utils.ts";
 import { CgRedo } from "react-icons/cg";
 import { Button } from "../ui/button.tsx";
 import { MessageVariants } from "./MessageVariants.tsx";
-import { JSX } from "react";
+import { JSX } from 'react';
 
 export function AIMessageShell<Agent extends AnyChatAgent>({
   message,
   children,
+  isLastMessage,
 }: {
   message: ChatAIMessage<Agent>;
   children: JSX.Element;
+  isLastMessage: boolean;
 }) {
   return (
-    <div className="group flex items-start max-w-full gap-2 pr-12 lg:pr-48">
+    <div
+      className={cn(
+        "group flex items-start max-w-full gap-2 pr-12 lg:pr-48",
+        isLastMessage && "min-h-[calc(100vh-240px)]"
+      )}
+    >
       <div className="flex-1 max-w-full">
         {message.path.count > 1 && <MessageVariants path={message.path} />}
         <div className="space-y-4">{children}</div>

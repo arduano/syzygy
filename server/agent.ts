@@ -124,17 +124,15 @@ const executeScriptTool = ai.tool({
   toolProgressSchema: z.object({
     output: z.string(),
   }),
-  run: async ({ input: { code }, sendProgress, extraArgs }) => {
+  run: async ({ input: { code }, sendProgress, extraArgs, signal }) => {
     const projectName = extraArgs.projectName;
     const currentProject = (await projectDb.readProjectConfig(projectName))!;
     const currentWorkdir = currentProject.workdir;
 
     const basePermissions: DenoPermissions = {
-      allowRun: ["git"],
       allowRead: [currentWorkdir, "."],
       allowWrite: [currentWorkdir, "."],
       allowEnv: true,
-      allowScripts: ["npm:tree-sitter"],
     };
 
     const dnsServers = await getSystemDnsServers();
@@ -144,7 +142,9 @@ const executeScriptTool = ai.tool({
       ),
     };
 
-    const permissions = mergePermissions(basePermissions, dnsPermissions);
+    const extraProjectPermissions = currentProject.permissions;
+
+    const permissions = mergePermissions(basePermissions, dnsPermissions, extraProjectPermissions);
 
     const result = await executeScript({
       projectName: projectName,
@@ -156,6 +156,7 @@ const executeScriptTool = ai.tool({
           output,
         });
       },
+      signal,
     });
 
     const stdout = truncateStringLines(result.stdout, 200, 500);
@@ -252,7 +253,7 @@ When giving advice about implementation of code, ALWAYS:
   mapErrorForAI: (error) => `An error occurred: ${error}`,
 });
 
-const allTools = [writeLibFile, executeScriptTool, getAdvice] as const;
+const allTools = [writeLibFile, executeScriptTool] as const;
 
 const langfuseHandler = new CallbackHandler({
   publicKey: "pk-lf-a52f8e79-f42c-430b-be4c-c3b78da4a0c4",
@@ -282,7 +283,8 @@ export const agent = ai.agent({
       projectFiles: projectFiles,
     });
 
-    return `
+    return `Formatting re-enabled
+
 You are a flexible programmer that's helping me automatically perform complex repetitive tasks with script-assisted automation.
 
 - A lot of repetitive work can be broken down into simple scriptable steps
@@ -296,6 +298,8 @@ You have access to a library of deno script files. The two import paths are:
 
 The execution environment is sandboxed via deno permissions, with whitelisted permissions for all the relevant functionality you'll need.
 You can use the deno filesystem API, but only within the WORKDIR directory.
+
+Whenever you're asked to interact with workdir files, you'll need to write a Deno script to do it.
 
 # Deno basics
 
@@ -316,10 +320,19 @@ Here is a rundown of the Deno basics you must know:
 
 ${filesPromptPart}
 
+# Functions
+
+You have a collection of functions you can execute via JSON that would perform actions, including:
+- write-lib-file: Write a file to the @lib directory
+- execute-script: Execute a TypeScript script with Deno
+
 # Environment
 
 WORKDIR=${currentWorkdir}
-TIME=${new Date().toISOString()}
+CURRENT_TIME_HOUR=${new Date(
+      Math.round(new Date().getTime() / 3600000) * 3600000
+    ).toISOString()}
+PROJECT_NAME=${currentProject.name}
 `;
   },
 });

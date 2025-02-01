@@ -15,9 +15,9 @@
     "npm:@radix-ui/react-slot@1.1.1": "1.1.1_@types+react@19.0.8_react@19.0.0",
     "npm:@tanstack/react-query-devtools@^5.64.2": "5.65.1_@tanstack+react-query@5.65.1__react@19.0.0_react@19.0.0",
     "npm:@tanstack/react-query@5.62.15": "5.62.15_react@19.0.0",
-    "npm:@trpc-chat-agent/core@~0.4.3": "0.4.3_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_@types+react@19.0.8_immer@10.1.1_react@18.2.0_openai@4.81.0__zod@3.24.1",
-    "npm:@trpc-chat-agent/langchain@~0.4.3": "0.4.3_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3_@types+react@19.0.8",
-    "npm:@trpc-chat-agent/react@~0.4.3": "0.4.3_react@18.2.0_@types+react@19.0.8_immer@10.1.1_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
+    "npm:@trpc-chat-agent/core@~0.4.4": "0.4.4_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_@types+react@19.0.8_immer@10.1.1_react@18.2.0_openai@4.81.0__zod@3.24.1",
+    "npm:@trpc-chat-agent/langchain@~0.4.4": "0.4.4_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3_@types+react@19.0.8",
+    "npm:@trpc-chat-agent/react@~0.4.4": "0.4.4_react@18.2.0_@types+react@19.0.8_immer@10.1.1_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
     "npm:@trpc/client@11.0.0-rc.718": "11.0.0-rc.718_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3",
     "npm:@trpc/next@11.0.0-rc.718": "11.0.0-rc.718_@tanstack+react-query@5.62.15__react@19.0.0_@trpc+client@11.0.0-rc.718__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3_@trpc+react-query@11.0.0-rc.718__@tanstack+react-query@5.62.15___react@19.0.0__@trpc+client@11.0.0-rc.718___@trpc+server@11.0.0-rc.718____typescript@5.7.3___typescript@5.7.3__@trpc+server@11.0.0-rc.718___typescript@5.7.3__react@19.0.0__react-dom@19.0.0___react@19.0.0__typescript@5.7.3_@trpc+server@11.0.0-rc.718__typescript@5.7.3_next@15.1.3__react@19.0.0__react-dom@19.0.0___react@19.0.0_react@19.0.0_react-dom@19.0.0__react@19.0.0_typescript@5.7.3",
     "npm:@trpc/react-query@11.0.0-rc.718": "11.0.0-rc.718_@tanstack+react-query@5.62.15__react@19.0.0_@trpc+client@11.0.0-rc.718__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3_@trpc+server@11.0.0-rc.718__typescript@5.7.3_react@19.0.0_react-dom@19.0.0__react@19.0.0_typescript@5.7.3",
@@ -812,8 +812,8 @@
         "react@19.0.0"
       ]
     },
-    "@trpc-chat-agent/core@0.4.3_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_@types+react@19.0.8_immer@10.1.1_react@18.2.0_openai@4.81.0__zod@3.24.1": {
-      "integrity": "sha512-PUcdBhWFe2LYGkkZiybY55AWwyycWHU8TWuOUXVBhD38uxWCMyzgBdsK0eAgRhyPRkK9OhbAxL32Qu8A1HtxUQ==",
+    "@trpc-chat-agent/core@0.4.4_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_@types+react@19.0.8_immer@10.1.1_react@18.2.0_openai@4.81.0__zod@3.24.1": {
+      "integrity": "sha512-Tn2V4d/hq3fHbcMNl0XJP85W8u1L3UDUojDGU7widYeFdemdgDrMPcHb0FaAkRVUmLDSp8O7lD9a7MFDuTyTng==",
       "dependencies": [
         "@langchain/core",
         "@langchain/langgraph",
@@ -827,8 +827,8 @@
         "zustand"
       ]
     },
-    "@trpc-chat-agent/langchain@0.4.3_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3_@types+react@19.0.8": {
-      "integrity": "sha512-PVhwuJxjlRNvUAioi5hlTGswqJvjcUnrLRcD+XWWIKIFCh8xAigxnoQG/JVAxBy0NWOhFhoFhDL5Qfjm/h+tZw==",
+    "@trpc-chat-agent/langchain@0.4.4_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3_@types+react@19.0.8": {
+      "integrity": "sha512-AqAiuTNsqbvnIjSg7HjpsY1kTTyu/KvnguOgXbQoFb5ZRxBgQt1/YH1lMKDvB37zzdN29/VbPBYiLByacoPM8Q==",
       "dependencies": [
         "@langchain/anthropic",
         "@langchain/core",
@@ -839,8 +839,8 @@
         "zod-to-json-schema"
       ]
     },
-    "@trpc-chat-agent/react@0.4.3_react@18.2.0_@types+react@19.0.8_immer@10.1.1_typescript@5.7.3_openai@4.81.0__zod@3.24.1": {
-      "integrity": "sha512-BNtd4tDeNtMoOATCcCJdGy4bVK2kCmlqbaGSNJDoz/BHcHMBAoreOcHdfU/7ti8xOMo3vsij5frZwO4AKeS9BA==",
+    "@trpc-chat-agent/react@0.4.4_react@18.2.0_@types+react@19.0.8_immer@10.1.1_typescript@5.7.3_openai@4.81.0__zod@3.24.1": {
+      "integrity": "sha512-Or+wUUAjXGjnrPDcSh9R4i82tbLEXUzTH1pQCc8me3DP+GQd+DC6tmysLpPCmRcJtV6KuGQc37rIpZifb2tZKA==",
       "dependencies": [
         "@preact/signals-core",
         "@preact/signals-react@3.0.1_react@18.2.0",
@@ -3363,9 +3363,9 @@
       "npm:@radix-ui/react-slot@1.1.1",
       "npm:@tanstack/react-query-devtools@^5.64.2",
       "npm:@tanstack/react-query@5.62.15",
-      "npm:@trpc-chat-agent/core@~0.4.3",
-      "npm:@trpc-chat-agent/langchain@~0.4.3",
-      "npm:@trpc-chat-agent/react@~0.4.3",
+      "npm:@trpc-chat-agent/core@~0.4.4",
+      "npm:@trpc-chat-agent/langchain@~0.4.4",
+      "npm:@trpc-chat-agent/react@~0.4.4",
       "npm:@trpc/client@11.0.0-rc.718",
       "npm:@trpc/next@11.0.0-rc.718",
       "npm:@trpc/react-query@11.0.0-rc.718",

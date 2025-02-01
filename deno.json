@@ -1,6 +1,8 @@
 {
   "tasks": {
-    "dev": "deno run -A --watch npm:next dev",
+    // --unstable-unsafe-proto required for deno compat
+    // https://github.com/vercel/next.js/issues/72591#issuecomment-2564798427
+    "dev": "deno run --unstable-unsafe-proto -A --watch npm:next dev --turbo",
     "build": "deno run -A npm:next build",
     "start": "deno run -A npm:next start",
     "lint": "deno lint"
@@ -23,9 +25,9 @@
     "@preact/signals-react": "npm:@preact/signals-react@^3.0.1",
     "@radix-ui/react-label": "npm:@radix-ui/react-label@^2.1.1",
     "@tanstack/react-query-devtools": "npm:@tanstack/react-query-devtools@^5.64.2",
-    "@trpc-chat-agent/core": "npm:@trpc-chat-agent/core@^0.4.3",
-    "@trpc-chat-agent/langchain": "npm:@trpc-chat-agent/langchain@^0.4.3",
-    "@trpc-chat-agent/react": "npm:@trpc-chat-agent/react@^0.4.3",
+    "@trpc-chat-agent/core": "npm:@trpc-chat-agent/core@^0.4.4",
+    "@trpc-chat-agent/langchain": "npm:@trpc-chat-agent/langchain@^0.4.4",
+    "@trpc-chat-agent/react": "npm:@trpc-chat-agent/react@^0.4.4",
     "@trpc/server": "npm:@trpc/server@11.0.0-rc.718",
     "@trpc/react-query": "npm:@trpc/react-query@11.0.0-rc.718",
     "@trpc/client": "npm:@trpc/client@11.0.0-rc.718",

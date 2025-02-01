@@ -43,32 +43,41 @@ export interface DenoPermissions {
   denyScripts?: string[];
 }
 
-export function mergePermissions(a: DenoPermissions, b: DenoPermissions): DenoPermissions {
-  const mergeArrays = (a: true | string[] | undefined, b: true | string[] | undefined): true | string[] | undefined => {
-    if (a === true || b === true) return true;
-    if (!a) return b;
-    if (!b) return a;
-    return [...new Set([...a, ...b])];
+export function mergePermissions(...permissions: DenoPermissions[]): DenoPermissions {
+  const mergeArrays = (arrays: (true | string[] | undefined)[]): true | string[] | undefined => {
+    if (arrays.some(a => a === true)) return true;
+    const validArrays = arrays.filter((a): a is string[] => Array.isArray(a));
+    return validArrays.length ? [...new Set(validArrays.flat())] : undefined;
+  };
+
+  const mergeDenyArrays = (arrays: string[][]): string[] => {
+    return [...new Set(arrays.flat())];
+  };
+
+  const mergeSysArrays = (arrays: (true | DenoSysPermission[] | undefined)[]): true | DenoSysPermission[] | undefined => {
+    if (arrays.some(a => a === true)) return true;
+    const validArrays = arrays.filter((a): a is DenoSysPermission[] => Array.isArray(a));
+    return validArrays.length ? [...new Set(validArrays.flat())] : undefined;
   };
 
   return {
-    allowRead: mergeArrays(a.allowRead, b.allowRead),
-    denyRead: [...new Set([...(a.denyRead || []), ...(b.denyRead || [])])],
-    allowWrite: mergeArrays(a.allowWrite, b.allowWrite),
-    denyWrite: [...new Set([...(a.denyWrite || []), ...(b.denyWrite || [])])],
-    allowNet: mergeArrays(a.allowNet, b.allowNet),
-    denyNet: [...new Set([...(a.denyNet || []), ...(b.denyNet || [])])],
-    allowEnv: mergeArrays(a.allowEnv, b.allowEnv),
-    denyEnv: [...new Set([...(a.denyEnv || []), ...(b.denyEnv || [])])],
-    allowSys: mergeArrays(a.allowSys, b.allowSys) as true | DenoSysPermission[] | undefined,
-    denySys: [...new Set([...(a.denySys || []), ...(b.denySys || [])])] as DenoSysPermission[],
-    allowRun: mergeArrays(a.allowRun, b.allowRun),
-    denyRun: [...new Set([...(a.denyRun || []), ...(b.denyRun || [])])],
-    allowFfi: mergeArrays(a.allowFfi, b.allowFfi),
-    denyFfi: [...new Set([...(a.denyFfi || []), ...(b.denyFfi || [])])],
-    allowImport: mergeArrays(a.allowImport, b.allowImport),
-    allowScripts: mergeArrays(a.allowScripts, b.allowScripts),
-    denyScripts: [...new Set([...(a.denyScripts || []), ...(b.denyScripts || [])])],
+    allowRead: mergeArrays(permissions.map(p => p.allowRead)),
+    denyRead: mergeDenyArrays(permissions.map(p => p.denyRead || [])),
+    allowWrite: mergeArrays(permissions.map(p => p.allowWrite)),
+    denyWrite: mergeDenyArrays(permissions.map(p => p.denyWrite || [])),
+    allowNet: mergeArrays(permissions.map(p => p.allowNet)),
+    denyNet: mergeDenyArrays(permissions.map(p => p.denyNet || [])),
+    allowEnv: mergeArrays(permissions.map(p => p.allowEnv)),
+    denyEnv: mergeDenyArrays(permissions.map(p => p.denyEnv || [])),
+    allowSys: mergeSysArrays(permissions.map(p => p.allowSys)),
+    denySys: mergeDenyArrays(permissions.map(p => p.denySys || [])) as DenoSysPermission[],
+    allowRun: mergeArrays(permissions.map(p => p.allowRun)),
+    denyRun: mergeDenyArrays(permissions.map(p => p.denyRun || [])),
+    allowFfi: mergeArrays(permissions.map(p => p.allowFfi)),
+    denyFfi: mergeDenyArrays(permissions.map(p => p.denyFfi || [])),
+    allowImport: mergeArrays(permissions.map(p => p.allowImport)),
+    allowScripts: mergeArrays(permissions.map(p => p.allowScripts)),
+    denyScripts: mergeDenyArrays(permissions.map(p => p.denyScripts || [])),
   };
 }
 

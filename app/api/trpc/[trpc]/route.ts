@@ -5,7 +5,7 @@ const handler = async (req: Request) => {
   // Import the router dynamically, as we don't have an OpenAI API key at server-side build time
   const router = await import("@/server/trpc.ts").then((m) => m.appRouter);
 
-  return fetchRequestHandler({
+  return await fetchRequestHandler({
     endpoint: "/api/trpc",
     req,
     router,

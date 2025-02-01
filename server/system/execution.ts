@@ -16,8 +16,9 @@ export async function executeScript(args: {
   permissions: DenoPermissions;
   onProgress?: (data: string) => void;
   workdir?: string;
+  signal?: AbortSignal;
 }): Promise<ExecutionResult> {
-  const { projectName, code, permissions, onProgress, workdir } = args;
+  const { projectName, code, permissions, onProgress, workdir, signal } = args;
 
   const filename = `temp_${nanoid()}.ts`;
   const scriptsFolder = projectDb.projectScriptFiles(projectName);
@@ -37,6 +38,7 @@ export async function executeScript(args: {
         ...Deno.env.toObject(),
         LD_LIBRARY_PATH: "", // Requires unsetting this for the security sandbox
       },
+      signal,
     });
 
     const child = process.spawn();

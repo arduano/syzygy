@@ -16,6 +16,9 @@ import { AIMessageShell } from "@/components/chat/AIMessage.tsx";
 import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
 import { UserMessage } from "@/components/chat/UserMessage.tsx";
 import { trpc, trpcClient } from "@/utils/trpc.ts";
+import { ThinkingIndicator } from "@/components/chat/ThinkingIndicator.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { FaStop } from "react-icons/fa";
 
 export type ChatComponentProps = Omit<
   UseConversationArgs<AgentType>,
@@ -66,10 +69,13 @@ function ChatComponentWithStaticId({
 }: ChatComponentPropsWithIdSignal) {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (animated: boolean) => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: animated ? "smooth" : "auto",
+    });
   };
 
   const conversationNames = trpc.listConversations.useQuery({ projectName });
@@ -77,9 +83,11 @@ function ChatComponentWithStaticId({
   const {
     messages,
     beginMessage,
+    cancelStream,
     isStreaming,
     isLoadingConversation,
     isMissingConversation,
+    conversationError,
   } = useConversation<AgentType>({
     initialConversationId: id,
     onUpdateConversationId: (id) => {
@@ -92,8 +100,18 @@ function ChatComponentWithStaticId({
   });
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (isStreaming) {
+      setTimeout(() => {
+        scrollToBottom(true);
+      }, 0);
+    }
+  }, [isStreaming]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      scrollToBottom(true);
+    }, 0);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -103,6 +121,21 @@ function ChatComponentWithStaticId({
     setInput("");
   };
 
+  const adjustTextareaHeight = () => {
+    const element = textareaRef.current;
+    if (element) {
+      element.style.height = "auto";
+      element.style.height = `${element.scrollHeight + 2}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [input]);
+
+  const conversationErrorString =
+    conversationError && (conversationError as any).message;
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -111,7 +144,7 @@ function ChatComponentWithStaticId({
           <div className="p-4 space-y-2">
             <div
               className="p-2 rounded cursor-pointer hover:bg-accent flex items-center gap-2"
-              onClick={() => router.push('/chat')}
+              onClick={() => router.push("/chat")}
             >
               <IoArrowBack className="w-5 h-5" />
               <span>Back to Projects</span>
@@ -158,20 +191,37 @@ function ChatComponentWithStaticId({
                   <div className="text-center p-4 text-destructive">
                     This conversation could not be found.
                   </div>
+                ) : conversationErrorString ? (
+                  <div className="text-center p-4 text-destructive">
+                    Error: {conversationErrorString}
+                  </div>
                 ) : (
-                  <RenderMessages
-                    messages={messages}
-                    renderAiMessageShell={(message, children) => (
-                      <AIMessageShell message={message} children={children} />
-                    )}
-                    renderAiMessagePartContent={(content) => (
-                      <StyledMarkdown>{content as string}</StyledMarkdown>
-                    )}
-                    renderUserMessage={(message) => (
-                      <UserMessage message={message} />
-                    )}
-                    renderToolCall={(tool) => <RenderTool tool={tool} />}
-                  />
+                  <div className="flex flex-col gap-2 pb-4">
+                    <RenderMessages
+                      messages={messages}
+                      isStreaming={isStreaming}
+                      renderAiMessageShell={(
+                        message,
+                        children,
+                        { isLastMessage }
+                      ) => (
+                        <AIMessageShell
+                          message={message}
+                          children={children}
+                          isLastMessage={isLastMessage}
+                        />
+                      )}
+                      renderAiMessagePartContent={(content) => (
+                        <StyledMarkdown>{content as string}</StyledMarkdown>
+                      )}
+                      renderUserMessage={(message) => (
+                        <UserMessage message={message} />
+                      )}
+                      renderToolCall={(tool) => <RenderTool tool={tool} />}
+                      renderThinkingIndicator={() => <ThinkingIndicator />}
+                    />
+                    <div ref={messagesEndRef} />
+                  </div>
                 )}
                 <div ref={messagesEndRef} />
               </div>
@@ -184,8 +234,12 @@ function ChatComponentWithStaticId({
               className="flex gap-4 max-w-4xl mx-auto"
             >
               <Textarea
+                ref={textareaRef}
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  adjustTextareaHeight();
+                }}
                 disabled={
                   isStreaming || isLoadingConversation || isMissingConversation
                 }
@@ -199,16 +253,24 @@ function ChatComponentWithStaticId({
                       handleSubmit(e as any);
                     }
                   }
+                  adjustTextareaHeight();
                 }}
                 style={{
                   height: "auto",
                 }}
-                onInput={(e) => {
-                  const target = e.target as HTMLTextAreaElement;
-                  target.style.height = "auto";
-                  target.style.height = `${target.scrollHeight}px`;
-                }}
+                onInput={adjustTextareaHeight}
               />
+              {isStreaming && (
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-destructive hover:text-destructive hover:bg-destructive/10"
+                  onClick={() => cancelStream()}
+                >
+                  <FaStop size={20} />
+                </Button>
+              )}
             </form>
           </div>
         </div>
