@@ -1,0 +1,15 @@
+{
+  "name": "Audio",
+  "createdAt": "2025-01-30T12:22:05.467Z",
+  "workdir": "/mnt/z/plex/my-music-bak/",
+  "permissions": {
+    "allowRead": [],
+    "allowWrite": [],
+    "allowNet": [],
+    "allowRun": [],
+    "allowEnv": [],
+    "allowFfi": [],
+    "allowImport": [],
+    "allowScripts": []
+  }
+}

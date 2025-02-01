@@ -8,8 +8,7 @@ import {
 import { CallbackHandler } from "langfuse-langchain";
 import { ChatDeepSeek } from "./chatDeepseek.ts";
 import process from "node:process";
-import { currentProject, currentWorkdir } from "./system/systemEnv.ts";
-import { scriptDb } from "@/server/system/scriptDb.ts";
+import { projectDb } from "./system/projectDb.ts";
 import { createPromptContextForFiles } from "@/server/system/projectFilePrompts.ts";
 import { mergeSplitDocFile } from "@/server/system/scriptFileDocs.ts";
 import { executeScript } from "@/server/system/execution.ts";
@@ -58,8 +57,9 @@ const writeLibFile = ai.tool({
   }),
   run: async ({
     input: { filename, content, exportedDeclarationsWithComments },
+    extraArgs,
   }) => {
-    const projectName = currentProject;
+    const projectName = extraArgs.projectName;
 
     if (filename.startsWith("@lib/")) {
       filename = filename.slice("@lib/".length);
@@ -69,7 +69,9 @@ const writeLibFile = ai.tool({
       content,
       docComment: exportedDeclarationsWithComments,
     });
-    await scriptDb.projectFiles(projectName).writeScript(filename, fullContent);
+    await projectDb
+      .projectFiles(projectName)
+      .writeScript(filename, fullContent);
 
     return {
       response: "File written",
@@ -122,7 +124,11 @@ const executeScriptTool = ai.tool({
   toolProgressSchema: z.object({
     output: z.string(),
   }),
-  run: async ({ input: { code }, sendProgress }) => {
+  run: async ({ input: { code }, sendProgress, extraArgs }) => {
+    const projectName = extraArgs.projectName;
+    const currentProject = (await projectDb.readProjectConfig(projectName))!;
+    const currentWorkdir = currentProject.workdir;
+
     const basePermissions: DenoPermissions = {
       allowRun: ["git"],
       allowRead: [currentWorkdir, "."],
@@ -133,13 +139,15 @@ const executeScriptTool = ai.tool({
 
     const dnsServers = await getSystemDnsServers();
     const dnsPermissions: DenoPermissions = {
-      allowNet: dnsServers.map((server) => `${server}:53`),
+      allowNet: dnsServers.map((server) =>
+        server.includes(":") ? `[${server}]:53` : `${server}:53`
+      ),
     };
 
     const permissions = mergePermissions(basePermissions, dnsPermissions);
 
     const result = await executeScript({
-      projectName: currentProject,
+      projectName: projectName,
       workdir: currentWorkdir,
       code,
       permissions,
@@ -253,17 +261,19 @@ const langfuseHandler = new CallbackHandler({
 });
 
 export const agent = ai.agent({
-  llm: new ChatOpenAI({ model: "gpt-4o" }),
-  // llm: new ChatAnthropic({ model: "claude-3-5-sonnet-20241022" }),
+  llm: new ChatOpenAI({ model: "o3-mini" }),
   tools: allTools,
   langchainCallbacks: [langfuseHandler],
-  systemMessage: async (ctx) => {
-    const projectName = currentProject;
+  systemMessage: async ({ ctx, extraArgs }) => {
+    const currentProject = (await projectDb.readProjectConfig(
+      extraArgs.projectName
+    ))!;
+    const currentWorkdir = currentProject.workdir;
 
-    const projectFiles = await scriptDb
-      .projectFiles(projectName)
+    const projectFiles = await projectDb
+      .projectFiles(extraArgs.projectName)
       .listScriptsWithContents();
-    const internalFiles = await scriptDb
+    const internalFiles = await projectDb
       .internalFiles()
       .listScriptsWithContents();
 

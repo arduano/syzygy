@@ -15,7 +15,9 @@ const analysisSchema = z.object({
   name: z.string(),
 });
 
-export async function makeNameForConversation(conversation: ConversationData<any>) {
+export async function makeNameForConversation(
+  conversation: ConversationData<any>
+) {
   const helpers = new ChatConversationHelper(conversation);
   const message = helpers.getUserMessageAt([
     { userMessageChildIndex: 0, aiMessageChildIndex: 0 },

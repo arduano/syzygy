@@ -5,22 +5,21 @@ import { platform } from "node:os";
 
 const execAsync = promisify(exec);
 
+/**
+ * Retrieves DNS servers on Windows by parsing the output of `ipconfig /all`.
+ */
 async function getDnsServersWindows(): Promise<string[]> {
   try {
     const { stdout } = await execAsync("ipconfig /all");
     const dnsServers: string[] = [];
 
-    // Split by lines, trim them
-    const lines = stdout.split("\n").map((line) => line.trim());
+    // Split output into lines and trim whitespace
+    const lines = stdout.split(/\r?\n/).map((line) => line.trim());
 
-    // We'll capture DNS servers that appear after lines that start with 'DNS Servers'
-    // or as subsequent indented lines:
     let collecting = false;
     for (const line of lines) {
-      // Example line might look like: "DNS Servers . . . . . . . . . . . : 8.8.8.8"
-      // or subsequent lines "                                          8.8.4.4"
       if (/^DNS Servers/.test(line)) {
-        // Attempt to capture any IP addresses on the same line after the colon
+        // Extract DNS server(s) from the current line after the colon
         const match = line.match(/:\s*(.*)/);
         if (match && match[1]) {
           const possibleIPs = match[1].split(/\s+/);
@@ -30,12 +29,12 @@ async function getDnsServersWindows(): Promise<string[]> {
         }
         collecting = true;
       } else if (collecting) {
-        // If the line is blank or starts with something else, stop collecting
-        if (!line || /:/.test(line)) {
+        // Stop collecting if a new section starts or line is empty
+        if (!line || /^.+?:/.test(line)) {
           collecting = false;
           continue;
         }
-        // Otherwise this might be an additional DNS server line
+        // Extract additional DNS servers listed in subsequent lines
         const possibleIPs = line.split(/\s+/);
         possibleIPs.forEach((ip) => {
           if (ip) dnsServers.push(ip);
@@ -43,7 +42,7 @@ async function getDnsServersWindows(): Promise<string[]> {
       }
     }
 
-    // Filter out duplicates
+    // Remove duplicates
     return Array.from(new Set(dnsServers));
   } catch (error) {
     console.error("Failed to get DNS servers on Windows:", error);
@@ -51,25 +50,32 @@ async function getDnsServersWindows(): Promise<string[]> {
   }
 }
 
+/**
+ * Retrieves DNS servers on Unix-like systems by parsing `/etc/resolv.conf`.
+ */
 async function getDnsServersUnix(): Promise<string[]> {
   try {
-    // Typical location for Unix-like systems
+    // Read the contents of /etc/resolv.conf
     const resolvConf = await readFile("/etc/resolv.conf", "utf8");
     const dnsServers: string[] = [];
 
-    // Look for lines that start with "nameserver"
-    const lines = resolvConf.split("\n").map((line) => line.trim());
+    // Split the file into lines and trim whitespace
+    const lines = resolvConf.split(/\r?\n/).map((line) => line.trim());
+
     for (const line of lines) {
-      if (line.startsWith("nameserver")) {
-        // Format: "nameserver x.x.x.x"
-        const parts = line.split(/\s+/);
-        if (parts.length >= 2) {
-          dnsServers.push(parts[1]);
-        }
+      // Skip empty lines and comments
+      if (!line || line.startsWith("#")) continue;
+
+      // Match lines that start with 'nameserver' followed by the IP address
+      const match = line.match(/^nameserver\s+(\S+)/i);
+      if (match && match[1]) {
+        const name = match[1];
+        const withoutInterface = name.split("%")[0].trim();
+        dnsServers.push(withoutInterface);
       }
     }
 
-    // Filter out duplicates
+    // Remove duplicates
     return Array.from(new Set(dnsServers));
   } catch (error) {
     console.error("Failed to read /etc/resolv.conf:", error);
@@ -77,13 +83,27 @@ async function getDnsServersUnix(): Promise<string[]> {
   }
 }
 
+/**
+ * Determines the current platform and retrieves DNS servers accordingly.
+ */
 export async function getSystemDnsServers(): Promise<string[]> {
   const currentPlatform = platform();
 
   if (currentPlatform === "win32") {
     return await getDnsServersWindows();
   } else {
-    // For Linux (and often macOS), try /etc/resolv.conf
+    // For Linux, macOS, and other Unix-like systems
     return await getDnsServersUnix();
   }
+}
+
+/**
+ * If the script is run directly, execute the following block.
+ * This allows the file to be both imported as a module and run as a script.
+ */
+if (require.main === module) {
+  (async () => {
+    const dnsServers = await getSystemDnsServers();
+    console.log("System DNS Servers:", dnsServers);
+  })();
 }

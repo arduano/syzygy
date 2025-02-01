@@ -1,17 +1,17 @@
 "use client";
 
 import type { AgentType } from "@/server/agent.ts";
-import type { AgentExtraArgs } from "@trpc-chat-agent/core";
 import type { UseConversationArgs } from "@trpc-chat-agent/react";
 import { Card } from "@/components/ui/card.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { ReadonlySignal, Signal, useSignal } from "@preact/signals-react";
+import { Signal, useSignal } from "@preact/signals-react";
 import { RenderMessages, useConversation } from "@trpc-chat-agent/react";
 import React, { useEffect, useRef, useState } from "react";
 import { RenderTool } from "./RenderTool.tsx";
 import { useRouter } from "next/navigation";
 import { IoMdAdd } from "react-icons/io";
+import { IoArrowBack } from "react-icons/io5";
 import { AIMessageShell } from "@/components/chat/AIMessage.tsx";
 import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
 import { UserMessage } from "@/components/chat/UserMessage.tsx";
@@ -111,7 +111,15 @@ function ChatComponentWithStaticId({
           <div className="p-4 space-y-2">
             <div
               className="p-2 rounded cursor-pointer hover:bg-accent flex items-center gap-2"
-              onClick={() => router.push("/chat")}
+              onClick={() => router.push('/chat')}
+            >
+              <IoArrowBack className="w-5 h-5" />
+              <span>Back to Projects</span>
+            </div>
+            <div className="h-px bg-border my-2" />
+            <div
+              className="p-2 rounded cursor-pointer hover:bg-accent flex items-center gap-2"
+              onClick={() => router.push(`/chat/${projectName}`)}
             >
               <IoMdAdd className="w-5 h-5" />
               <span>New Conversation</span>
@@ -129,7 +137,9 @@ function ChatComponentWithStaticId({
                   className={`p-2 rounded cursor-pointer hover:bg-accent ${
                     id === convId.id ? "bg-accent" : ""
                   }`}
-                  onClick={() => router.push(`/chat/${convId.id}`)}
+                  onClick={() =>
+                    router.push(`/chat/${projectName}/${convId.id}`)
+                  }
                 >
                   {convId.name}
                 </div>

@@ -42,7 +42,7 @@ async function makeProjectConversationsBackend(args: { projectName: string }) {
   });
 
   const listConversations = async () => {
-    return (await conversationList.get("list")) as string[];
+    return ((await conversationList.get("list")) as string[]) ?? [];
   };
   const addConversation = async (conversationId: string) => {
     const list = await listConversations();

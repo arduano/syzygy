@@ -8,8 +8,9 @@ import {
 import { initTRPC } from "@trpc/server";
 import { nanoid } from "nanoid";
 import { agent } from "./agent.ts";
-import { scriptDb } from "@/server/system/scriptDb.ts";
+import { projectDb } from "./system/projectDb.ts";
 import z from "zod";
+import { createDefaultConfig } from "@/server/system/projectConfig.ts";
 
 export const ee = new EventEmitter();
 
@@ -18,7 +19,30 @@ export const t = initTRPC.context<typeof createContext>().create();
 type ARgs = AgentExtraArgs<typeof agent>;
 
 export const appRouter = t.router({
-  listProjects: t.procedure.query(() => scriptDb.listProjects()),
+  listProjects: t.procedure.query(() => projectDb.listProjects()),
+
+  createProject: t.procedure
+    .input(
+      z.object({
+        name: z.string(),
+        workdir: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const projectName = input.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+      const config = createDefaultConfig({
+        name: input.name,
+        workdir: input.workdir,
+      });
+
+      await projectDb.createProject(projectName, config);
+
+      return { projectName };
+    }),
 
   chat: makeChatRouterForAgent({
     agent,

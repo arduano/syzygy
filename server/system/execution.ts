@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { scriptDb } from "./scriptDb.ts";
+import { projectDb } from "./projectDb.ts";
 import * as path from "node:path";
 import { DenoPermissions, buildDenoPermissionFlags } from "./permissions.ts";
 
@@ -20,7 +20,7 @@ export async function executeScript(args: {
   const { projectName, code, permissions, onProgress, workdir } = args;
 
   const filename = `temp_${nanoid()}.ts`;
-  const scriptsFolder = scriptDb.projectScriptFiles(projectName);
+  const scriptsFolder = projectDb.projectScriptFiles(projectName);
   const scriptPath = path.join(scriptsFolder.path, filename);
 
   // Create temporary script file

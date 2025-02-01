@@ -1,6 +1,11 @@
 import path from "node:path";
 import { SplitFile, splitFileDoc } from "./scriptFileDocs.ts";
 import { sandboxDir } from "@/server/system/systemEnv.ts";
+import {
+  ProjectConfig,
+  createDefaultConfig,
+  projectConfigSchema,
+} from "./projectConfig.ts";
 
 const internalsFolder = "core";
 const projectsFolder = "projects";
@@ -85,7 +90,7 @@ class ScriptsFolder {
   }
 }
 
-export class ScriptDb {
+export class ProjectDb {
   rootPath: string;
 
   constructor(rootPath: string) {
@@ -108,17 +113,55 @@ export class ScriptDb {
     );
   }
 
+  async readProjectConfig(projectName: string): Promise<ProjectConfig | null> {
+    const configPath = path.join(
+      this.rootPath,
+      projectsFolder,
+      projectName,
+      "config.json"
+    );
+    try {
+      const configContent = await Deno.readTextFile(configPath);
+      const config = JSON.parse(configContent);
+      return projectConfigSchema.parse(config);
+    } catch (error) {
+      if (!(error instanceof Deno.errors.NotFound)) {
+        console.error(
+          `Error reading config for project ${projectName}:`,
+          error
+        );
+      }
+      return null;
+    }
+  }
+
+  async writeProjectConfig(projectName: string, config: ProjectConfig) {
+    const configPath = path.join(
+      this.rootPath,
+      projectsFolder,
+      projectName,
+      "config.json"
+    );
+    await Deno.writeTextFile(configPath, JSON.stringify(config, null, 2));
+  }
+
   async listProjects() {
     const projectsPath = path.join(this.rootPath, projectsFolder);
     const projects = await Deno.readDir(projectsPath);
-    const projectNames = [];
+    const projectsData = [];
     for await (const project of projects) {
-      projectNames.push(project.name);
+      const config = await this.readProjectConfig(project.name);
+      if (config) {
+        projectsData.push({
+          name: project.name,
+          config,
+        });
+      }
     }
-    return projectNames;
+    return projectsData;
   }
 
-  async createProject(projectName: string) {
+  async createProject(projectName: string, config: ProjectConfig) {
     const projectPath = path.join(this.rootPath, projectsFolder, projectName);
     await Deno.mkdir(projectPath);
 
@@ -138,7 +181,11 @@ export class ScriptDb {
       path.join(projectScriptsPath, "deno.json"),
       scriptsDenoJson
     );
+
+    await this.writeProjectConfig(projectName, config);
+
+    return config;
   }
 }
 
-export const scriptDb = new ScriptDb(sandboxDir);
+export const projectDb = new ProjectDb(sandboxDir);
