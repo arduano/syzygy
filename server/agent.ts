@@ -18,18 +18,17 @@ import { langchainBackend } from "@trpc-chat-agent/langchain";
 import { DenoPermissions, mergePermissions } from "./system/permissions.ts";
 import { getSystemDnsServers } from "./system/dns.ts";
 
+const thinkingEffort = z.enum(["low", "medium", "high"]);
+export type ThinkingEffort = z.infer<typeof thinkingEffort>;
+
 export const ai = initAgents
   .context<typeof createContext>()
-  .backend(langchainBackend.extraArgs(z.object({ projectName: z.string() })))
+  .backend(
+    langchainBackend.extraArgs(
+      z.object({ projectName: z.string(), thinkingEffort })
+    )
+  )
   .create();
-
-const deepseek = new ChatDeepSeek({
-  openAIApiKey: process.env.DEEPSEEK_API_KEY,
-  modelName: "deepseek-reasoner",
-  configuration: {
-    baseURL: "https://api.deepseek.com",
-  },
-});
 
 const expert = new ChatOpenAI({
   modelName: "o1-mini",
@@ -144,7 +143,11 @@ const executeScriptTool = ai.tool({
 
     const extraProjectPermissions = currentProject.permissions;
 
-    const permissions = mergePermissions(basePermissions, dnsPermissions, extraProjectPermissions);
+    const permissions = mergePermissions(
+      basePermissions,
+      dnsPermissions,
+      extraProjectPermissions
+    );
 
     const result = await executeScript({
       projectName: projectName,
@@ -182,70 +185,6 @@ ${result.exitCode}
         ...result,
         stdout,
         stderr,
-      },
-    };
-  },
-  mapArgsForClient: (args) => args,
-  mapErrorForAI: (error) => `An error occurred: ${error}`,
-});
-
-const getAdvice = ai.tool({
-  name: "get-advice",
-  description:
-    "Get advice or answers to questions from an expert programmer. The expert programmer can see the full chat history.",
-  schema: z.object({
-    question: z
-      .string()
-      .describe(
-        "The question or topic to get advice about. Be specific and thorough with your question. Make sure all details are covered, and always include extra context where possible."
-      ),
-  }),
-  run: async ({ input: { question }, conversation, conversationPath }) => {
-    const chatHistory = conversation.asMessagesArray(conversationPath);
-
-    const chatHistoryMessages = chatHistory
-      .map((message) => {
-        if (message.kind === "ai") {
-          return `
-<ai>
-${message.parts.map((part) => part.content).join("\n\n")}
-</ai>
-          `.trim();
-        } else {
-          return `
-<user>
-${message.content}
-</user>
-          `.trim();
-        }
-      })
-      .join("\n\n");
-
-    const response = await expert2.invoke([
-      {
-        role: "user",
-        content: `
-You are a helpful assistant that can provide advice or answers to programming questions. You deeply think about the implementation of code and come up with the perfect solutions to problems.
-
-When giving advice about implementation of code, ALWAYS:
-- Include example implementations
-- Keep in mind that the code will be run in Deno, so you can import any npm packages via \`npm:packagename\`
-`,
-      },
-      {
-        role: "user",
-        content: chatHistoryMessages,
-      },
-      {
-        role: "user",
-        content: question,
-      },
-    ]);
-
-    return {
-      response: response.content,
-      clientResult: {
-        answer: response.content as string,
       },
     };
   },

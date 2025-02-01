@@ -51,12 +51,12 @@ export default function ProjectsPage() {
         <h1 className="mb-6 text-center text-3xl font-bold">Projects</h1>
         <div className="flex flex-col space-y-3">
           {isLoading ? (
-            <div className="flex justify-center py-4">
+            <div className="flex justify-center">
               <Loader2 className="h-6 w-6 animate-spin" />
             </div>
           ) : projects?.length === 0 ? (
-            <div className="text-center text-muted-foreground py-4">
-              No projects yet. Create one to get started!
+            <div className="text-center text-muted-foreground">
+              No projects yet
             </div>
           ) : (
             projects?.map((project) => (

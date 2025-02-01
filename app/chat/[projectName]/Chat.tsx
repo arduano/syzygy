@@ -1,6 +1,6 @@
 "use client";
 
-import type { AgentType } from "@/server/agent.ts";
+import { type ThinkingEffort, type AgentType } from "@/server/agent.ts";
 import type { UseConversationArgs } from "@trpc-chat-agent/react";
 import { Card } from "@/components/ui/card.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
@@ -19,10 +19,18 @@ import { trpc, trpcClient } from "@/utils/trpc.ts";
 import { ThinkingIndicator } from "@/components/chat/ThinkingIndicator.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { FaStop } from "react-icons/fa";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 export type ChatComponentProps = Omit<
   UseConversationArgs<AgentType>,
-  "initialConversationId" | "router"
+  "initialConversationId" | "router" | "extraArgs"
 > & {
   id?: string;
   projectName: string;
@@ -72,6 +80,8 @@ function ChatComponentWithStaticId({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
 
+  const [thinkingEffort, setThinkingEffort] = useState<ThinkingEffort>("low");
+
   const scrollToBottom = (animated: boolean) => {
     messagesEndRef.current?.scrollIntoView({
       behavior: animated ? "smooth" : "auto",
@@ -96,7 +106,10 @@ function ChatComponentWithStaticId({
       conversationNames.refetch();
     },
     router: trpcClient.chat,
-    ...converationArgs,
+    extraArgs: {
+      projectName,
+      thinkingEffort,
+    }
   });
 
   useEffect(() => {
@@ -184,6 +197,27 @@ function ChatComponentWithStaticId({
       {/* Main chat area */}
       <div className="flex-1">
         <div className="flex flex-col h-screen max-h-screen">
+          {/* Top bar */}
+          <div className="border-b p-2">
+            <div className="flex items-center justify-start gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    Thinking Effort: {thinkingEffort}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Thinking Effort</DropdownMenuLabel>
+                  <DropdownMenuRadioGroup value={thinkingEffort} onValueChange={(v) => setThinkingEffort(v as ThinkingEffort)}>
+                    <DropdownMenuRadioItem value="low">Low</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="medium">Medium</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="high">High</DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+
           <ScrollArea className="flex-1 h-full">
             <Card className=" border-0 rounded-none shadow-none relative">
               <div className="flex flex-col gap-4 p-4 max-w-4xl mx-auto">

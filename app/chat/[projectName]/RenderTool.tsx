@@ -168,30 +168,6 @@ export function RenderTool({
       );
     }
 
-    case "get-advice": {
-      const data = tool.result;
-      return (
-        <ToolCallWrapper tool={tool} title="AI Advice">
-          <div className="space-y-2">
-            <div>
-              <span className="font-semibold">Question:</span>
-              <div className="mt-1">
-                <StyledMarkdown>{tool.args?.question ?? ""}</StyledMarkdown>
-              </div>
-            </div>
-            {data && (
-              <div>
-                <span className="font-semibold">Answer:</span>
-                <div className="mt-1">
-                  <StyledMarkdown>{data.answer}</StyledMarkdown>
-                </div>
-              </div>
-            )}
-          </div>
-        </ToolCallWrapper>
-      );
-    }
-
     default:
       return (
         <ToolCallWrapper tool={tool} title="Unknown Tool">

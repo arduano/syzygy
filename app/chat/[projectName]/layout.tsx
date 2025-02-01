@@ -15,8 +15,9 @@ export default function ProjectLayout() {
       <Chat
         id={id}
         projectName={projectName}
-        onUpdateConversationId={(id) => router.push(`/chat/${projectName}/${id}`)}
-        extraArgs={{ projectName }}
+        onUpdateConversationId={(id) =>
+          router.push(`/chat/${projectName}/${id}`)
+        }
       />
     </main>
   );
