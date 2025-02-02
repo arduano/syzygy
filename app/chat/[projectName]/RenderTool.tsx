@@ -18,6 +18,7 @@ import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Card } from "@/components/ui/card.tsx";
+import { ThinkingIndicator } from "@/components/chat/ThinkingIndicator.tsx";
 
 function CodeContent({
   content,
@@ -93,19 +94,19 @@ export function RenderTool({
               <code>{tool.args?.filename}</code>
             </div>
             <div>
-              <span className="font-semibold">Declarations:</span>
+              <span className="font-semibold">Content:</span>
               <div className="mt-1">
                 <CodeContent
-                  content={tool.args?.exportedDeclarationsWithComments ?? ""}
+                  content={tool.args?.content ?? ""}
                   language="typescript"
                 />
               </div>
             </div>
             <div>
-              <span className="font-semibold">Content:</span>
+              <span className="font-semibold">Declarations:</span>
               <div className="mt-1">
                 <CodeContent
-                  content={tool.args?.content ?? ""}
+                  content={tool.args?.exportedDeclarationsWithComments ?? ""}
                   language="typescript"
                 />
               </div>
@@ -162,6 +163,32 @@ export function RenderTool({
                   </div>
                 )}
               </div>
+            )}
+          </div>
+        </ToolCallWrapper>
+      );
+    }
+
+    case "get-advice": {
+      const data = tool.result;
+      return (
+        <ToolCallWrapper tool={tool} title="AI Advice">
+          <div className="space-y-2">
+            <div>
+              <span className="font-semibold">Question:</span>
+              <div className="mt-1">
+                <StyledMarkdown>{tool.args?.question ?? ""}</StyledMarkdown>
+              </div>
+            </div>
+            {data ? (
+              <div>
+                <span className="font-semibold">Answer:</span>
+                <div className="mt-1">
+                  <StyledMarkdown>{data.answer}</StyledMarkdown>
+                </div>
+              </div>
+            ) : (
+              <ThinkingIndicator />
             )}
           </div>
         </ToolCallWrapper>

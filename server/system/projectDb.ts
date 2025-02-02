@@ -65,7 +65,7 @@ class ScriptsFolder {
         scripts.map(async (script) => [
           script,
           await Deno.readTextFile(path.join(this.path, script)),
-        ])
+        ] as const)
       )
     );
   }

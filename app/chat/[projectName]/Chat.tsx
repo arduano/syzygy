@@ -19,6 +19,7 @@ import { trpc, trpcClient } from "@/utils/trpc.ts";
 import { ThinkingIndicator } from "@/components/chat/ThinkingIndicator.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { FaStop } from "react-icons/fa";
+import { HiChevronDown } from "react-icons/hi";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -203,7 +204,7 @@ function ChatComponentWithStaticId({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-2">
-                    Thinking Effort: {thinkingEffort}
+                    Thinking Effort: {thinkingEffort} <HiChevronDown />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -265,7 +266,7 @@ function ChatComponentWithStaticId({
           <div className="border-t rounded-none p-4">
             <form
               onSubmit={handleSubmit}
-              className="flex gap-4 max-w-4xl mx-auto"
+              className="relative flex gap-4 max-w-4xl mx-auto"
             >
               <Textarea
                 ref={textareaRef}
