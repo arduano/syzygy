@@ -1,0 +1,21 @@
+# Rules
+
+This is deno project. Please use all Deno v2.0 practices when working with this project.
+
+### Installing packages
+
+Deno v2.0 uses `deno add npm:package-name` to install packages.
+
+### Imports
+
+All imports must use the full file extension.
+
+For example:
+```tsx
+import { Card } from "@/components/ui/card.tsx";
+import { cn } from "@/lib/utils.ts";
+```
+
+### Repo state
+
+This repo is currently in the transition from NextJS to Vite. The NextJS code is located in `app_old`, and the Vite code is located in `app`.

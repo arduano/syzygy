@@ -1,5 +1,3 @@
-"use client";
-
 import { type ThinkingEffort, type AgentType } from "@/server/agent.ts";
 import type { UseConversationArgs } from "@trpc-chat-agent/react";
 import { Card } from "@/components/ui/card.tsx";
@@ -9,7 +7,6 @@ import { Signal, useSignal } from "@preact/signals-react";
 import { RenderMessages, useConversation } from "@trpc-chat-agent/react";
 import React, { useEffect, useRef, useState } from "react";
 import { RenderTool } from "./RenderTool.tsx";
-import { useRouter } from "next/navigation";
 import { IoMdAdd } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 import { AIMessageShell } from "@/components/chat/AIMessage.tsx";
@@ -28,16 +25,15 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import { useMatch, useNavigate, useParams } from "react-router-dom";
 
-export type ChatComponentProps = Omit<
-  UseConversationArgs<AgentType>,
-  "initialConversationId" | "router" | "extraArgs"
-> & {
-  id?: string;
-  projectName: string;
-};
+export function Chat() {
+  const { projectName } = useParams();
+  const match = useMatch("/chat/:projectName/:chatId");
+  const id = match?.params.chatId;
 
-export function Chat({ id, ...props }: ChatComponentProps) {
+  const navigate = useNavigate();
+
   const [key, setKey] = useState(0);
   const [pastId, setPastId] = useState(id);
 
@@ -55,18 +51,30 @@ export function Chat({ id, ...props }: ChatComponentProps) {
     }
   }, [id]);
 
+  if (!projectName) {
+    return <div>Invalid project name</div>;
+  }
+
   return (
     <ChatComponentWithStaticId
       key={key}
       id={id}
-      {...props}
       lastCreatedConversation={lastCreatedConversation}
+      projectName={projectName}
+      onUpdateConversationId={(id) => {
+        navigate(`/chat/${projectName}/${id}`);
+      }}
     />
   );
 }
 
-type ChatComponentPropsWithIdSignal = ChatComponentProps & {
+type ChatComponentPropsWithIdSignal = Omit<
+  UseConversationArgs<AgentType>,
+  "initialConversationId" | "router" | "extraArgs"
+> & {
   lastCreatedConversation: Signal<string | undefined>;
+  id?: string;
+  projectName: string;
 };
 
 function ChatComponentWithStaticId({
@@ -74,12 +82,11 @@ function ChatComponentWithStaticId({
   lastCreatedConversation,
   projectName,
   onUpdateConversationId,
-  ...converationArgs
 }: ChatComponentPropsWithIdSignal) {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const [thinkingEffort, setThinkingEffort] = useState<ThinkingEffort>("low");
 
@@ -110,7 +117,7 @@ function ChatComponentWithStaticId({
     extraArgs: {
       projectName,
       thinkingEffort,
-    }
+    },
   });
 
   useEffect(() => {
@@ -158,7 +165,7 @@ function ChatComponentWithStaticId({
           <div className="p-4 space-y-2">
             <div
               className="p-2 rounded cursor-pointer hover:bg-accent flex items-center gap-2"
-              onClick={() => router.push("/chat")}
+              onClick={() => navigate("/chat")}
             >
               <IoArrowBack className="w-5 h-5" />
               <span>Back to Projects</span>
@@ -166,7 +173,7 @@ function ChatComponentWithStaticId({
             <div className="h-px bg-border my-2" />
             <div
               className="p-2 rounded cursor-pointer hover:bg-accent flex items-center gap-2"
-              onClick={() => router.push(`/chat/${projectName}`)}
+              onClick={() => navigate(`/chat/${projectName}`)}
             >
               <IoMdAdd className="w-5 h-5" />
               <span>New Conversation</span>
@@ -184,9 +191,7 @@ function ChatComponentWithStaticId({
                   className={`p-2 rounded cursor-pointer hover:bg-accent ${
                     id === convId.id ? "bg-accent" : ""
                   }`}
-                  onClick={() =>
-                    router.push(`/chat/${projectName}/${convId.id}`)
-                  }
+                  onClick={() => navigate(`/chat/${projectName}/${convId.id}`)}
                 >
                   {convId.name}
                 </div>
@@ -209,10 +214,21 @@ function ChatComponentWithStaticId({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Thinking Effort</DropdownMenuLabel>
-                  <DropdownMenuRadioGroup value={thinkingEffort} onValueChange={(v) => setThinkingEffort(v as ThinkingEffort)}>
-                    <DropdownMenuRadioItem value="low">Low</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="medium">Medium</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="high">High</DropdownMenuRadioItem>
+                  <DropdownMenuRadioGroup
+                    value={thinkingEffort}
+                    onValueChange={(v) =>
+                      setThinkingEffort(v as ThinkingEffort)
+                    }
+                  >
+                    <DropdownMenuRadioItem value="low">
+                      Low
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="medium">
+                      Medium
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="high">
+                      High
+                    </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
               </DropdownMenu>

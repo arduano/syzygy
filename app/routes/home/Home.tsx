@@ -1,8 +1,5 @@
-"use client";
-
 import { Card } from "@/components/ui/card.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
-import Link from "next/link";
 import { trpc } from "@/utils/trpc.ts";
 import {
   Dialog,
@@ -14,19 +11,19 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { IoMdAdd } from "react-icons/io";
 import { Label } from "@/components/ui/label.tsx";
 import { Loader2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function ProjectsPage() {
+export function Home() {
   const { data: projects, isLoading } = trpc.listProjects.useQuery();
   const createProject = trpc.createProject.useMutation();
   const [open, setOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [workdir, setWorkdir] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,11 +33,11 @@ export default function ProjectsPage() {
       setIsRedirecting(true);
       const result = await createProject.mutateAsync({
         name: projectName,
-        workdir: workdir.trim()
+        workdir: workdir.trim(),
       });
-      router.push(`/chat/${result.projectName}`);
+      navigate(`/chat/${result.projectName}`);
     } catch (error) {
-      console.error('Failed to create project:', error);
+      console.error("Failed to create project:", error);
       setIsRedirecting(false);
     }
   };
@@ -62,11 +59,13 @@ export default function ProjectsPage() {
             projects?.map((project) => (
               <Link
                 key={project.name}
-                href={`/chat/${encodeURIComponent(project.name)}`}
+                to={`/chat/${encodeURIComponent(project.name)}`}
                 className="transition-transform hover:scale-[1.02]"
               >
                 <Card className="flex h-12 items-center px-4">
-                  <h2 className="text-lg font-semibold">{project.config.name}</h2>
+                  <h2 className="text-lg font-semibold">
+                    {project.config.name}
+                  </h2>
                 </Card>
               </Link>
             ))
@@ -118,7 +117,7 @@ export default function ProjectsPage() {
                       Creating...
                     </>
                   ) : (
-                    'Create'
+                    "Create"
                   )}
                 </Button>
               </form>

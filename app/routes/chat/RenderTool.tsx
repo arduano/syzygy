@@ -1,5 +1,3 @@
-"use client";
-
 import type { AgentType } from "@/server/agent.ts";
 import type { AgentTools, ChatAIMessageToolCall } from "@trpc-chat-agent/core";
 import { ToolCallWrapper } from "@/components/chat/ToolCallWrapper.tsx";

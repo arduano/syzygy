@@ -96,14 +96,3 @@ export async function getSystemDnsServers(): Promise<string[]> {
     return await getDnsServersUnix();
   }
 }
-
-/**
- * If the script is run directly, execute the following block.
- * This allows the file to be both imported as a module and run as a script.
- */
-if (require.main === module) {
-  (async () => {
-    const dnsServers = await getSystemDnsServers();
-    console.log("System DNS Servers:", dnsServers);
-  })();
-}
