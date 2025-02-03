@@ -7,7 +7,7 @@ import { oakCors } from "@tajpouria/cors";
 const app = new Application();
 const oakRouter = new Router();
 
-if (Deno.env.get("DEV")) {
+if (Deno.env.get("VITE_DEV")) {
   console.log("Running in DEV mode");
   app.use(
     oakCors({
@@ -37,7 +37,17 @@ oakRouter.all("/api/trpc/:path*", async (ctx) => {
   response.headers.forEach((value, key) => {
     ctx.response.headers.set(key, value);
   });
-  ctx.response.body = await response.text();
+  ctx.response.body = async function* () {
+    const stream = await response.body?.getReader();
+    if (!stream) return;
+    while (true) {
+      const { value, done } = await stream.read();
+      if (done) {
+        break;
+      }
+      yield value;
+    }
+  };
 });
 
 app.use(oakRouter.routes());

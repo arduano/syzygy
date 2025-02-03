@@ -4,7 +4,9 @@ import { createTRPCReact } from "@trpc/react-query";
 
 export const trpc = createTRPCReact<AppRouter>();
 
-const baseUrl = "http://localhost:3000";
+// deno-lint-ignore ban-ts-comment
+// @ts-ignore
+const baseUrl = import.meta.env.VITE_DEV ? "http://localhost:3000" : "";
 
 export const trpcClient = trpc.createClient({
   links: [

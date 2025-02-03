@@ -12,7 +12,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { AIMessageShell } from "@/components/chat/AIMessage.tsx";
 import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
 import { UserMessage } from "@/components/chat/UserMessage.tsx";
-import { trpc, trpcClient } from "@/utils/trpc.ts";
+import { trpc, trpcClient } from "../../trpc.ts";
 import { ThinkingIndicator } from "@/components/chat/ThinkingIndicator.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { FaStop } from "react-icons/fa";
@@ -25,7 +25,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-import { useMatch, useNavigate, useParams } from "react-router-dom";
+import { useMatch, useNavigate, useParams, Link } from "react-router-dom";
 
 export function Chat() {
   const { projectName } = useParams();
@@ -163,21 +163,21 @@ function ChatComponentWithStaticId({
       <div className="w-64 border-r border-border bg-card">
         <ScrollArea className="h-full">
           <div className="p-4 space-y-2">
-            <div
+            <Link
+              to="/"
               className="p-2 rounded cursor-pointer hover:bg-accent flex items-center gap-2"
-              onClick={() => navigate("/chat")}
             >
               <IoArrowBack className="w-5 h-5" />
               <span>Back to Projects</span>
-            </div>
+            </Link>
             <div className="h-px bg-border my-2" />
-            <div
+            <Link
+              to={`/chat/${projectName}`}
               className="p-2 rounded cursor-pointer hover:bg-accent flex items-center gap-2"
-              onClick={() => navigate(`/chat/${projectName}`)}
             >
               <IoMdAdd className="w-5 h-5" />
               <span>New Conversation</span>
-            </div>
+            </Link>
             <div className="h-px bg-border my-2" />
             {conversationNames.data
               ?.toSorted(

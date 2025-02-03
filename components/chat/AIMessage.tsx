@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils.ts";
 import { CgRedo } from "react-icons/cg";
 import { Button } from "../ui/button.tsx";
 import { MessageVariants } from "./MessageVariants.tsx";
-import { JSX } from 'react';
 
 export function AIMessageShell<Agent extends AnyChatAgent>({
   message,
@@ -11,7 +10,7 @@ export function AIMessageShell<Agent extends AnyChatAgent>({
   isLastMessage,
 }: {
   message: ChatAIMessage<Agent>;
-  children: JSX.Element;
+  children: React.ReactNode;
   isLastMessage: boolean;
 }) {
   return (

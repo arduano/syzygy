@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
-import { trpc } from "@/utils/trpc.ts";
+import { trpc } from "../../trpc.ts";
 import {
   Dialog,
   DialogContent,

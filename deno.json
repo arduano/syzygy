@@ -2,6 +2,7 @@
   "tasks": {
     "dev:server": "deno run -A --watch --env-file=./.env ./server/server.ts",
     "dev:client": "deno -A npm:vite dev",
+    "build:client": "deno -A npm:vite build",
     "build": "deno run -A npm:next build",
     "start": "deno run -A npm:next start",
     "lint": "deno lint"
