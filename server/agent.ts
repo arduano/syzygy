@@ -14,7 +14,10 @@ import { CallbackHandler } from "langfuse-langchain";
 import process from "node:process";
 import { projectDb } from "./system/projectDb.ts";
 import { createPromptContextForFiles } from "@/server/system/projectFilePrompts.ts";
-import { mergeSplitDocFile } from "@/server/system/scriptFileDocs.ts";
+import {
+  mergeSplitDocFile,
+  splitFileDoc,
+} from "@/server/system/scriptFileDocs.ts";
 import { executeScript } from "@/server/system/execution.ts";
 import { createContext } from "node:vm";
 import { initAgents } from "@trpc-chat-agent/core";
@@ -277,7 +280,73 @@ const getAdvice = ai.tool({
   mapErrorForAI: (error) => `An error occurred: ${error}`,
 });
 
-const allTools = [writeLibFile, executeScriptTool, getAdvice] as const;
+const readScriptFile = ai.tool({
+  name: "read-script-file",
+  description: "Read the contents of a script file from either @lib/ or @core/",
+  schema: z.object({
+    path: z
+      .string()
+      .refine(
+        (path) => {
+          const validPrefix =
+            path.startsWith("@lib/") || path.startsWith("@core/");
+          const singleSlash = (path.match(/\//g) || []).length === 1;
+          return validPrefix && singleSlash;
+        },
+        {
+          message:
+            "Path must start with @lib/ or @core/ and contain exactly one slash",
+        }
+      )
+      .describe(
+        "The path to the script file, must start with either @lib/ or @core/"
+      ),
+  }),
+  run: async ({ input: { path }, extraArgs }) => {
+    const projectName = extraArgs.projectName;
+
+    const isCore = path.startsWith("@core/");
+    const filename = path.slice(isCore ? "@core/".length : "@lib/".length);
+
+    const files = isCore
+      ? await projectDb.internalFiles()
+      : await projectDb.projectFiles(projectName);
+
+    const content = await files.getScript(filename);
+
+    if (!content) {
+      throw new Error(`File ${path} not found`);
+    }
+
+    const { content: c, docComment: d } = splitFileDoc(content);
+
+    return {
+      response: `
+File contents:
+\`\`\`typescript
+${c}
+\`\`\`
+
+File declarations:
+\`\`\`typescript
+${d}
+\`\`\`
+`.trim(),
+      clientResult: {
+        content,
+      },
+    };
+  },
+  mapArgsForClient: (args) => args,
+  mapErrorForAI: (error) => `An error occurred: ${error}`,
+});
+
+const allTools = [
+  writeLibFile,
+  executeScriptTool,
+  getAdvice,
+  readScriptFile,
+] as const;
 
 const langfuseHandler = new CallbackHandler({
   publicKey: "pk-lf-a52f8e79-f42c-430b-be4c-c3b78da4a0c4",
@@ -359,6 +428,8 @@ async function makeSystemMessage(args: {
     .internalFiles()
     .listScriptsWithContents();
 
+  const context = await projectDb.readProjectContext(args.projectName);
+
   const filesPromptPart = createPromptContextForFiles({
     coreFiles: internalFiles,
     projectFiles: projectFiles,
@@ -366,54 +437,61 @@ async function makeSystemMessage(args: {
 
   return `${args.isOSeries ? "Formatting re-enabled" : ""}
 
-  You are a flexible programmer that's helping me automatically perform complex repetitive tasks with script-assisted automation.
+You are a flexible programmer that's helping me automatically perform complex repetitive tasks with script-assisted automation.
 
-  - A lot of repetitive work can be broken down into simple scriptable steps
-  - 90% of the work can be taken care of fully with scripts
-  - The remaining 10% might need manual intervention, but a lot of time was still saved
-  - You must help think of intuitive and creative ways to automate the work
+- A lot of repetitive work can be broken down into simple scriptable steps
+- 90% of the work can be taken care of fully with scripts
+- The remaining 10% might need manual intervention, but a lot of time was still saved
+- You must help think of intuitive and creative ways to automate the work
 
-  You have access to a library of deno script files. The two import paths are:
-  - @core/ - The core library of scripts that are available to call. These files have special permissions outside the sandboxed environment.
-  - @lib/ - The main collection of helpers for you to use. You can always create new helpers as you see fit.
+You have access to a library of deno script files. The two import paths are:
+- @core/ - The core library of scripts that are available to call. These files have special permissions outside the sandboxed environment.
+- @lib/ - The main collection of helpers for you to use. You can always create new helpers as you see fit.
 
-  The execution environment is sandboxed via deno permissions, with whitelisted permissions for all the relevant functionality you'll need.
-  You can use the deno filesystem API, but only within the WORKDIR directory.
+The execution environment is sandboxed via deno permissions, with whitelisted permissions for all the relevant functionality you'll need.
+You can use the deno filesystem API, but only within the WORKDIR directory.
 
-  Whenever you're asked to interact with workdir files, you'll need to write a Deno script to do it.
+Whenever you're asked to interact with workdir files, you'll need to write a Deno script to do it.
 
-  # Deno basics
+# Deno basics
 
-  Here is a rundown of the Deno basics you must know:
-  - You can import lib files you wrote with the @lib/ prefix. \`./\` will never work in this environment.
-  - Core libraries can be imported with the @core/ prefix.
-  - You can import any npm packages with \`npm:packagename\` (e.g. \`npm:axios\`)
-  - Node core libraries can be imported with \`node:packagename\` (e.g. \`node:fs\`)
-  - ALWAYS use .ts extensions when importing. Deno doesn't implicitly assume import extensions.
-  - You can use the deno filesystem API:
-    - \`Deno.readTextFile\` for reading files
-    - \`Deno.writeTextFile\` for writing files
-    - \`Deno.remove\` for deleting files
-    - \`Deno.mkdir\` for creating directories
-    - \`Deno.stat\` for getting file stats
+Here is a rundown of the Deno basics you must know:
+- You can import lib files you wrote with the @lib/ prefix. \`./\` will never work in this environment.
+- Core libraries can be imported with the @core/ prefix.
+- You can import any npm packages with \`npm:packagename\` (e.g. \`npm:axios\`)
+- Node core libraries can be imported with \`node:packagename\` (e.g. \`node:fs\`)
+- ALWAYS use .ts extensions when importing. Deno doesn't implicitly assume import extensions.
+- You can use the deno filesystem API:
+  - \`Deno.readTextFile\` for reading files
+  - \`Deno.writeTextFile\` for writing files
+  - \`Deno.remove\` for deleting files
+  - \`Deno.mkdir\` for creating directories
+  - \`Deno.stat\` for getting file stats
 
-  # Library files
+# Library files
 
-  ${filesPromptPart}
+${filesPromptPart}
 
-  # Functions
+# Functions
 
-  You have a collection of functions you can execute via JSON that would perform actions, including:
-  - write-lib-file: Write a file to the @lib directory
-  - execute-script: Execute a TypeScript script with Deno
+You have a collection of functions you can execute via JSON that would perform actions, including:
+- write-lib-file: Write a file to the @lib directory
+- execute-script: Execute a TypeScript script with Deno
+- read-script-file: Read the contents of a script file from either @lib/ or @core/
 
-  # Environment
+${
+  context.trim().length === 0
+    ? ""
+    : `# Context\n\n<context>\n${context}\n</context>\n`
+}
 
-  WORKDIR=${args.currentWorkdir}
-  CURRENT_TIME_HOUR=${new Date(
+# Environment
+
+WORKDIR=${args.currentWorkdir}
+CURRENT_TIME_HOUR=${new Date(
     Math.round(new Date().getTime() / 3600000) * 3600000
   ).toISOString()}
-  PROJECT_NAME=${args.projectName}
+PROJECT_NAME=${args.projectName}
   `;
 }
 

@@ -62,10 +62,13 @@ class ScriptsFolder {
     const scripts = await this.listScripts();
     return Object.fromEntries(
       await Promise.all(
-        scripts.map(async (script) => [
-          script,
-          await Deno.readTextFile(path.join(this.path, script)),
-        ] as const)
+        scripts.map(
+          async (script) =>
+            [
+              script,
+              await Deno.readTextFile(path.join(this.path, script)),
+            ] as const
+        )
       )
     );
   }
@@ -74,8 +77,23 @@ class ScriptsFolder {
     return path.join(this.path, scriptName);
   }
 
+  async scriptExists(scriptName: string) {
+    await this.ensureDir();
+    const scriptPath = this.getScriptPath(scriptName);
+    try {
+      await Deno.stat(scriptPath);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   async getScript(scriptName: string) {
     await this.ensureDir();
+    if (!(await this.scriptExists(scriptName))) {
+      return null;
+    }
+
     return Deno.readTextFile(this.getScriptPath(scriptName));
   }
 
@@ -183,8 +201,27 @@ export class ProjectDb {
     );
 
     await this.writeProjectConfig(projectName, config);
+    await Deno.writeTextFile(path.join(projectPath, "context.md"), "");
 
     return config;
+  }
+
+  async readProjectContext(projectName: string): Promise<string> {
+    const contextPath = path.join(
+      this.rootPath,
+      projectsFolder,
+      projectName,
+      "context.md"
+    );
+    try {
+      return await Deno.readTextFile(contextPath);
+    } catch (error) {
+      if (error instanceof Deno.errors.NotFound) {
+        await Deno.writeTextFile(contextPath, "");
+        return "";
+      }
+      throw error;
+    }
   }
 }
 
