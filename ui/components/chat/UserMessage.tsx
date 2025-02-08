@@ -4,7 +4,7 @@ import type {
   AnyChatAgent,
   ChatUserMessage,
 } from "@trpc-chat-agent/core";
-import { cn } from "@/lib/utils.ts";
+import { cn } from "@/ui/lib/utils.ts";
 import { useEffect, useRef, useState } from "react";
 import { RiPencilFill } from "react-icons/ri";
 import { Button } from "../ui/button.tsx";

@@ -3,12 +3,12 @@ import tailwindScrollbar from "tailwind-scrollbar";
 import tailwindAnimate from "tailwindcss-animate";
 
 export default {
-  darkMode: ["class"],
   content: [
+    "./ui/**/*.{js,ts,jsx,tsx,mdx,html}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./index.html"
+    "./index.html",
   ],
   theme: {
     extend: {

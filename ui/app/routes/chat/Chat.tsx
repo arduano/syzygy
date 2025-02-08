@@ -1,20 +1,20 @@
 import { type ThinkingEffort, type AgentType } from "@/server/agent.ts";
 import type { UseConversationArgs } from "@trpc-chat-agent/react";
-import { Card } from "@/components/ui/card.tsx";
-import { ScrollArea } from "@/components/ui/scroll-area.tsx";
-import { Textarea } from "@/components/ui/textarea.tsx";
+import { Card } from "@/ui/components/ui/card.tsx";
+import { ScrollArea } from "@/ui/components/ui/scroll-area.tsx";
+import { Textarea } from "@/ui/components/ui/textarea.tsx";
 import { Signal, useSignal } from "@preact/signals-react";
 import { RenderMessages, useConversation } from "@trpc-chat-agent/react";
 import React, { useEffect, useRef, useState } from "react";
 import { RenderTool } from "./RenderTool.tsx";
 import { IoMdAdd } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
-import { AIMessageShell } from "@/components/chat/AIMessage.tsx";
-import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
-import { UserMessage } from "@/components/chat/UserMessage.tsx";
+import { AIMessageShell } from "@/ui/components/chat/AIMessage.tsx";
+import { StyledMarkdown } from "@/ui/components/chat/StyledMarkdown.tsx";
+import { UserMessage } from "@/ui/components/chat/UserMessage.tsx";
 import { trpc, trpcClient } from "../../trpc.ts";
-import { ThinkingIndicator } from "@/components/chat/ThinkingIndicator.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import { ThinkingIndicator } from "@/ui/components/chat/ThinkingIndicator.tsx";
+import { Button } from "@/ui/components/ui/button.tsx";
 import { FaStop } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
 import {
@@ -24,7 +24,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu.tsx";
+} from "@/ui/components/ui/dropdown-menu.tsx";
 import { useMatch, useNavigate, useParams, Link } from "react-router-dom";
 
 export function Chat() {

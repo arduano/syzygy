@@ -1,5 +1,5 @@
-import { Card } from "@/components/ui/card.tsx";
-import { ScrollArea } from "@/components/ui/scroll-area.tsx";
+import { Card } from "@/ui/components/ui/card.tsx";
+import { ScrollArea } from "@/ui/components/ui/scroll-area.tsx";
 import { trpc } from "../../trpc.ts";
 import {
   Dialog,
@@ -7,12 +7,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Input } from "@/components/ui/input.tsx";
+} from "@/ui/components/ui/dialog.tsx";
+import { Button } from "@/ui/components/ui/button.tsx";
+import { Input } from "@/ui/components/ui/input.tsx";
 import { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { Label } from "@/components/ui/label.tsx";
+import { Label } from "@/ui/components/ui/label.tsx";
 import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 

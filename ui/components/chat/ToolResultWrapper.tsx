@@ -1,4 +1,4 @@
-import { Card } from '../ui/card.tsx';
+import { Card } from "../ui/card.tsx";
 
 interface ToolResultWrapperProps {
   icon: React.ReactNode;
@@ -7,7 +7,12 @@ interface ToolResultWrapperProps {
   children?: React.ReactNode;
 }
 
-export function ToolResultWrapper({ icon, title, subtitle, children }: ToolResultWrapperProps) {
+export function ToolResultWrapper({
+  icon,
+  title,
+  subtitle,
+  children,
+}: ToolResultWrapperProps) {
   return (
     <Card className="mt-2 p-4 border-none">
       <div className="flex items-start gap-3">

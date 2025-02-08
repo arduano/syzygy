@@ -1,5 +1,5 @@
 import type { AnyChatAgent, ChatAIMessage } from "@trpc-chat-agent/core";
-import { cn } from "@/lib/utils.ts";
+import { cn } from "@/ui/lib/utils.ts";
 import { CgRedo } from "react-icons/cg";
 import { Button } from "../ui/button.tsx";
 import { MessageVariants } from "./MessageVariants.tsx";

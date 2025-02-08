@@ -1,22 +1,22 @@
 import type { AgentType } from "@/server/agent.ts";
 import type { AgentTools, ChatAIMessageToolCall } from "@trpc-chat-agent/core";
-import { ToolCallWrapper } from "@/components/chat/ToolCallWrapper.tsx";
-import { ToolResultWrapper } from "@/components/chat/ToolResultWrapper.tsx";
+import { ToolCallWrapper } from "@/ui/components/chat/ToolCallWrapper.tsx";
+import { ToolResultWrapper } from "@/ui/components/chat/ToolResultWrapper.tsx";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import { useState } from "react";
-import { StyledMarkdown } from "@/components/chat/StyledMarkdown.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import { StyledMarkdown } from "@/ui/components/chat/StyledMarkdown.tsx";
+import { Button } from "@/ui/components/ui/button.tsx";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog.tsx";
-import { ScrollArea } from "@/components/ui/scroll-area.tsx";
+} from "@/ui/components/ui/dialog.tsx";
+import { ScrollArea } from "@/ui/components/ui/scroll-area.tsx";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Card } from "@/components/ui/card.tsx";
-import { ThinkingIndicator } from "@/components/chat/ThinkingIndicator.tsx";
+import { Card } from "@/ui/components/ui/card.tsx";
+import { ThinkingIndicator } from "@/ui/components/chat/ThinkingIndicator.tsx";
 
 function CodeContent({
   content,

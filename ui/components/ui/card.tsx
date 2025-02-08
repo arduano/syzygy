@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils.ts";
+import { cn } from "@/ui/lib/utils.ts";
 
 const Card = ({
   ref,

@@ -1,5 +1,5 @@
-import type { ChatPathStateWithSwitch } from '@trpc-chat-agent/core';
-import { Button } from '../ui/button.tsx';
+import type { ChatPathStateWithSwitch } from "@trpc-chat-agent/core";
+import { Button } from "../ui/button.tsx";
 
 export function MessageVariants({ path }: { path: ChatPathStateWithSwitch }) {
   return (
@@ -8,7 +8,7 @@ export function MessageVariants({ path }: { path: ChatPathStateWithSwitch }) {
         <Button
           key={i}
           onClick={() => path.switchTo(i)}
-          variant={path.index === i ? 'secondary' : 'ghost'}
+          variant={path.index === i ? "secondary" : "ghost"}
           size="sm"
           className="w-5 h-5 p-0"
         >
