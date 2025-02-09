@@ -6,12 +6,15 @@ import * as React from "react";
 
 const ScrollArea = ({
   ref,
+  viewportRef,
   className,
   children,
   orientation = "vertical",
+  onScroll,
   ...props
 }: React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
-  ref?: React.RefObject<React.ElementRef<typeof ScrollAreaPrimitive.Root>>;
+  ref?: React.Ref<React.ElementRef<typeof ScrollAreaPrimitive.Root>>;
+  viewportRef?: React.Ref<HTMLDivElement>;
   orientation?: "vertical" | "horizontal" | "both";
 }) => (
   <ScrollAreaPrimitive.Root
@@ -19,7 +22,11 @@ const ScrollArea = ({
     className={cn("relative overflow-hidden min-h-0 flex flex-col", className)}
     {...props}
   >
-    <ScrollAreaPrimitive.Viewport className="flex-1 w-full min-h-0 min-w-0 rounded-[inherit]">
+    <ScrollAreaPrimitive.Viewport
+      ref={viewportRef}
+      className="flex-1 w-full min-h-0 min-w-0 rounded-[inherit]"
+      onScroll={onScroll}
+    >
       {children}
     </ScrollAreaPrimitive.Viewport>
     {(orientation === "vertical" || orientation === "both") && (

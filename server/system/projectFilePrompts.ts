@@ -1,26 +1,44 @@
-import { splitFileDoc } from "@/server/system/scriptFileDocs.ts";
+import {
+  mergeSplitDocFile,
+  splitFileDoc,
+} from "@/server/system/scriptFileDocs.ts";
+import { Context, ConversationBackend } from "@/server/context.ts";
 
-function convertFileToText(importPath: string, file: string) {
+async function convertFileToText(
+  importPath: string,
+  file: string,
+  ctx: ConversationBackend
+) {
   const split = splitFileDoc(file);
+  const declarations = await ctx.getFileDeclarations(file);
+  const joinedAgain = mergeSplitDocFile({
+    docComment: split.docComment,
+    content: declarations.output,
+  });
 
   return `
 <fileDoc importPath="${importPath}">
-${split.docComment}
+${joinedAgain}
 </fileDoc>
   `.trim();
 }
 
-export function createPromptContextForFiles(data: {
+export async function createPromptContextForFiles(data: {
   coreFiles: Record<string, string>;
   projectFiles: Record<string, string>;
+  ctx: ConversationBackend;
 }) {
-  const coreFileDocs = Object.entries(data.coreFiles)
-    .map(([fileName, file]) => convertFileToText(`@core/${fileName}`, file))
-    .join("\n");
+  const coreFileDocs = await Promise.all(
+    Object.entries(data.coreFiles).map(async ([fileName, file]) =>
+      convertFileToText(`@core/${fileName}`, file, data.ctx)
+    )
+  );
 
-  const projectFileDocs = Object.entries(data.projectFiles)
-    .map(([fileName, file]) => convertFileToText(`@lib/${fileName}`, file))
-    .join("\n");
+  const projectFileDocs = await Promise.all(
+    Object.entries(data.projectFiles).map(async ([fileName, file]) =>
+      convertFileToText(`@lib/${fileName}`, file, data.ctx)
+    )
+  );
 
   return `
 Here are all of the available files that can be imported in scripts.
@@ -28,11 +46,11 @@ You can only see the scaffold/functionality of these by default, to reduce the a
 
 <availableFiles>
 <coreFiles>
-${coreFileDocs}
+${coreFileDocs.join("\n")}
 </coreFiles>
 
 <projectLibFiles>
-${projectFileDocs}
+${projectFileDocs.join("\n")}
 </projectLibFiles>
 </availableFiles>
   `;

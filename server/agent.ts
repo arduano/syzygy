@@ -18,8 +18,7 @@ import {
   mergeSplitDocFile,
   splitFileDoc,
 } from "@/server/system/scriptFileDocs.ts";
-import { executeScript } from "@/server/system/execution.ts";
-import { createContext } from "node:vm";
+import { executeScript, truncateStringLines } from "@/server/system/execution.ts";
 import { initAgents } from "@trpc-chat-agent/core";
 import {
   asLangChainMessagesArray,
@@ -28,6 +27,7 @@ import {
 import { DenoPermissions, mergePermissions } from "./system/permissions.ts";
 import { getSystemDnsServers } from "./system/dns.ts";
 import { ProjectConfig } from "@/server/system/projectConfig.ts";
+import { Context, createContext } from "@/server/context.ts";
 
 const thinkingEffort = z.enum(["low", "medium", "high"]);
 export type ThinkingEffort = z.infer<typeof thinkingEffort>;
@@ -45,10 +45,6 @@ const expert = new ChatOpenAI({
   modelName: "o3-mini",
 });
 
-// const expert2 = new ChatGroq({
-//   modelName: "deepseek-r1-distill-llama-70b",
-// });
-
 const writeLibFile = ai.tool({
   name: "write-lib-file",
   description: "Write a file to the lib directory",
@@ -57,31 +53,17 @@ const writeLibFile = ai.tool({
     content: z
       .string()
       .describe(
-        "The actual content of the lib file, exporting all the relevant helper functions."
-      ),
-    exportedDeclarationsWithComments: z
-      .string()
-      .describe(
-        "The high-level detailed description of the file's exports and functionality, including doc comments for each item. You don't need to include code here other than the signatures, unless it helps illustrate the point."
+        "The actual content of the lib file, exporting all the relevant helper functions. You MUST extensively doc comment the file's contents for yourself (including a doc comment at the top of the file), so that file declarations explain the purpose of each function well."
       ),
   }),
-  run: async ({
-    input: { filename, content, exportedDeclarationsWithComments },
-    extraArgs,
-  }) => {
+  run: async ({ input: { filename, content }, extraArgs }) => {
     const projectName = extraArgs.projectName;
 
     if (filename.startsWith("@lib/")) {
       filename = filename.slice("@lib/".length);
     }
 
-    const fullContent = mergeSplitDocFile({
-      content,
-      docComment: exportedDeclarationsWithComments,
-    });
-    await projectDb
-      .projectFiles(projectName)
-      .writeScript(filename, fullContent);
+    await projectDb.projectFiles(projectName).writeScript(filename, content);
 
     return {
       response: "File written",
@@ -93,37 +75,6 @@ const writeLibFile = ai.tool({
   mapArgsForClient: (args) => args,
   mapErrorForAI: (error) => `An error occurred: ${error}`,
 });
-
-function truncateStringLines(
-  str: string,
-  maxLines: number,
-  maxLineLength: number
-) {
-  let lines = str.split("\n");
-
-  // Remove lines from the middle, inserting a marker saying N lines were truncated
-  if (lines.length > maxLines) {
-    lines = [
-      ...lines.slice(0, maxLines / 2),
-      `...`,
-      `... ${lines.length - maxLines} lines truncated ...`,
-      `...`,
-      ...lines.slice(-maxLines / 2),
-    ];
-  }
-
-  lines = lines.map((line) => {
-    if (line.length > maxLineLength) {
-      return (
-        line.slice(0, maxLineLength) +
-        ` ... truncated ${line.length - maxLineLength} characters ...`
-      );
-    }
-    return line;
-  });
-
-  return lines.join("\n");
-}
 
 const executeScriptTool = ai.tool({
   name: "execute-script",
@@ -173,8 +124,8 @@ const executeScriptTool = ai.tool({
       signal,
     });
 
-    const stdout = truncateStringLines(result.stdout, 200, 500);
-    const stderr = truncateStringLines(result.stderr, 200, 500);
+    const stdout = truncateStringLines(result.stdout);
+    const stderr = truncateStringLines(result.stderr);
 
     const aiResponse = `
 <output>
@@ -213,18 +164,13 @@ const getAdvice = ai.tool({
       .describe(
         "The question or topic to get advice about. Be specific and thorough with your question. Make sure all details are covered, and always include extra context where possible."
       ),
-    thinkingEffort: z
-      .enum(["low", "medium", "high"])
-      .default("medium")
-      .describe(
-        "The level of effort to put into the answer. Low effort answers are more brief and may not cover all details. Medium effort answers are more detailed and may include some extra context. High effort answers are very detailed and may include lots of extra context. More thinking is more expensive, so choose the right thinking level for each one."
-      ),
   }),
   run: async ({
-    input: { question, thinkingEffort },
+    input: { question },
     conversation,
     conversationPath,
     extraArgs,
+    ctx,
   }) => {
     const langchainMessages = asLangChainMessagesArray(
       conversation,
@@ -246,24 +192,23 @@ const getAdvice = ai.tool({
     ))!;
     const currentWorkdir = currentProject.workdir;
 
-    const response = await expert
-      .bind({ reasoning_effort: thinkingEffort ?? "medium" })
-      .invoke([
-        {
-          role: "system",
-          content: await makeSystemMessage({
-            isOSeries: true,
-            projectName: extraArgs.projectName,
-            currentWorkdir,
-            currentProject,
-          }),
-        },
-        ...langchainMessages,
-        {
-          role: "system",
-          content: `You are being asked the following question: \n\n${question}\n\nThink carefully, and provide an answer that fits the requirements.`,
-        },
-      ]);
+    const response = await expert.bind({ reasoning_effort: "high" }).invoke([
+      {
+        role: "system",
+        content: await makeSystemMessage({
+          isOSeries: true,
+          projectName: extraArgs.projectName,
+          currentWorkdir,
+          currentProject,
+          ctx,
+        }),
+      },
+      ...langchainMessages,
+      {
+        role: "system",
+        content: `You are being asked the following question: \n\n${question}\n\nThink carefully, and provide an answer that fits the requirements.`,
+      },
+    ]);
 
     const aiResponse =
       response.content +
@@ -318,18 +263,11 @@ const readScriptFile = ai.tool({
       throw new Error(`File ${path} not found`);
     }
 
-    const { content: c, docComment: d } = splitFileDoc(content);
-
     return {
       response: `
 File contents:
 \`\`\`typescript
-${c}
-\`\`\`
-
-File declarations:
-\`\`\`typescript
-${d}
+${content}
 \`\`\`
 `.trim(),
       clientResult: {
@@ -358,7 +296,7 @@ export const agent = ai.agent({
   llm: new ChatOpenAI({ model: "gpt-4o" }),
   tools: allTools,
   langchainCallbacks: [langfuseHandler],
-  transformMessages: async ({ conversation, path, extraArgs }) => {
+  transformMessages: async ({ conversation, path, extraArgs, ctx }) => {
     const messagesList = asLangChainMessagesArray(conversation, path);
 
     const currentProject = (await projectDb.readProjectConfig(
@@ -371,6 +309,7 @@ export const agent = ai.agent({
       projectName: extraArgs.projectName,
       currentWorkdir,
       currentProject,
+      ctx,
     });
 
     const allMessages = [
@@ -420,6 +359,7 @@ async function makeSystemMessage(args: {
   projectName: string;
   currentWorkdir: string;
   currentProject: ProjectConfig;
+  ctx: Context;
 }) {
   const projectFiles = await projectDb
     .projectFiles(args.projectName)
@@ -430,10 +370,13 @@ async function makeSystemMessage(args: {
 
   const context = await projectDb.readProjectContext(args.projectName);
 
-  const filesPromptPart = createPromptContextForFiles({
-    coreFiles: internalFiles,
-    projectFiles: projectFiles,
-  });
+  const filesPromptPart = await args.ctx.forProject(args.projectName, (ctx) =>
+    createPromptContextForFiles({
+      coreFiles: internalFiles,
+      projectFiles: projectFiles,
+      ctx,
+    })
+  );
 
   return `${args.isOSeries ? "Formatting re-enabled" : ""}
 

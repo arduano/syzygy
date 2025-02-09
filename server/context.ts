@@ -13,6 +13,8 @@ import {
   makeNameForConversation,
 } from "@/server/conversationMetadata.ts";
 import { sandboxDir } from "@/server/system/systemEnv.ts";
+import { withCache } from "@/server/system/cache.ts";
+import { compileDeclarations } from "@/server/system/compileDeclarations.ts";
 
 async function makeProjectConversationsBackend(args: { projectName: string }) {
   const storePath = path.join(
@@ -48,6 +50,12 @@ async function makeProjectConversationsBackend(args: { projectName: string }) {
     const list = await listConversations();
     await conversationList.set("list", [...new Set([...list, conversationId])]);
   };
+
+  const getFileDeclarations = withCache(
+    compileDeclarations,
+    "fileDeclarations",
+    storePath
+  );
 
   async function getAllConversationsWithMetadata() {
     const conversations = await listConversations();
@@ -96,11 +104,12 @@ async function makeProjectConversationsBackend(args: { projectName: string }) {
     conversations: conversationStore,
     listConversations,
     addConversation,
+    getFileDeclarations,
     getAllConversationsWithMetadata,
   };
 }
 
-type ConversationBackend = Awaited<
+export type ConversationBackend = Awaited<
   ReturnType<typeof makeProjectConversationsBackend>
 >;
 

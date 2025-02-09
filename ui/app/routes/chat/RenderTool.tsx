@@ -3,7 +3,7 @@ import type { AgentTools, ChatAIMessageToolCall } from "@trpc-chat-agent/core";
 import { ToolCallWrapper } from "@/ui/components/chat/ToolCallWrapper.tsx";
 import { ToolResultWrapper } from "@/ui/components/chat/ToolResultWrapper.tsx";
 import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { StyledMarkdown } from "@/ui/components/chat/StyledMarkdown.tsx";
 import { Button } from "@/ui/components/ui/button.tsx";
 import {
@@ -18,44 +18,77 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Card } from "@/ui/components/ui/card.tsx";
 import { ThinkingIndicator } from "@/ui/components/chat/ThinkingIndicator.tsx";
 
-function CodeContent({
-  content,
+const CodeBlock = ({
+  content: blockContent,
   language,
+  autoScroll = false,
 }: {
   content: string;
   language?: string;
+  autoScroll?: boolean;
+}) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [userScrolled, setUserScrolled] = useState(false);
+
+  useEffect(() => {
+    if (autoScroll && !userScrolled && scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [blockContent, autoScroll, userScrolled]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!scrollRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+    const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 10;
+
+      setUserScrolled(!isAtBottom);
+  };
+
+  const inner = language ? (
+    <SyntaxHighlighter
+      language={language}
+      style={atomDark}
+      PreTag="div"
+      className="p-0"
+      customStyle={{ margin: 0 }}
+    >
+      {blockContent}
+    </SyntaxHighlighter>
+  ) : (
+    <Card className="p-4 border border-accent-foreground/20 w-full block rounded-lg">
+      <pre className="font-mono whitespace-pre-wrap">{blockContent}</pre>
+    </Card>
+  );
+
+  return (
+    <ScrollArea
+      className="max-w-full max-h-full"
+      orientation="both"
+      viewportRef={scrollRef}
+      onScroll={handleScroll}
+    >
+      {inner}
+    </ScrollArea>
+  );
+};
+
+function CodeContent({
+  content,
+  language,
+  autoScroll = false,
+}: {
+  content: string;
+  language?: string;
+  autoScroll?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const truncated =
     content.length > 500 ? content.slice(0, 500) + "..." : content;
 
-  const CodeBlock = ({ content: blockContent }: { content: string }) => {
-    const inner = language ? (
-      <SyntaxHighlighter
-        language={language}
-        style={atomDark}
-        PreTag="div"
-        className="p-0"
-        customStyle={{ margin: 0 }}
-      >
-        {blockContent}
-      </SyntaxHighlighter>
-    ) : (
-      <Card className="p-4 border border-accent-foreground/20 w-full block rounded-lg">
-        <pre className="font-mono whitespace-pre-wrap">{blockContent}</pre>
-      </Card>
-    );
-
-    return (
-      <ScrollArea className="max-w-full max-h-full" orientation="both">
-        {inner}
-      </ScrollArea>
-    );
-  };
-
   return (
     <>
-      <CodeBlock content={truncated} />
+      <CodeBlock content={truncated} language={language} />
       {content.length > 500 && (
         <Button variant="outline" size="sm" onClick={() => setIsOpen(true)}>
           View Full Content
@@ -68,7 +101,11 @@ function CodeContent({
             <DialogTitle>Full Content</DialogTitle>
           </DialogHeader>
           <div className="p-4 max-w-2xl max-h-[80vh]">
-            <CodeBlock content={content} />
+            <CodeBlock
+              content={content}
+              language={language}
+              autoScroll={autoScroll}
+            />
           </div>
         </DialogContent>
       </Dialog>
@@ -100,15 +137,6 @@ export function RenderTool({
                 />
               </div>
             </div>
-            <div>
-              <span className="font-semibold">Declarations:</span>
-              <div className="mt-1">
-                <CodeContent
-                  content={tool.args?.exportedDeclarationsWithComments ?? ""}
-                  language="typescript"
-                />
-              </div>
-            </div>
           </div>
         </ToolCallWrapper>
       );
@@ -134,7 +162,7 @@ export function RenderTool({
               <div>
                 <span className="font-semibold">Output:</span>
                 <div className="mt-1">
-                  <CodeContent content={progress} />
+                  <CodeContent content={progress} autoScroll={true} />
                 </div>
               </div>
             )}
@@ -148,7 +176,7 @@ export function RenderTool({
                   <div>
                     <span className="font-semibold">Stdout:</span>
                     <div className="mt-1">
-                      <CodeContent content={data.stdout} />
+                      <CodeContent content={data.stdout} autoScroll={true} />
                     </div>
                   </div>
                 )}
@@ -156,7 +184,7 @@ export function RenderTool({
                   <div>
                     <span className="font-semibold">Stderr:</span>
                     <div className="mt-1">
-                      <CodeContent content={data.stderr} />
+                      <CodeContent content={data.stderr} autoScroll={true} />
                     </div>
                   </div>
                 )}

@@ -1,48 +1,7 @@
 /**
- * /**
- *  * Runs a Git command with the specified arguments and returns the output as a string.
- *  * @param args - An array of string arguments for the Git command.
- *  * @returns The standard output of the executed command.
- *  * @throws If the command exits with a non-zero status code,
- *  *         an error containing the standard error output is thrown.
- *  *\/
- * async function runGitCommand(args: string[]): Promise<string>
- *
- * /**
- *  * Retrieves the current Git branch and revision SHA-1 in the repository.
- *  * @returns An object containing the branch name and current revision SHA-1.
- *  *\/
- * export async function gitGetStatus(): Promise<{ branch: string, revision: string }>
- *
- * /**
- *  * Checks out to a specified Git branch or revision with options.
- *  * @param branchOrRev - The branch name or revision to check out.
- *  * @param options - An array of additional options for the checkout command.
- *  *\/
- * export async function gitCheckout(branchOrRev: string, options: string[] = []): Promise<void>
- *
- * /**
- *  * Stages all changes and commits them with a given commit message.
- *  * @param message - The commit message to use.
- *  * @returns The SHA-1 of the newly created commit.
- *  *\/
- * export async function gitCommit(message: string): Promise<string>
- *
- * /**
- *  * Pushes committed changes to the remote repository.
- *  *\/
- * export async function gitPush(): Promise<void>
- *
- * /**
- *  * Pulls the latest changes from the remote repository.
- *  *\/
- * export async function gitPull(): Promise<void>
- *
- * /**
- *  * Fetches updates from the remote repository without merging.
- *  *\/
- * export async function gitFetch(): Promise<void>
+ * Provides helper functions for performing common Git operations, such as getting the current status, checking out branches, committing changes, and more.
  */
+
 /**
  * Runs a Git command with the specified arguments and returns the output as a string.
  * @param args - An array of string arguments for the Git command.
