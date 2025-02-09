@@ -17,14 +17,6 @@ import { ThinkingIndicator } from "@/ui/components/chat/ThinkingIndicator.tsx";
 import { Button } from "@/ui/components/ui/button.tsx";
 import { FaStop } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/ui/components/ui/dropdown-menu.tsx";
 import { useMatch, useNavigate, useParams, Link } from "react-router-dom";
 
 export function Chat() {
@@ -97,6 +89,8 @@ function ChatComponentWithStaticId({
   };
 
   const conversationNames = trpc.listConversations.useQuery({ projectName });
+
+  const projectDetails = trpc.getProjectDetails.useQuery({ projectName });
 
   const {
     messages,
@@ -205,33 +199,8 @@ function ChatComponentWithStaticId({
         <div className="flex flex-col h-screen max-h-screen">
           {/* Top bar */}
           <div className="border-b p-2">
-            <div className="flex items-center justify-start gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-2">
-                    Thinking Effort: {thinkingEffort} <HiChevronDown />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Thinking Effort</DropdownMenuLabel>
-                  <DropdownMenuRadioGroup
-                    value={thinkingEffort}
-                    onValueChange={(v) =>
-                      setThinkingEffort(v as ThinkingEffort)
-                    }
-                  >
-                    <DropdownMenuRadioItem value="low">
-                      Low
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="medium">
-                      Medium
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="high">
-                      High
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <div className="flex items-center justify-center gap-2">
+              <div>{projectDetails.data?.projectConfig.name ?? projectName}</div>
             </div>
           </div>
 

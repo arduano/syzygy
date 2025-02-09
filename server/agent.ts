@@ -18,7 +18,10 @@ import {
   mergeSplitDocFile,
   splitFileDoc,
 } from "@/server/system/scriptFileDocs.ts";
-import { executeScript, truncateStringLines } from "@/server/system/execution.ts";
+import {
+  executeScript,
+  truncateStringLines,
+} from "@/server/system/execution.ts";
 import { initAgents } from "@trpc-chat-agent/core";
 import {
   asLangChainMessagesArray,
@@ -88,11 +91,17 @@ const executeScriptTool = ai.tool({
   run: async ({ input: { code }, sendProgress, extraArgs, signal }) => {
     const projectName = extraArgs.projectName;
     const currentProject = (await projectDb.readProjectConfig(projectName))!;
-    const currentWorkdir = currentProject.workdir;
+    const currentWorkdir =
+      currentProject.workdir === "" ? undefined : currentProject.workdir;
+
+    const basePaths = ["."];
+    if (currentWorkdir) {
+      basePaths.push(currentWorkdir);
+    }
 
     const basePermissions: DenoPermissions = {
-      allowRead: [currentWorkdir, "."],
-      allowWrite: [currentWorkdir, "."],
+      allowRead: basePaths,
+      allowWrite: basePaths,
       allowEnv: true,
     };
 
@@ -393,6 +402,8 @@ You have access to a library of deno script files. The two import paths are:
 
 The execution environment is sandboxed via deno permissions, with whitelisted permissions for all the relevant functionality you'll need.
 You can use the deno filesystem API, but only within the WORKDIR directory.
+
+Please avoid writing lib files eagerly, write them after I ask you to. Instead, lean towards running execute-script with all the logic first instead.
 
 Whenever you're asked to interact with workdir files, you'll need to write a Deno script to do it.
 

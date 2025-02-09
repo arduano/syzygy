@@ -46,12 +46,15 @@
     "npm:@tailwindcss/vite@^4.0.4": "4.0.4_vite@6.0.11__@types+node@22.5.4_@types+node@22.5.4_lightningcss@1.29.1",
     "npm:@tanstack/react-query-devtools@^5.64.2": "5.65.1_@tanstack+react-query@5.65.1__react@19.0.0_react@19.0.0",
     "npm:@tanstack/react-query@5.62.15": "5.62.15_react@19.0.0",
-    "npm:@trpc-chat-agent/core@~0.4.5": "0.4.8_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
-    "npm:@trpc-chat-agent/core@~0.4.8": "0.4.8_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
-    "npm:@trpc-chat-agent/langchain@~0.4.7": "0.4.8_@trpc-chat-agent+core@0.4.8__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3",
-    "npm:@trpc-chat-agent/langchain@~0.4.8": "0.4.8_@trpc-chat-agent+core@0.4.8__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3",
-    "npm:@trpc-chat-agent/react@~0.4.7": "0.4.8_@trpc-chat-agent+core@0.4.8__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_react@19.0.0_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
-    "npm:@trpc-chat-agent/react@~0.4.8": "0.4.8_@trpc-chat-agent+core@0.4.8__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_react@19.0.0_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
+    "npm:@trpc-chat-agent/core@~0.4.5": "0.4.9_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
+    "npm:@trpc-chat-agent/core@~0.4.8": "0.4.9_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
+    "npm:@trpc-chat-agent/core@~0.4.9": "0.4.9_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
+    "npm:@trpc-chat-agent/langchain@~0.4.7": "0.4.9_@trpc-chat-agent+core@0.4.9__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3",
+    "npm:@trpc-chat-agent/langchain@~0.4.8": "0.4.9_@trpc-chat-agent+core@0.4.9__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3",
+    "npm:@trpc-chat-agent/langchain@~0.4.9": "0.4.9_@trpc-chat-agent+core@0.4.9__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3",
+    "npm:@trpc-chat-agent/react@~0.4.7": "0.4.9_@trpc-chat-agent+core@0.4.9__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_react@19.0.0_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
+    "npm:@trpc-chat-agent/react@~0.4.8": "0.4.9_@trpc-chat-agent+core@0.4.9__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_react@19.0.0_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
+    "npm:@trpc-chat-agent/react@~0.4.9": "0.4.9_@trpc-chat-agent+core@0.4.9__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_react@19.0.0_typescript@5.7.3_openai@4.81.0__zod@3.24.1",
     "npm:@trpc/client@11.0.0-rc.718": "11.0.0-rc.718_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3",
     "npm:@trpc/react-query@11.0.0-rc.718": "11.0.0-rc.718_@tanstack+react-query@5.62.15__react@19.0.0_@trpc+client@11.0.0-rc.718__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3_@trpc+server@11.0.0-rc.718__typescript@5.7.3_react@19.0.0_react-dom@19.0.0__react@19.0.0_typescript@5.7.3",
     "npm:@trpc/server@11.0.0-rc.718": "11.0.0-rc.718_typescript@5.7.3",
@@ -1266,8 +1269,8 @@
         "react"
       ]
     },
-    "@trpc-chat-agent/core@0.4.8_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_openai@4.81.0__zod@3.24.1": {
-      "integrity": "sha512-hG9seJdlJBQLcUfVt0gn1V6p89w4YZLmuXUOfOsmoLrukQuz+56IzNW//fGOpK2DQVXh2U4xChK6C/KUHYNHgw==",
+    "@trpc-chat-agent/core@0.4.9_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@trpc+server@11.0.0-rc.718__typescript@5.7.3_typescript@5.7.3_openai@4.81.0__zod@3.24.1": {
+      "integrity": "sha512-pCP5rg5SLSgaFYwQjfVbcCaOm4dwPwtD3NNxi1jPyB6ktAMUHZrD922NkyHxpu005lz+4cquB7v52Td7NrSf+A==",
       "dependencies": [
         "@langchain/core",
         "@langchain/langgraph",
@@ -1279,8 +1282,8 @@
         "zod"
       ]
     },
-    "@trpc-chat-agent/langchain@0.4.8_@trpc-chat-agent+core@0.4.8__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3": {
-      "integrity": "sha512-n1Of2vFeVOgi6UvkIXjzVMw/OzzaTg/ioIG+/djBD4LYb/+Ns8l8R+cnlA0SSkROyYIix25BgWTkU1xUm/P5zw==",
+    "@trpc-chat-agent/langchain@0.4.9_@trpc-chat-agent+core@0.4.9__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_zod@3.24.1_openai@4.81.0__zod@3.24.1_typescript@5.7.3": {
+      "integrity": "sha512-dbfT35eH5GB2xCC4Soag5wxEQ9zOOUaW0L5X+qc3/pIcKwrr4zHkD/VoezYIyHKFVEajtD5idJ1cJjPhZhts5g==",
       "dependencies": [
         "@langchain/anthropic",
         "@langchain/core",
@@ -1291,8 +1294,8 @@
         "zod-to-json-schema"
       ]
     },
-    "@trpc-chat-agent/react@0.4.8_@trpc-chat-agent+core@0.4.8__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_react@19.0.0_typescript@5.7.3_openai@4.81.0__zod@3.24.1": {
-      "integrity": "sha512-Il6s09qap6ytpoxcO3liunX6fTi2UsfFjd+qpuKsulR0iQIko5Tj3DAYHChQCyW4OpznKuzu2vYvCUCVYlOq8Q==",
+    "@trpc-chat-agent/react@0.4.9_@trpc-chat-agent+core@0.4.9__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@trpc+server@11.0.0-rc.718___typescript@5.7.3__typescript@5.7.3__openai@4.81.0___zod@3.24.1_react@19.0.0_typescript@5.7.3_openai@4.81.0__zod@3.24.1": {
+      "integrity": "sha512-BncJdgGyFzTdYizMEpNOOTDOapqgbHmVhHC7V4o3HTTAgH77R40xfPP9ylU+U06b5OoibKHADWYezofIoxomDA==",
       "dependencies": [
         "@preact/signals-core",
         "@preact/signals-react",
@@ -3893,9 +3896,9 @@
       "npm:@tailwindcss/vite@^4.0.4",
       "npm:@tanstack/react-query-devtools@^5.64.2",
       "npm:@tanstack/react-query@5.62.15",
-      "npm:@trpc-chat-agent/core@~0.4.8",
-      "npm:@trpc-chat-agent/langchain@~0.4.8",
-      "npm:@trpc-chat-agent/react@~0.4.8",
+      "npm:@trpc-chat-agent/core@~0.4.9",
+      "npm:@trpc-chat-agent/langchain@~0.4.9",
+      "npm:@trpc-chat-agent/react@~0.4.9",
       "npm:@trpc/client@11.0.0-rc.718",
       "npm:@trpc/react-query@11.0.0-rc.718",
       "npm:@trpc/server@11.0.0-rc.718",

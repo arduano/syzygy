@@ -15,7 +15,7 @@ export function compileDeclarations(sourceCode: string) {
   const options: ts.CompilerOptions = {
     declaration: true,
     emitDeclarationOnly: true,
-    outDir: "./.cache/defs", // Affects the naming of output files (virtual names).
+    outDir: "./", // Affects the naming of output files (virtual names).
   };
 
   // This object will collect our emitted files in memory.
@@ -96,11 +96,8 @@ export function compileDeclarations(sourceCode: string) {
       .join("\n");
   }
 
-  console.log(output);
-  console.log(output["./.cache/defs/inmemory.d.ts"]);
-
   return {
-    output: output["./.cache/defs/inmemory.d.ts"],
+    output: output["./inmemory.d.ts"],
     diagnosticMessages,
   };
 }

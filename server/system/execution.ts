@@ -22,7 +22,7 @@ export async function executeScript(args: {
   permissions: DenoPermissions;
   onProgress?: (data: string) => void;
   workdir?: string;
-  signal?: AbortSignal;
+  signal: AbortSignal;
 }): Promise<ExecutionResult> {
   const { projectName, code, permissions, onProgress, workdir, signal } = args;
 
@@ -47,15 +47,44 @@ export async function executeScript(args: {
       signal,
     });
 
-    const term = new TerminalClass({ cols: 80, rows: 1 });
-    const termStdout = new TerminalClass({ cols: 80, rows: 1 });
-    const termStderr = new TerminalClass({ cols: 80, rows: 1 });
+    const term = new TerminalClass({
+      cols: 80,
+      rows: 1,
+      scrollback: 100000,
+      convertEol: true,
+    });
+    const termStdout = new TerminalClass({
+      cols: 80,
+      rows: 1,
+      scrollback: 100000,
+      convertEol: true,
+    });
+    const termStderr = new TerminalClass({
+      cols: 80,
+      rows: 1,
+      scrollback: 100000,
+      convertEol: true,
+    });
 
     const progressDebouncer = new Debouncer<void>(1000, () => {
       onProgress?.(readTerminalLines(term));
     });
 
     const child = process.spawn();
+
+    // signal.addEventListener("abort", () => {
+    //   console.log("Aborting child Deno process");
+    //   child.kill("SIGTERM");
+    // });
+
+    let stdoutHandlerResolve: (() => void) | undefined;
+    let stderrHandlerResolve: (() => void) | undefined;
+    const stdoutHandlerPromise = new Promise<void>((resolve) => {
+      stdoutHandlerResolve = resolve;
+    });
+    const stderrHandlerPromise = new Promise<void>((resolve) => {
+      stderrHandlerResolve = resolve;
+    });
 
     // Handle stdout
     const stdoutReader = child.stdout.getReader();
@@ -64,11 +93,16 @@ export async function executeScript(args: {
         const { done, value } = await stdoutReader.read();
         if (done) break;
 
-        term.write(value);
-        termStdout.write(value);
+        await Promise.all([
+          Deno.stdout.write(value),
+          new Promise<void>((resolve) => term.write(value, resolve)),
+          new Promise<void>((resolve) => termStdout.write(value, resolve)),
+        ]);
 
         progressDebouncer.debounce();
       }
+
+      stdoutHandlerResolve?.();
     })();
 
     // Handle stderr
@@ -78,14 +112,22 @@ export async function executeScript(args: {
         const { done, value } = await stderrReader.read();
         if (done) break;
 
-        term.write(value);
-        termStderr.write(value);
+        await Promise.all([
+          Deno.stderr.write(value),
+          new Promise<void>((resolve) => term.write(value, resolve)),
+          new Promise<void>((resolve) => termStderr.write(value, resolve)),
+        ]);
 
         progressDebouncer.debounce();
       }
+
+      stderrHandlerResolve?.();
     })();
 
     const { code: exitCode } = await child.status;
+
+    await stdoutHandlerPromise;
+    await stderrHandlerPromise;
 
     progressDebouncer.flush();
 

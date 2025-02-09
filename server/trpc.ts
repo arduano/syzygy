@@ -89,6 +89,18 @@ export const appRouter = t.router({
         return backend.getAllConversationsWithMetadata();
       });
     }),
+
+  getProjectDetails: t.procedure
+    .input(z.object({ projectName: z.string() }))
+    .query(async ({ input }) => {
+      const projectConfig = await projectDb.readProjectConfig(
+        input.projectName
+      );
+      if (!projectConfig) {
+        throw new Error(`Project ${input.projectName} not found`);
+      }
+      return { projectConfig };
+    }),
 });
 
 export type AppRouter = typeof appRouter;

@@ -4,57 +4,60 @@ import { createContext } from "./context.ts";
 import { appRouter } from "@/server/trpc.ts";
 import { oakCors } from "@tajpouria/cors";
 
-const app = new Application();
-const oakRouter = new Router();
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "*",
+  "Access-Control-Allow-Credentials": "true",
+  "Access-Control-Max-Age": "86400",
+} as const;
 
-if (Deno.env.get("VITE_DEV")) {
-  console.log("Running in DEV mode");
-  app.use(
-    oakCors({
-      origin: "*",
-      methods: ["GET", "POST", "OPTIONS"],
-    })
-  );
+function withCors<T extends Response>(response: T): T {
+  if (!Deno.env.get("VITE_DEV")) return response;
+
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+
+  return response;
 }
 
-// tRPC handler
-oakRouter.all("/api/trpc/:path*", async (ctx) => {
-  const req = new Request(ctx.request.url, {
-    method: ctx.request.method,
-    headers: ctx.request.headers,
-    body:
-      ctx.request.method === "POST" ? await ctx.request.body.blob() : undefined,
-  });
+Deno.serve(
+  {
+    port: 3000,
+  },
+  async (request) => {
+    const url = new URL(request.url);
 
-  const response = await fetchRequestHandler({
-    endpoint: "/api/trpc",
-    req,
-    router: appRouter,
-    createContext,
-  });
-
-  ctx.response.status = response.status;
-  response.headers.forEach((value, key) => {
-    ctx.response.headers.set(key, value);
-  });
-  ctx.response.body = async function* () {
-    const stream = await response.body?.getReader();
-    if (!stream) return;
-    while (true) {
-      const { value, done } = await stream.read();
-      if (done) {
-        break;
-      }
-      yield value;
+    // Handle CORS preflight
+    if (Deno.env.get("VITE_DEV") && request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders,
+      });
     }
-  };
-});
 
-app.use(oakRouter.routes());
-app.use(oakRouter.allowedMethods());
+    if (url.pathname.startsWith("/api/trpc")) {
+      try {
+        const response = await fetchRequestHandler({
+          endpoint: "/api/trpc",
+          req: request,
+          router: appRouter,
+          createContext,
+        });
 
-// Start the server
-const port = 3000;
-console.log(`Server running on http://localhost:${port}`);
+        return withCors(response);
+      } catch (error: any) {
+        console.error("tRPC error:", error);
+        return withCors(
+          new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          })
+        );
+      }
+    }
 
-await app.listen({ port });
+    return withCors(new Response("Not Found", { status: 404 }));
+  }
+);
