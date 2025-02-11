@@ -18,10 +18,7 @@ import {
   mergeSplitDocFile,
   splitFileDoc,
 } from "@/server/system/scriptFileDocs.ts";
-import {
-  executeScript,
-  truncateStringLines,
-} from "@/server/system/execution.ts";
+import { executeScript } from "@/server/system/execution.ts";
 import { initAgents } from "@trpc-chat-agent/core";
 import {
   asLangChainMessagesArray,
@@ -133,8 +130,8 @@ const executeScriptTool = ai.tool({
       signal,
     });
 
-    const stdout = truncateStringLines(result.stdout);
-    const stderr = truncateStringLines(result.stderr);
+    const stdout = result.stdout;
+    const stderr = result.stderr;
 
     const aiResponse = `
 <output>

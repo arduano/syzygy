@@ -201,34 +201,3 @@ function readTerminalLines(term: Terminal) {
 
   return readLines.join("\n");
 }
-
-export function truncateStringLines(
-  str: string,
-  maxLines = defaultMaxLines,
-  maxLineLength = defaultMaxLineLength
-) {
-  let lines = str.split("\n");
-
-  // Remove lines from the middle, inserting a marker saying N lines were truncated
-  if (lines.length > maxLines) {
-    lines = [
-      ...lines.slice(0, maxLines / 2),
-      `...`,
-      `... ${lines.length - maxLines} lines truncated ...`,
-      `...`,
-      ...lines.slice(-maxLines / 2),
-    ];
-  }
-
-  lines = lines.map((line) => {
-    if (line.length > maxLineLength) {
-      return (
-        line.slice(0, maxLineLength) +
-        ` ... truncated ${line.length - maxLineLength} characters ...`
-      );
-    }
-    return line;
-  });
-
-  return lines.join("\n");
-}
