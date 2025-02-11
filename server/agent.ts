@@ -41,8 +41,15 @@ export const ai = initAgents
   )
   .create();
 
+const langfuseHandler = new CallbackHandler({
+  publicKey: "pk-lf-a52f8e79-f42c-430b-be4c-c3b78da4a0c4",
+  secretKey: "sk-lf-3379fff6-97c4-48ae-95f3-817c0a65d2c8",
+  baseUrl: "http://192.168.1.51:3000",
+});
+
 const expert = new ChatOpenAI({
   modelName: "o3-mini",
+  callbacks: [langfuseHandler],
 });
 
 const writeLibFile = ai.tool({
@@ -291,12 +298,6 @@ const allTools = [
   getAdvice,
   readScriptFile,
 ] as const;
-
-const langfuseHandler = new CallbackHandler({
-  publicKey: "pk-lf-a52f8e79-f42c-430b-be4c-c3b78da4a0c4",
-  secretKey: "sk-lf-3379fff6-97c4-48ae-95f3-817c0a65d2c8",
-  baseUrl: "http://192.168.1.51:3000",
-});
 
 export const agent = ai.agent({
   llm: new ChatOpenAI({ model: "gpt-4o" }),
