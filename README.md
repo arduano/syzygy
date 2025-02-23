@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Syzygy
+
+*/ˈsɪzɪdʒi/* - The conjunction or opposition of two corresponding things.
+
+This tool seamlessly connects you to an AI chat agent, allowing you to multiply your productivity with script-driven automation.
+
+## Key Features
+
+- **Progressive Abstraction**: What sets Syzygy (as a chat agent) apart is its ability to perform abstraction, allowing you to build up complexity one step at a time, before asking the AI to abstract it away into a function.
+- **Deno-Powered**: Scripts executed by Syzygy can do anything Deno can, which includes executing more AI calls! Syzygy can write a script that selectively executes more AI prompts, e.g. for advanced mass code refactoring.
+- **Fully sandboxed**: Deno provides powerful sandboxing features, allowing you to manually whitelist what the script can access. This gives you a lot more trust in Syzygy's arbitrary code execution.
+
+## Perfect For
+
+Syzygy shines the most when you're tasked with prototyping/developing one-off scripts. Use case examples include:
+- One-off complex website scraper
+- Performing large one-off repetitive code refactoring
+- Transcoding a folder of complex media files with ffmpeg
+- Performing complex one-off validation on data
+- Generating a report on the status of a database/system
 
 ## Getting Started
 
-First, run the development server:
+*Syzygy will support standalone execution in the near future*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Requirements
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Syzygy requires Deno 2.0 or higher.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+*Documentation will come later*
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
