@@ -28,6 +28,8 @@ import { DenoPermissions, mergePermissions } from "./system/permissions.ts";
 import { getSystemDnsServers } from "./system/dns.ts";
 import { ProjectConfig } from "@/server/system/projectConfig.ts";
 import { Context, createContext } from "@/server/context.ts";
+import { baseChatModel, expertChatModel } from "@/server/adapters/models.ts";
+import { langfuseCallbacks } from "@/server/adapters/langfuse.ts";
 
 const thinkingEffort = z.enum(["low", "medium", "high"]);
 export type ThinkingEffort = z.infer<typeof thinkingEffort>;
@@ -40,17 +42,6 @@ export const ai = initAgents
     )
   )
   .create();
-
-const langfuseHandler = new CallbackHandler({
-  publicKey: "pk-lf-a52f8e79-f42c-430b-be4c-c3b78da4a0c4",
-  secretKey: "sk-lf-3379fff6-97c4-48ae-95f3-817c0a65d2c8",
-  baseUrl: "http://192.168.1.51:3000",
-});
-
-const expert = new ChatOpenAI({
-  modelName: "o3-mini",
-  callbacks: [langfuseHandler],
-});
 
 const writeLibFile = ai.tool({
   name: "write-lib-file",
@@ -205,7 +196,7 @@ const getAdvice = ai.tool({
     ))!;
     const currentWorkdir = currentProject.workdir;
 
-    const response = await expert.bind({ reasoning_effort: "high" }).invoke([
+    const response = await expertChatModel.invoke([
       {
         role: "system",
         content: await makeSystemMessage({
@@ -300,9 +291,9 @@ const allTools = [
 ] as const;
 
 export const agent = ai.agent({
-  llm: new ChatOpenAI({ model: "gpt-4o" }),
+  llm: baseChatModel,
   tools: allTools,
-  langchainCallbacks: [langfuseHandler],
+  langchainCallbacks: [...langfuseCallbacks],
   transformMessages: async ({ conversation, path, extraArgs, ctx }) => {
     const messagesList = asLangChainMessagesArray(conversation, path);
 
@@ -350,15 +341,6 @@ export const agent = ai.agent({
 
     return allMessages;
   },
-  // transformInvocation: (args, { extraArgs }) => {
-  //   return {
-  //     ...args,
-  //     bind: {
-  //       ...args.bind,
-  //       reasoning_effort: extraArgs.thinkingEffort,
-  //     },
-  //   };
-  // },
 });
 
 async function makeSystemMessage(args: {

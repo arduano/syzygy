@@ -66,7 +66,7 @@ export async function executeScript(args: {
       convertEol: true,
     });
 
-    const progressDebouncer = new Debouncer<void>(1000, () => {
+    const progressDebouncer = new Debouncer<void>(500, () => {
       onProgress?.(readTerminalLines(term));
     });
 
