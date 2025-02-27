@@ -1,11 +1,16 @@
 {
+  "name": "@syzygy/chat",
+  "version": "0.1.0",
+  "license": "MIT",
+  "exports": "./server.ts",
   "tasks": {
     "dev:server": "deno run -A --watch --env-file=./.env ./server/server.ts",
     "dev:client": "deno -A npm:vite dev",
     "build:client": "deno -A npm:vite build",
     "build": "deno run -A npm:next build",
     "start": "deno run -A npm:next start",
-    "lint": "deno lint"
+    "lint": "deno lint",
+    "changeset": "deno run -A ./changesets.ts"
   },
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "deno.window"],
