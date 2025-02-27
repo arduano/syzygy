@@ -40,6 +40,7 @@ next-env.d.ts
 
 # Vite
 .vite
+/ui/dist
 /dist
 
 # Project

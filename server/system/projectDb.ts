@@ -1,11 +1,6 @@
 import path from "node:path";
-import { SplitFile, splitFileDoc } from "./scriptFileDocs.ts";
 import { sandboxDir } from "@/server/system/systemEnv.ts";
-import {
-  ProjectConfig,
-  createDefaultConfig,
-  projectConfigSchema,
-} from "./projectConfig.ts";
+import { ProjectConfig, projectConfigSchema } from "./projectConfig.ts";
 
 const internalsFolder = "core";
 const projectsFolder = "projects";
@@ -165,6 +160,10 @@ export class ProjectDb {
 
   async listProjects() {
     const projectsPath = path.join(this.rootPath, projectsFolder);
+
+    // Ensure the projects path exists
+    await Deno.mkdir(projectsPath, { recursive: true });
+
     const projects = await Deno.readDir(projectsPath);
     const projectsData = [];
     for await (const project of projects) {

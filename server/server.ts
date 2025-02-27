@@ -1,8 +1,7 @@
-import { Application, Router } from "@oak/oak";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { createContext } from "./context.ts";
 import { appRouter } from "@/server/trpc.ts";
-import { oakCors } from "@tajpouria/cors";
+import mime from "npm:mime-types";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -56,6 +55,35 @@ Deno.serve(
           })
         );
       }
+    }
+
+    if (!Deno.env.get("VITE_DEV")) {
+      const embeds = await import("../dist/mod.ts");
+      const file = await embeds.default.get(url.pathname.slice(1));
+      console.log(url.pathname);
+      if (!file) {
+        const indexFile = await embeds.default.get("index.html");
+        if (indexFile) {
+          return withCors(
+            new Response(await indexFile.bytes(), {
+              headers: {
+                "content-type": "text/html",
+              },
+            })
+          );
+        } else {
+          throw new Error("Index file not found");
+        }
+      }
+
+      return withCors(
+        new Response(await file.bytes(), {
+          headers: {
+            "content-type":
+              mime.lookup(url.pathname) || "application/octet-stream",
+          },
+        })
+      );
     }
 
     return withCors(new Response("Not Found", { status: 404 }));
