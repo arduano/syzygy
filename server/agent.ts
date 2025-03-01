@@ -1,20 +1,20 @@
-import { ChatOpenAI } from "@langchain/openai";
-import { ChatGroq } from "@langchain/groq";
+import type { ChatOpenAI } from "@langchain/openai";
+import type { ChatGroq } from "@langchain/groq";
 import { z } from "zod";
 import {
   AIMessage,
-  AIMessageFields,
+  type AIMessageFields,
   HumanMessage,
-  isAIMessageChunk,
+  type isAIMessageChunk,
   SystemMessage,
   ToolMessage,
   type AIMessageChunk,
 } from "@langchain/core/messages";
-import { CallbackHandler } from "langfuse-langchain";
-import process from "node:process";
+import type { CallbackHandler } from "langfuse-langchain";
+import type process from "node:process";
 import { projectDb } from "./system/projectDb.ts";
 import { createPromptContextForFiles } from "@/server/system/projectFilePrompts.ts";
-import {
+import type {
   mergeSplitDocFile,
   splitFileDoc,
 } from "@/server/system/scriptFileDocs.ts";
@@ -24,10 +24,10 @@ import {
   asLangChainMessagesArray,
   langchainBackend,
 } from "@trpc-chat-agent/langchain";
-import { DenoPermissions, mergePermissions } from "./system/permissions.ts";
+import { type DenoPermissions, mergePermissions } from "./system/permissions.ts";
 import { getSystemDnsServers } from "./system/dns.ts";
-import { ProjectConfig } from "@/server/system/projectConfig.ts";
-import { Context, createContext } from "@/server/context.ts";
+import type { ProjectConfig } from "@/server/system/projectConfig.ts";
+import type { Context, createContext } from "@/server/context.ts";
 import { baseChatModel, expertChatModel } from "@/server/adapters/models.ts";
 import { langfuseCallbacks } from "@/server/adapters/langfuse.ts";
 

@@ -1,7 +1,7 @@
 import type { createContext } from "./context.ts";
 import { EventEmitter } from "node:events";
 import {
-  AgentExtraArgs,
+  type AgentExtraArgs,
   makeChatRouterForAgent,
   ServerSideChatConversationHelper,
 } from "@trpc-chat-agent/core";

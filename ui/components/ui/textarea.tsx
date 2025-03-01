@@ -1,6 +1,6 @@
 import { cn } from "@/ui/lib/utils.ts";
 
-import * as React from "react";
+import type * as React from "react";
 
 const Textarea = ({
   ref,

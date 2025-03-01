@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
 import { projectDb } from "./projectDb.ts";
 import * as path from "node:path";
-import { DenoPermissions, buildDenoPermissionFlags } from "./permissions.ts";
+import { type DenoPermissions, buildDenoPermissionFlags } from "./permissions.ts";
 import * as xterm from "@xterm/xterm";
-import { type Terminal } from "@xterm/xterm";
+import type { Terminal } from "@xterm/xterm";
 import { Debouncer } from "@/server/debouncer.ts";
 
 // Hack

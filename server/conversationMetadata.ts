@@ -2,10 +2,10 @@ import { ChatOpenAI } from "@langchain/openai";
 import { z } from "zod";
 import {
   ChatConversationHelper,
-  ConversationData,
+  type ConversationData,
 } from "@trpc-chat-agent/core";
 import { zodResponseFormat } from "openai/helpers/zod";
-import { Context } from "@/server/context.ts";
+import type { Context } from "@/server/context.ts";
 
 const miniLlm = new ChatOpenAI({
   modelName: "gpt-4o-mini",

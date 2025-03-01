@@ -1,11 +1,11 @@
-import { type ThinkingEffort, type AgentType } from "@/server/agent.ts";
+import type { ThinkingEffort, AgentType } from "@/server/agent.ts";
 import type { UseConversationArgs } from "@trpc-chat-agent/react";
 import { Card } from "@/ui/components/ui/card.tsx";
 import { ScrollArea } from "@/ui/components/ui/scroll-area.tsx";
 import { Textarea } from "@/ui/components/ui/textarea.tsx";
-import { Signal, useSignal } from "@preact/signals-react";
+import { type Signal, useSignal } from "@preact/signals-react";
 import { RenderMessages, useConversation } from "@trpc-chat-agent/react";
-import React, { useEffect, useRef, useState } from "react";
+import type React, { useEffect, useRef, useState } from "react";
 import { RenderTool } from "./RenderTool.tsx";
 import { IoMdAdd } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
@@ -16,7 +16,7 @@ import { trpc, trpcClient } from "../../trpc.ts";
 import { ThinkingIndicator } from "@/ui/components/chat/ThinkingIndicator.tsx";
 import { Button } from "@/ui/components/ui/button.tsx";
 import { FaStop } from "react-icons/fa";
-import { HiChevronDown } from "react-icons/hi";
+import type { HiChevronDown } from "react-icons/hi";
 import { useMatch, useNavigate, useParams, Link } from "react-router-dom";
 
 export function Chat() {

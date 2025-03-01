@@ -1,8 +1,8 @@
 import type { AgentType } from "@/server/agent.ts";
 import type { AgentTools, ChatAIMessageToolCall } from "@trpc-chat-agent/core";
 import { ToolCallWrapper } from "@/ui/components/chat/ToolCallWrapper.tsx";
-import { ToolResultWrapper } from "@/ui/components/chat/ToolResultWrapper.tsx";
-import { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
+import type { ToolResultWrapper } from "@/ui/components/chat/ToolResultWrapper.tsx";
+import type { HiOutlineChatBubbleOvalLeft } from "react-icons/hi2";
 import { useState, useRef, useEffect } from "react";
 import { StyledMarkdown } from "@/ui/components/chat/StyledMarkdown.tsx";
 import { Button } from "@/ui/components/ui/button.tsx";

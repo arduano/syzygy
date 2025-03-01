@@ -2,7 +2,7 @@ import {
   mergeSplitDocFile,
   splitFileDoc,
 } from "@/server/system/scriptFileDocs.ts";
-import { Context, ConversationBackend } from "@/server/context.ts";
+import type { Context, ConversationBackend } from "@/server/context.ts";
 
 async function convertFileToText(
   importPath: string,

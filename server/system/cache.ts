@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { kvsLocalStorage } from "@kvs/node-localstorage";
-import { findUpSync } from "find-up";
+import type { findUpSync } from "find-up";
 import path from "node:path";
 
 export type CacheableFunction<Args extends any[] = any[], Return = any> = (

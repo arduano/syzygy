@@ -2,7 +2,7 @@
 
 import { cn } from "@/ui/lib/utils.ts";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
-import * as React from "react";
+import type * as React from "react";
 
 const ScrollArea = ({
   ref,
