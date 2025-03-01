@@ -2,13 +2,13 @@
   "name": "@syzygy/chat",
   "version": "0.1.0",
   "license": "MIT",
-  "exports": "./server.ts",
+  "exports": {
+    ".": "./server.ts"
+  },
   "tasks": {
     "dev:server": "deno run -A --watch --env-file=./.env ./server/server.ts",
     "dev:client": "deno -A npm:vite dev",
-    "build:client": "deno -A npm:vite build",
-    "build": "deno run -A npm:next build",
-    "start": "deno run -A npm:next start",
+    "build:client": "deno -A npm:vite build && deno run -A jsr:@smallweb/embed ui/dist dist",
     "lint": "deno lint",
     "changeset": "deno run -A ./changesets.ts"
   },
