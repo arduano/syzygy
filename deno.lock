@@ -83,6 +83,7 @@
     "npm:langfuse-langchain@^3.32.3": "3.33.1_langchain@0.3.15__@langchain+anthropic@0.3.12___@langchain+core@0.3.37____openai@4.81.0_____zod@3.24.1____zod@3.24.1___zod@3.24.1___openai@4.81.0____zod@3.24.1__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__@langchain+groq@0.1.3___@langchain+core@0.3.37____openai@4.81.0_____zod@3.24.1____zod@3.24.1___zod@3.24.1___openai@4.81.0____zod@3.24.1__openai@4.81.0___zod@3.24.1__zod@3.24.1_@langchain+anthropic@0.3.12__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__zod@3.24.1__openai@4.81.0___zod@3.24.1_@langchain+core@0.3.37__openai@4.81.0___zod@3.24.1__zod@3.24.1_@langchain+groq@0.1.3__@langchain+core@0.3.37___openai@4.81.0____zod@3.24.1___zod@3.24.1__zod@3.24.1__openai@4.81.0___zod@3.24.1_openai@4.81.0__zod@3.24.1",
     "npm:lucide-react@0.469.0": "0.469.0_react@19.0.0",
     "npm:mime-types@*": "2.1.35",
+    "npm:mime-types@3.0.0": "3.0.0",
     "npm:mime-types@^2.1.35": "2.1.35",
     "npm:nanoid@^5.0.9": "5.0.9",
     "npm:openai@^4.80.1": "4.81.0_zod@3.24.1",
@@ -2203,7 +2204,7 @@
       "dependencies": [
         "asynckit",
         "combined-stream",
-        "mime-types"
+        "mime-types@2.1.35"
       ]
     },
     "format@0.2.2": {
@@ -3159,10 +3160,19 @@
     "mime-db@1.52.0": {
       "integrity": "sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg=="
     },
+    "mime-db@1.53.0": {
+      "integrity": "sha512-oHlN/w+3MQ3rba9rqFr6V/ypF10LSkdwUysQL7GkXoTgIWeV+tcXGA852TBxH+gsh8UWoyhR1hKcoMJTuWflpg=="
+    },
     "mime-types@2.1.35": {
       "integrity": "sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==",
       "dependencies": [
-        "mime-db"
+        "mime-db@1.52.0"
+      ]
+    },
+    "mime-types@3.0.0": {
+      "integrity": "sha512-XqoSHeCGjVClAmoGFG3lVFqQFRIrTVw2OH3axRqAcfaw+gHWIfnASS92AV+Rl/mk0MupgZTRHQOjxY6YVnzK5w==",
+      "dependencies": [
+        "mime-db@1.53.0"
       ]
     },
     "mimic-fn@2.1.0": {

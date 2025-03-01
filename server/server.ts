@@ -1,7 +1,7 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { createContext } from "./context.ts";
 import { appRouter } from "@/server/trpc.ts";
-import mime from "npm:mime-types";
+import mime from "npm:mime-types@3.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

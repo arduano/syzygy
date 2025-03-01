@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "exports": {
-    ".": "./server.ts"
+    ".": "./server/server.ts"
   },
   "tasks": {
     "dev:server": "deno run -A --watch --env-file=./.env ./server/server.ts",
@@ -87,6 +87,9 @@
     "indentWidth": 2,
     "singleQuote": true,
     "semiColons": true
+  },
+  "publish": {
+    "exclude": ["!dist/"]
   },
   "nodeModulesDir": "auto",
   "unstable": ["kv", "fs"]
