@@ -1,7 +1,9 @@
+import "jsr:@std/dotenv@^0.225.3/load";
+
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { createContext } from "./context.ts";
 import { appRouter } from "@/server/trpc.ts";
-import mime from "npm:mime-types@3.0.0";
+import mime from "npm:mime-types@^3.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,7 +14,7 @@ const corsHeaders = {
 } as const;
 
 function withCors<T extends Response>(response: T): T {
-  if (!Deno.env.get("VITE_DEV")) return response;
+  if (!Deno.env.get("DEV")) return response;
 
   Object.entries(corsHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
@@ -29,7 +31,7 @@ Deno.serve(
     const url = new URL(request.url);
 
     // Handle CORS preflight
-    if (Deno.env.get("VITE_DEV") && request.method === "OPTIONS") {
+    if (Deno.env.get("DEV") && request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
         headers: corsHeaders,
@@ -57,7 +59,7 @@ Deno.serve(
       }
     }
 
-    if (!Deno.env.get("VITE_DEV")) {
+    if (!Deno.env.get("DEV")) {
       const embeds = await import("../dist/mod.ts");
       const file = await embeds.default.get(url.pathname.slice(1));
       console.log(url.pathname);

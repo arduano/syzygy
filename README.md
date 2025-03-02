@@ -2,7 +2,7 @@
 
 */ˈsɪzɪdʒi/* - The conjunction or opposition of two corresponding things.
 
-This tool seamlessly connects you to an AI chat agent, allowing you to multiply your productivity with script-driven automation.
+This tool seamlessly connects you to an AI chat agent, allowing you to multiply your productivity with rapid script-driven automation.
 
 ## Key Features
 

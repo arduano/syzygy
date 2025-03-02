@@ -24,12 +24,16 @@ import {
   asLangChainMessagesArray,
   langchainBackend,
 } from "@trpc-chat-agent/langchain";
-import { type DenoPermissions, mergePermissions } from "./system/permissions.ts";
+import {
+  type DenoPermissions,
+  mergePermissions,
+} from "./system/permissions.ts";
 import { getSystemDnsServers } from "./system/dns.ts";
 import type { ProjectConfig } from "@/server/system/projectConfig.ts";
 import type { Context, createContext } from "@/server/context.ts";
-import { baseChatModel, expertChatModel } from "@/server/adapters/models.ts";
-import { langfuseCallbacks } from "@/server/adapters/langfuse.ts";
+import { type baseChatModel, expertChatModel } from "@/server/adapters/models.ts";
+import type { langfuseCallbacks } from "@/server/adapters/langfuse.ts";
+import { syzygyConfig } from "@/server/systemConfig.ts";
 
 const thinkingEffort = z.enum(["low", "medium", "high"]);
 export type ThinkingEffort = z.infer<typeof thinkingEffort>;
@@ -290,10 +294,12 @@ const allTools = [
   readScriptFile,
 ] as const;
 
+const callbacks = syzygyConfig.callbacks ?? [];
+
 export const agent = ai.agent({
-  llm: baseChatModel,
+  llm: syzygyConfig.chatModel,
   tools: allTools,
-  langchainCallbacks: [...langfuseCallbacks],
+  langchainCallbacks: callbacks,
   transformMessages: async ({ conversation, path, extraArgs, ctx }) => {
     const messagesList = asLangChainMessagesArray(conversation, path);
 

@@ -5,7 +5,8 @@ import { ScrollArea } from "@/ui/components/ui/scroll-area.tsx";
 import { Textarea } from "@/ui/components/ui/textarea.tsx";
 import { type Signal, useSignal } from "@preact/signals-react";
 import { RenderMessages, useConversation } from "@trpc-chat-agent/react";
-import type React, { useEffect, useRef, useState } from "react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import { RenderTool } from "./RenderTool.tsx";
 import { IoMdAdd } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
@@ -200,7 +201,9 @@ function ChatComponentWithStaticId({
           {/* Top bar */}
           <div className="border-b p-2">
             <div className="flex items-center justify-center gap-2">
-              <div>{projectDetails.data?.projectConfig.name ?? projectName}</div>
+              <div>
+                {projectDetails.data?.projectConfig.name ?? projectName}
+              </div>
             </div>
           </div>
 
@@ -227,9 +230,10 @@ function ChatComponentWithStaticId({
                       ) => (
                         <AIMessageShell
                           message={message}
-                          children={children}
                           isLastMessage={isLastMessage}
-                        />
+                        >
+                          {children}
+                        </AIMessageShell>
                       )}
                       renderAiMessagePartContent={(content) => (
                         <StyledMarkdown>{content as string}</StyledMarkdown>

@@ -1,5 +1,5 @@
 import path from "node:path";
-import { sandboxDir } from "@/server/system/systemEnv.ts";
+import { sandboxDir } from "../systemConfig.ts";
 import { type ProjectConfig, projectConfigSchema } from "./projectConfig.ts";
 
 const internalsFolder = "core";

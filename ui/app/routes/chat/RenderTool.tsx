@@ -162,7 +162,7 @@ export function RenderTool({
               <div>
                 <span className="font-semibold">Output:</span>
                 <div className="mt-1">
-                  <CodeContent content={progress} autoScroll={true} />
+                  <CodeContent content={progress} autoScroll />
                 </div>
               </div>
             )}
@@ -176,7 +176,7 @@ export function RenderTool({
                   <div>
                     <span className="font-semibold">Stdout:</span>
                     <div className="mt-1">
-                      <CodeContent content={data.stdout} autoScroll={true} />
+                      <CodeContent content={data.stdout} autoScroll />
                     </div>
                   </div>
                 )}
@@ -184,7 +184,7 @@ export function RenderTool({
                   <div>
                     <span className="font-semibold">Stderr:</span>
                     <div className="mt-1">
-                      <CodeContent content={data.stderr} autoScroll={true} />
+                      <CodeContent content={data.stderr} autoScroll />
                     </div>
                   </div>
                 )}

@@ -12,7 +12,7 @@ import {
   type ConversationMetadata,
   makeNameForConversation,
 } from "@/server/conversationMetadata.ts";
-import { sandboxDir } from "@/server/system/systemEnv.ts";
+import { sandboxDir } from "./systemConfig.ts";
 import { withCache } from "@/server/system/cache.ts";
 import { compileDeclarations } from "@/server/system/compileDeclarations.ts";
 

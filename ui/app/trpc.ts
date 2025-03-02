@@ -6,7 +6,7 @@ export const trpc = createTRPCReact<AppRouter>();
 
 // deno-lint-ignore ban-ts-comment
 // @ts-ignore
-const baseUrl = import.meta.env.VITE_DEV ? "http://localhost:3000" : "";
+const baseUrl = import.meta.env.DEV ? "http://localhost:3000" : "";
 
 export const trpcClient = trpc.createClient({
   links: [
